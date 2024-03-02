@@ -12,9 +12,9 @@ user_route.get('/',userController.loginLoad)
 
 user_route.get('/signup',userController.loadRegister)
 
+user_route.get('/otpverify',userController.loadotpverify)
 
-
-
+user_route.get('/home',userController.loadHome)
 
 
 

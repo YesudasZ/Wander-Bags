@@ -24,9 +24,27 @@ const loadRegister = async(req,res)=>{
   }
 }
 
+const loadotpverify = async(req,res)=>{
+  try {
+    res.render('otpverify');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const loadHome = async(req,res)=>{
+  try {
+    res.render('home');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 
 module.exports = {
   loginLoad,
-  loadRegister
+  loadRegister,
+  loadotpverify,
+  loadHome
 }
