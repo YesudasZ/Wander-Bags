@@ -1,4 +1,6 @@
+const User = require('../models/userModel');
 
+const bcrypt = require('bcrypt')
 
 
 const loginLoad = async(req,res)=>{
@@ -41,10 +43,41 @@ const loadHome = async(req,res)=>{
 }
 
 
+const loadforgetpassword =async (req,res)=>{
+  try{
+    res.render('forgetpassword')
+  }catch(error){
+    console.log(error.message);
+  }
+}
+
+
+
+const loadforgetpasswordotp = async(req,res)=>{
+  try {
+    res.render('forgetpasswordotp')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+const loadresetpassword = async(req,res)=>{
+  try {
+    res.render('passwordreset')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 
 module.exports = {
   loginLoad,
   loadRegister,
   loadotpverify,
-  loadHome
+  loadHome,
+  loadforgetpassword,
+  loadforgetpasswordotp,
+  loadresetpassword
 }
