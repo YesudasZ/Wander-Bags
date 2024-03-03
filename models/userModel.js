@@ -10,11 +10,7 @@ type:String,
 required:true 
 },
 mobile:{
-type:String,
-required:true 
-},
-image:{
-type:String,
+type:Number,
 required:true 
 },
 password:{
@@ -23,8 +19,15 @@ required:true
 },
 is_admin:{
 type:Number,
-required:true
-}
+required:true,
+
+},
+is_block:{
+  type:Number,
+  required:true,
+  default:false
+  }
+  
 
 
 })
