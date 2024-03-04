@@ -18,6 +18,7 @@ let transporter = nodemailer.createTransport({
 const sendotpverificationemail = async ({ _id, email }, res) => {
   try {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+    console.log(otp);
 
     //mail options
     const mailoptions = {
@@ -126,6 +127,61 @@ const loadotpverify = async (req, res) => {
   }
 }
 
+const otpverify = async (req, res) => {
+  try {
+    let {userId,otp} = req.body;
+    console.log(req.body);
+    if(!userId || ! otp){
+      throw Error("Empty otp details are not allowed");
+    } else{
+      const userotpverificationrecord = await userotpverification.find({
+        userId,
+      });
+      if(userotpverificationrecord.length <=0){
+        // no record found
+        throw new Error(
+          "Account record doesn't exist or has been verified already. Please sign up or log in."
+        );
+      }else{
+        //user otp rcord exists
+        const { expiresAt } = userotpverificationrecord[0];
+        const hashedotp = userotpverificationrecord[0].otp;
+
+        if(expiresAt < Date.now()){
+        // user otp record has expired
+       await userotpverification.deleteMany({userId});
+       throw new Error("Code has expired. Please request again.");
+
+        }else{
+           const validotp = await bcrypt.compare(otp,hashedotp)
+
+           if(!validotp){
+            // supplied otp is wrong 
+            throw new Error ("Invalid code passed. Check your inbox.")
+           }else{
+            // Success
+            await User.updateOne({_id:userId},{verified:true});
+            await userotpverification.deleteMany({userId});
+            res.json({
+              status:"VERIFIED",
+              message:`user email verified successfully`
+            })
+
+            res.redirect('/home')
+           }
+        }
+
+      }
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
 const loadHome = async (req, res) => {
   try {
     res.render('home');
@@ -172,5 +228,6 @@ module.exports = {
   loadforgetpassword,
   loadforgetpasswordotp,
   loadresetpassword,
-  insertuser
+  insertuser,
+  otpverify
 }

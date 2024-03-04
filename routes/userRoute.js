@@ -30,6 +30,8 @@ user_route.post('/signup',userController.insertuser)
 
 user_route.get('/otpverify',userController.loadotpverify)
 
+user_route.post('/otpverify',userController.otpverify)
+
 user_route.get('/home',userController.loadHome)
 
 
