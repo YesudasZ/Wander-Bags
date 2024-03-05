@@ -7,51 +7,11 @@ const userotpverification = require("../models/userotpverification")
 
 const nodemailer = require("nodemailer");
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: "wanderbags29@gmail.com",
-    pass: "ghmk tzmh sjxw ymeq"
-  }
-})
 
-const sendotpverificationemail = async ({ _id, email }, res) => {
-  try {
-    const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-    console.log(otp);
-
-    //mail options
-    const mailoptions = {
-      from: "wanderbags29@gmail.com",
-      to: email,
-      subject: 'OTP Verification',
-      text: `Your OTP for verification is: ${otp}`
-    }
-
-
-
-    const newotpverification = await new userotpverification({
-      userId: _id,
-      otp,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 3600000,
-    })
-    // save otp recard
-
-    await newotpverification.save();
-    await transporter.sendMail(mailoptions, (err, info) => {
-      console.log(err, info.messageId);
-      return otp
-    });
-
-
-  } catch (error) {
-    res.json({
-      status: "FAILED",
-      message: error.message,
-    });
-  }
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit OTP
 }
+
 
 const securePassword = async (password) => {
   try {
@@ -68,6 +28,8 @@ const securePassword = async (password) => {
 const insertuser = async (req, res) => {
   try {
 
+    const otp = generateOTP();
+
     const spassword = await securePassword(req.body.password);
     const user = new User({
       name: req.body.name,
@@ -75,10 +37,34 @@ const insertuser = async (req, res) => {
       mobile: req.body.mobile,
       password: spassword,
       is_admin: 0,
-    })
-    await sendotpverificationemail(user);
-    const userdata = await user.save();
+      verified: false,
+      otp: otp, 
+      otpExpiration: Date.now() + 60000 
+    });
+    
+     const userdata =  await user.save();
+       req.session.details = userdata
+       req.session.save();
 
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: "wanderbags29@gmail.com",
+        pass: "ghmk tzmh sjxw ymeq"
+      }
+    })
+
+    const mailoptions = {
+      from: "wanderbags29@gmail.com",
+      to: req.body.email,
+      subject: 'OTP Verification',
+      text: `Your OTP for verification is: ${otp}`
+    }
+
+
+      await transporter.sendMail(mailoptions);
+   
     res.redirect('/otpverify')
 
 
@@ -129,56 +115,40 @@ const loadotpverify = async (req, res) => {
 
 const otpverify = async (req, res) => {
   try {
-    let {userId,otp} = req.body;
-    console.log(req.body);
-    if(!userId || ! otp){
-      throw Error("Empty otp details are not allowed");
-    } else{
-      const userotpverificationrecord = await userotpverification.find({
-        userId,
-      });
-      if(userotpverificationrecord.length <=0){
-        // no record found
-        throw new Error(
-          "Account record doesn't exist or has been verified already. Please sign up or log in."
-        );
-      }else{
-        //user otp rcord exists
-        const { expiresAt } = userotpverificationrecord[0];
-        const hashedotp = userotpverificationrecord[0].otp;
+    const  otpcheck  = await parseInt(req.body.otp);
 
-        if(expiresAt < Date.now()){
-        // user otp record has expired
-       await userotpverification.deleteMany({userId});
-       throw new Error("Code has expired. Please request again.");
+     const dbotp = req.session.details.otp
 
-        }else{
-           const validotp = await bcrypt.compare(otp,hashedotp)
+//      console.log(email);
+//     // Find the user by email
+//     const user = await User.findOne({ email });
+// console.log(user);
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
 
-           if(!validotp){
-            // supplied otp is wrong 
-            throw new Error ("Invalid code passed. Check your inbox.")
-           }else{
-            // Success
-            await User.updateOne({_id:userId},{verified:true});
-            await userotpverification.deleteMany({userId});
-            res.json({
-              status:"VERIFIED",
-              message:`user email verified successfully`
-            })
-
-            res.redirect('/home')
-           }
-        }
-
-      }
+//     // Check if OTP has expired
+//     if (user.otpExpiration < Date.now()) {
+//       return res.status(400).json({ message: 'OTP has expired' });
+//     }
+console.log(otpcheck);
+console.log(dbotp);
+    // Check if OTP matches
+    if (dbotp !== otpcheck) {
+      return res.status(400).json({ message: 'Invalid OTP' });
     }
-    
+
+    // Mark user as verified
+    // user.verified = true;
+    // await user.save();
+
+     res.render('home')
+
   } catch (error) {
     console.log(error.message);
+    res.status(500).send('Error occurred while processing your request');
   }
 }
-
 
 
 
