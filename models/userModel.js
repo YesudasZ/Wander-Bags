@@ -20,21 +20,13 @@ const userSchema = new mongoose.Schema({
   is_admin: {
     type: Number,
     required: true,
-
+    default: 0
   },
   is_block: {
     type: Number,
     required: true,
-    default: false
-  },
-  verified: Boolean,
-  otp:{
-    type:Number,
-    required: true
+    default: 0
   }
-
-
-
 })
 
 module.exports = mongoose.model('User', userSchema);

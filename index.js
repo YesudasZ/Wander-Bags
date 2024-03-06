@@ -5,7 +5,7 @@ const express = require("express");
 
 const app = express();
 
-const userotpverification = require("./models/userotpverification")
+
 
 const nodemailer = require("nodemailer");
 

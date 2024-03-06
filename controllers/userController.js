@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 const bcrypt = require('bcrypt')
 
 
-const userotpverification = require("../models/userotpverification")
+
 
 const nodemailer = require("nodemailer");
 
@@ -11,6 +11,16 @@ const nodemailer = require("nodemailer");
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit OTP
 }
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "wanderbags29@gmail.com",
+    pass: "ghmk tzmh sjxw ymeq"
+  }
+})
+
+
 
 
 const securePassword = async (password) => {
@@ -27,33 +37,35 @@ const securePassword = async (password) => {
 
 const insertuser = async (req, res) => {
   try {
-
+    const email = req.body.email;
+    const mobileNumber = req.body.mobile;
+    const existingemail = await User.findOne({ email: email })
+    const existingnumber = await User.findOne({ mobile: mobileNumber })
+    if (existingemail) {
+      return res.render("signup", { message: "Email already exists" })
+    }
+    if (existingnumber) {
+      return res.render("signup", { message: "Mobile already exists" })
+    }
     const otp = generateOTP();
 
-    const spassword = await securePassword(req.body.password);
-    const user = new User({
+    console.log(otp);
+
+    const details = {
       name: req.body.name,
       email: req.body.email,
       mobile: req.body.mobile,
-      password: spassword,
+      password: req.body.password,
       is_admin: 0,
       verified: false,
-      otp: otp, 
-      otpExpiration: Date.now() + 60000 
-    });
-    
-     const userdata =  await user.save();
-       req.session.details = userdata
-       req.session.save();
+      otp: otp,
+      otpExpiration: Date.now() + 60000
+    };
 
+    req.session.details = details
+    req.session.save();
 
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: "wanderbags29@gmail.com",
-        pass: "ghmk tzmh sjxw ymeq"
-      }
-    })
+  
 
     const mailoptions = {
       from: "wanderbags29@gmail.com",
@@ -61,21 +73,50 @@ const insertuser = async (req, res) => {
       subject: 'OTP Verification',
       text: `Your OTP for verification is: ${otp}`
     }
+    await transporter.sendMail(mailoptions);
 
-
-      await transporter.sendMail(mailoptions);
-   
     res.redirect('/otpverify')
-
-
-
 
   } catch (error) {
     console.log(error.message);
   }
 }
 
+const sendotp = (email,otp) =>{
+  const mailoptions = {
+    from:'wanderbags29@gmail.com',
+    to:email,
+    subject: 'OTP Verification',
+    text: `Your OTP for verification is: ${otp}`
+  }
+    transporter.sendMail(mailoptions);
+}
 
+const regenerateOTP = (email)=>{
+  const otp = generateOTP();
+  sendotp(email,otp);
+  return otp;
+
+}
+
+
+
+const resendotp = async(req,res)=>{
+  try {
+    const details = req.session.details;
+    const otp = regenerateOTP(details.email);
+    console.log('resend',otp);
+    req.session.details.otp=otp;
+    req.session.details.otpExpiration=Date.now() + 60000
+    req.session.save();
+    res.json({ success: true, message: 'OTP resend successfully' });
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+}
+ 
 
 const loginLoad = async (req, res) => {
 
@@ -115,40 +156,39 @@ const loadotpverify = async (req, res) => {
 
 const otpverify = async (req, res) => {
   try {
-    const  otpcheck  = await parseInt(req.body.otp);
+    const otpcheck = await parseInt(req.body.otp);
+    const dbotp = req.session.details.otp
 
-     const dbotp = req.session.details.otp
-
-//      console.log(email);
-//     // Find the user by email
-//     const user = await User.findOne({ email });
-// console.log(user);
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     // Check if OTP has expired
-//     if (user.otpExpiration < Date.now()) {
-//       return res.status(400).json({ message: 'OTP has expired' });
-//     }
-console.log(otpcheck);
-console.log(dbotp);
     // Check if OTP matches
-    if (dbotp !== otpcheck) {
-      return res.status(400).json({ message: 'Invalid OTP' });
+    if (dbotp == otpcheck) {
+      // Check if OTP has expired
+      if (req.session.details.otpExpiration < Date.now()) {
+        return res.render('otpverify', { message: 'OTP has expired' });
+      }
+      const spassword = await securePassword(req.session.details.password);
+      const user = new User({
+        name: req.session.details.name,
+        email: req.session.details.email,
+        mobile: req.session.details.mobile,
+        password: spassword,
+        is_admin: 0,
+        is_blocked: 0
+      });
+      await user.save();
+
+      return res.redirect('/home')
     }
 
-    // Mark user as verified
-    // user.verified = true;
-    // await user.save();
-
-     res.render('home')
+    else {
+      return res.render('otpverify', { message: 'Invalid OTP' });
+    }
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('Error occurred while processing your request');
+   
   }
 }
+
 
 
 
@@ -199,5 +239,6 @@ module.exports = {
   loadforgetpasswordotp,
   loadresetpassword,
   insertuser,
-  otpverify
+  otpverify,
+  resendotp,
 }

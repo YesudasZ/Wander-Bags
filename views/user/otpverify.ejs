@@ -30,10 +30,15 @@
                                         <div class="heading_s1">
                                             <h3 class="mb-30">OTP Verification</h3>
                                         </div>
+                                        <% if(typeof message !=='undefined' ){ %>
+                                            <h4 style="color: red;">
+                                                <%= message %>
+                                            </h4>
+                                            <%}%>
 
-                                        <form method="post">
+                                        <form method="post" action="/otpverify">
                                             <div class="form-group">
-                                                <input type="text" required="" name="otp" placeholder="Enter OTP">
+                                                <input type="number" required="" name="otp" placeholder="Enter OTP">
                                             </div>
 
                                             <!-- Timer for OTP -->
@@ -43,12 +48,12 @@
 
                                             <!-- Resend OTP and Verify Buttons -->
                                             <div class="form-group d-flex justify-content-between align-items-center">
-                                                <button type="button" class="btn btn-fill-out hover-up mr-2" id="resend-otp">Resend OTP</button>
+                                                <button type="button" class="btn btn-fill-out hover-up mr-2" id="resendotp" href="/otpverify">Resend OTP</button>
                                                 <button type="submit" class="btn btn-fill-out hover-up" name="verify">Verify</button>
                                             </div>
                                         </form>
 
-                                        <div class="text-muted text-center">Didn't receive OTP? <a href="#">Resend</a></div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -99,23 +104,41 @@
 
     <!-- OTP Timer Script -->
     <script>
-        // Set the initial value of the timer
-        let secondsLeft = 60;
+ let countDown = 60;
+document.getElementById('otp-timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
 
-        // Function to update the timer
-        function updateTimer() {
-            document.getElementById("otp-timer").textContent = secondsLeft;
-            secondsLeft--;
+// Disable resend OTP button when the timer starts
+document.getElementById('resendotp').disabled = true;
 
-            // Resend OTP after timer ends
-            if (secondsLeft < 0) {
-                clearInterval(timerInterval);
-                document.getElementById("resend-otp").disabled = false;
-            }
-        }
+const timer = setInterval(() => {
+    console.log('Countdown:', countDown);
+    if (countDown === 0) {
+        // Enable resend OTP button and clear timer
+        document.getElementById('resendotp').disabled = false;
+        document.getElementById('otp-timer').innerText = '';
+        clearInterval(timer);
+    } else {
+        // Update countdown and display remaining time
+        countDown--;
+        document.getElementById('otp-timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
+    }
+}, 1000);
 
-        // Start the timer
-        const timerInterval = setInterval(updateTimer, 1000);
+document.getElementById('resendotp').addEventListener('click', async () => {
+    // Disable resend OTP button
+    document.getElementById('resendotp').disabled = true;
+    
+    try {
+        // Send request to resend OTP
+        const response = await fetch('/resendotp', { method: 'POST' });
+        // const data = await response.json();
+        // console.log('Fetch response:', data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+
     </script>
 </body>
 

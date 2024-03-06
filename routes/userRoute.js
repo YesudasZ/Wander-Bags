@@ -32,6 +32,8 @@ user_route.get('/otpverify',userController.loadotpverify)
 
 user_route.post('/otpverify',userController.otpverify)
 
+user_route.post('/resendotp',userController.resendotp)
+
 user_route.get('/home',userController.loadHome)
 
 
