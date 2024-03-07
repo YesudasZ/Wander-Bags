@@ -4,6 +4,19 @@ const user_route = express();
 
 const session = require("express-session");
 
+const passport = require('passport')
+
+ require('../passport');
+ user_route.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET 
+}));
+
+ user_route.use(passport.initialize());
+
+ user_route.use(passport.session())
+
 const config = require("../config/config");
 
 user_route.use(session({secret:config.sessionSecret}));
@@ -25,6 +38,18 @@ user_route.get('/signup',userController.loadRegister)
 
 user_route.post('/signup',userController.insertuser)
 
+user_route.get('/auth/google',passport.authenticate('google',{
+scope:['profile']  
+}));
+
+user_route.get('/auth/google/callback',passport.authenticate('google',{
+  successRedirect: '/success', 
+		failureRedirect: '/failure'
+}))
+
+user_route.get('/success',userController.successGoogleLogin);
+
+user_route.get('/failure',userController.failureGoogleLogin)
 
 
 

@@ -35,6 +35,21 @@ const securePassword = async (password) => {
 }
 
 
+
+const successGoogleLogin = (req , res) => { 
+	if(!req.user) 
+		res.redirect('/failure'); 
+    console.log(req.user);
+	res.send("Welcome " + req.user.displayName); 
+}
+
+
+const failureGoogleLogin = (req , res) => { 
+	res.send("Error"); 
+}
+
+
+
 const insertuser = async (req, res) => {
   try {
     const email = req.body.email;
@@ -241,4 +256,6 @@ module.exports = {
   insertuser,
   otpverify,
   resendotp,
+  successGoogleLogin,
+  failureGoogleLogin
 }
