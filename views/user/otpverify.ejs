@@ -105,24 +105,33 @@
     <!-- OTP Timer Script -->
     <script>
  let countDown = 60;
-document.getElementById('otp-timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
+let timer;
 
-// Disable resend OTP button when the timer starts
-document.getElementById('resendotp').disabled = true;
+// Function to start the timer
+function startTimer() {
+    timer = setInterval(() => {
+        if (countDown === 0) {
+            // Enable resend OTP button and clear timer
+            document.getElementById('resendotp').disabled = false;
+            document.getElementById('otp-timer').innerText = '';
+            clearInterval(timer);
+        } else {
+            // Update countdown and display remaining time
+            countDown--;
+            document.getElementById('otp-timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
+        }
+    }, 1000);
+}
 
-const timer = setInterval(() => {
-    console.log('Countdown:', countDown);
-    if (countDown === 0) {
-        // Enable resend OTP button and clear timer
-        document.getElementById('resendotp').disabled = false;
-        document.getElementById('otp-timer').innerText = '';
-        clearInterval(timer);
-    } else {
-        // Update countdown and display remaining time
-        countDown--;
-        document.getElementById('otp-timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
-    }
-}, 1000);
+// Function to reset the timer
+function resetTimer() {
+    clearInterval(timer);
+    countDown = 60;
+    startTimer();
+}
+
+// Initial start of timer
+startTimer();
 
 document.getElementById('resendotp').addEventListener('click', async () => {
     // Disable resend OTP button
@@ -131,12 +140,13 @@ document.getElementById('resendotp').addEventListener('click', async () => {
     try {
         // Send request to resend OTP
         const response = await fetch('/resendotp', { method: 'POST' });
-        // const data = await response.json();
-        // console.log('Fetch response:', data);
+        // Reset the timer after sending OTP
+        resetTimer();
     } catch (error) {
         console.error('Error:', error);
     }
 });
+
 
 
     </script>

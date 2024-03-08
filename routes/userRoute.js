@@ -32,7 +32,9 @@ user_route.use(bodyParser.urlencoded({extended:true}))
 
 const userController = require ('../controllers/userController');
 
-user_route.get('/',userController.loginLoad)
+user_route.get('/login',userController.loginLoad)
+
+user_route.post('/login',userController.verifylogin)
 
 user_route.get('/signup',userController.loadRegister)
 

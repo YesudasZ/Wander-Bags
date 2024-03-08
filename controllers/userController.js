@@ -62,6 +62,9 @@ const insertuser = async (req, res) => {
     if (existingnumber) {
       return res.render("signup", { message: "Mobile already exists" })
     }
+
+    res.redirect('/otpverify')
+
     const otp = generateOTP();
 
     console.log(otp);
@@ -90,7 +93,7 @@ const insertuser = async (req, res) => {
     }
     await transporter.sendMail(mailoptions);
 
-    res.redirect('/otpverify')
+   
 
   } catch (error) {
     console.log(error.message);
@@ -157,6 +160,34 @@ const loadRegister = async (req, res) => {
 }
 
 
+const verifylogin = async (req, res) => {
+    try {
+        const {email,password} = req.body;
+        console.log(email);
+        const userData = await User.findOne({ email: email });
+        console.log(userData);
+        if(userData){
+            const passwordMatch = await bcrypt.compare(password,userData.password)
+            if(passwordMatch){
+                if(userData.is_verified == 0){
+                    res.render('login',{message1:"Unauthorized Access."})
+                }else{
+                    req.session.user_id = userData._id;
+                    req.session.user = true;
+                    res.redirect('/home');
+                }
+            }else{
+                res.render('login',{message:"Invalid Username and password"});
+            }
+            
+        }else{
+           res.render('login',{message:"*Invalid username and password"});
+        }
+
+         } catch (error) {
+        console.log(error.message)
+    }
+};
 
 
 
@@ -187,7 +218,7 @@ const otpverify = async (req, res) => {
         mobile: req.session.details.mobile,
         password: spassword,
         is_admin: 0,
-        is_blocked: 0
+        is_verified: 1
       });
       await user.save();
 
@@ -257,5 +288,6 @@ module.exports = {
   otpverify,
   resendotp,
   successGoogleLogin,
-  failureGoogleLogin
+  failureGoogleLogin,
+  verifylogin
 }
