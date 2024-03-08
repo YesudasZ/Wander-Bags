@@ -60,10 +60,36 @@ const loadadminpanel = async (req, res) => {
   }
 }
 
+const loadcustomers = async (req, res) => {
+  try {
+    res.render('customers');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
+const loadproducts = async (req, res) => {
+  try {
+    res.render('products');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+const loadcategories = async (req, res) => {
+  try {
+    res.render('categories');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 module.exports = {
   loadLogin,
   verifyLogin,
-  loadadminpanel
+  loadadminpanel,
+  loadcustomers,
+  loadproducts,
+  loadcategories
 }

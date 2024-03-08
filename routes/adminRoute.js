@@ -14,4 +14,10 @@ admin_route.post('/',adminController.verifyLogin)
 
 admin_route.get('/adminpanel',adminController.loadadminpanel)
 
+admin_route.get('/customers',adminController.loadcustomers)
+
+admin_route.get('/products',adminController.loadproducts)
+
+admin_route.get('/categories',adminController.loadcategories)
+
 module.exports = admin_route;
