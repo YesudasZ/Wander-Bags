@@ -29,12 +29,14 @@
                         <h4 style="color: red;"><%=message %></h4>
                     <% } %>
 
-                    <form  method="post">
+                    <form id="loginForm" method="post" onsubmit="return validateForm()">
                         <div class="mb-3">
-                            <input class="form-control" name="email" placeholder=" Email" type="text">
+                            <input class="form-control" name="email" id="email" placeholder=" Email" type="text">
+                            <span id="emailError" class="error"></span>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
-                            <input class="form-control" name="password" placeholder="Password" type="password">
+                            <input class="form-control" name="password" id="password" placeholder="Password" type="password">
+                            <span id="passwordError" class="error"></span>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
                             <a href="#" class="float-end font-sm text-muted">Forgot password?</a>
@@ -81,6 +83,36 @@
     <script src="admin-asset/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="admin-asset/js/main.js" type="text/javascript"></script>
+
+    <script>
+        function validateForm() {
+            var email = document.getElementById("email").value.trim();
+            var password = document.getElementById("password").value.trim();
+            var emailError = document.getElementById("emailError");
+            var passwordError = document.getElementById("passwordError");
+            var isValid = true;
+
+            // Reset error messages
+            emailError.innerText = "";
+            passwordError.innerText = "";
+
+            // Validate email
+            if (email === "") {
+                emailError.innerText = "Email is required";
+                emailError.style.color = 'red'
+                isValid = false;
+            }
+
+            // Validate password
+            if (password === "") {
+                passwordError.innerText = "Password is required";
+                passwordError.style.color = 'red'
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
 </body>
 
 </html>

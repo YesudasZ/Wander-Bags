@@ -46,27 +46,27 @@
 
                                                 <form action="/signup" method="post" id="myForm">
                                                     <div class="form-group">
-                                                        <input type="text" name="name" id="name" required=""
+                                                        <input type="text" name="name" id="name" 
                                                             placeholder="Username" onkeyup="nameValidation()">
                                                         <span id="nameError" class="error"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input type="text" required="" name="email" id="email"
+                                                        <input type="text"  name="email" id="email"
                                                             placeholder="Email" onkeyup="emailValidation()">
                                                         <span id="emailError" class="error"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input type="number" required="" name="mobile" id="mobile"
+                                                        <input type="number"  name="mobile" id="mobile"
                                                             placeholder="Mobile" onkeyup="mobileValidation()">
                                                         <span id="mobileError" class="error"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input required="" type="password" name="password" id="password"
+                                                        <input  type="password" name="password" id="password"
                                                             placeholder="Password" onkeyup="passwordValidation()">
                                                         <span id="passwordError" class="error"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <input required="" type="password" name="confirmpassword"
+                                                        <input  type="password" name="confirmpassword"
                                                             id="confirmpassword" placeholder="Confirm Password"
                                                             onkeyup="confirmpasswordValidation()">
                                                         <span id="confirmpasswordError" class="error"></span>
@@ -173,13 +173,13 @@
         function nameValidation() {
             const nameValue = name.value
             if (nameValue.trim() == 0) {
-                nameError.innerHTML = 'First Name is required'
+                nameError.innerHTML = 'Name is required'
                 nameError.style.color = 'red'
                 name.style.border = "solid 2px red";
                 return false;
             }
             if (!nameValue.match(nameRegex)) {
-                nameError.innerHTML = 'First Name is not Valid'
+                nameError.innerHTML = 'Name is not Valid'
                 nameError.style.color = 'red'
                 name.style.border = "solid 2px red";
                 return false;
@@ -194,6 +194,12 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         function emailValidation() {
             const emailValue = email.value
+            if (emailValue.trim() == 0) {
+                emailError.innerHTML = 'Email is required'
+                emailError.style.color = 'red'
+                email.style.border = "solid 2px red";
+                return false;
+            }
             if (!emailValue.match(emailRegex)) {
                 emailError.innerHTML = 'Email not valid'
                 emailError.style.color = 'red'
@@ -210,6 +216,13 @@
         const mobileRegex = /^\d{10}$/
         function mobileValidation() {
             const mobileValue = mobile.value
+            if (mobileValue.trim() == 0) {
+                mobileError.innerHTML = 'Mobile is required'
+                mobileError.style.color = 'red'
+                mobile.style.border = "solid 2px red";
+                return false;
+            }
+            
             if (!mobileValue.match(mobileRegex)) {
                 mobileError.innerHTML = 'Mobile Number not valid'
                 mobileError.style.color = 'red'

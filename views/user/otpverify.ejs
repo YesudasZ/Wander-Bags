@@ -104,9 +104,9 @@
 
     <!-- OTP Timer Script -->
     <script>
- let countDown = 60;
+let countDown = 60;
 let timer;
-
+document.getElementById('resendotp').disabled = true;
 // Function to start the timer
 function startTimer() {
     timer = setInterval(() => {
@@ -146,7 +146,6 @@ document.getElementById('resendotp').addEventListener('click', async () => {
         console.error('Error:', error);
     }
 });
-
 
 
     </script>

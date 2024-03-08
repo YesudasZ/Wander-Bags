@@ -50,6 +50,25 @@ const failureGoogleLogin = (req , res) => {
 
 
 
+
+const landingLoad = async (req, res) => {
+
+  try {
+
+    res.render('home')
+
+  } catch (error) {
+
+    console.log(error.message);
+
+  }
+
+}
+
+
+
+
+
 const insertuser = async (req, res) => {
   try {
     const email = req.body.email;
@@ -170,14 +189,14 @@ const verifylogin = async (req, res) => {
             const passwordMatch = await bcrypt.compare(password,userData.password)
             if(passwordMatch){
                 if(userData.is_verified == 0){
-                    res.render('login',{message1:"Unauthorized Access."})
+                    res.render('login',{message:"Unauthorized Access."})
                 }else{
                     req.session.user_id = userData._id;
                     req.session.user = true;
                     res.redirect('/home');
                 }
             }else{
-                res.render('login',{message:"Invalid Username and password"});
+                res.render('login',{message:"Password is incorrect"});
             }
             
         }else{
@@ -289,5 +308,6 @@ module.exports = {
   resendotp,
   successGoogleLogin,
   failureGoogleLogin,
-  verifylogin
+  verifylogin,
+  landingLoad
 }

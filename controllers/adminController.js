@@ -1,7 +1,10 @@
+const User = require('../models/userModel');
+
+const bcrypt = require('bcrypt')
 
 
 
-const loadLogin = async(req,res)=>{
+const loadLogin = async (req, res) => {
   try {
     res.render('login')
   } catch (error) {
@@ -9,47 +12,58 @@ const loadLogin = async(req,res)=>{
   }
 }
 
-// const verifyLogin = async(req,res)=>{
-//   try {
-    
-//    const email = req.body.email;
-//    const password = req.body.password;
+const verifyLogin = async (req, res) => {
+  try {
 
-//    const userData = await User.findOne({email:email});
+    const email = req.body.email;
+    const password = req.body.password;
 
-//    if(userData){
-   
-//     const passwordMatch = await bcrypt.compare(password,userData.password)
-     
-//     if(passwordMatch){
+    console.log(email);
+    console.log(password);
 
-//        if(userData.is_admin === 0){
-//         res.render('login',{message:"Email and password is incorrect"});
-//        }
-//        else{
-//         req.session.user_id = userData._id;
-//         res.redirect("/admin/home");
-//        }
+    const userData = await User.findOne({ email: email });
+    console.log(userData);
+    if (userData) {
 
-//     }
-//     else{
+      const passwordMatch = await bcrypt.compare(password, userData.password)
 
-//       res.render('login',{message:"Email and password is incorrect"});
-//     }
+      if (passwordMatch) {
 
-//    }
-//    else{
-//     res.render('login',{message:"Email and password is incorrect"});
-//    }
+        if (userData.is_admin === 0) {
+          res.render('login', { message: "Unauthorized" });
+        }
+        else {
+          req.session.user_id = userData._id;
+          res.redirect("/admin/adminpanel");
+        }
+      }
+      else {
 
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
+        res.render('login', { message: "Password is incorrect" });
+      }
+
+    }
+    else {
+      res.render('login', { message: "Email and Password is incorrect" });
+    }
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const loadadminpanel = async (req, res) => {
+  try {
+    res.render('adminpanel');
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 
 
 module.exports = {
-  loadLogin
-  // verifyLogin
+  loadLogin,
+  verifyLogin,
+  loadadminpanel
 }
