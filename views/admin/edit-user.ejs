@@ -35,13 +35,13 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active">
                   
                     <a class="menu-link" href="http://localhost:4000/admin/customers"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Customers</span>
                     </a>
                 </li>
-                <li class="menu-item active ">
+                <li class="menu-item ">
                     <a class="menu-link" href="http://localhost:4000/admin/categories"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Categories</span>
                     </a>
@@ -170,9 +170,41 @@
                 </nav>
             </div> -->
         </section> 
-
-
-
+        <section class="customerslist-container-1">
+          <div class="container">
+              <div class="profile-table-1">
+                  <div class="profile-heading-1">
+                      <h1>Edit User</h1>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6">
+                      <form action="/admin/edit-user" method="POST">
+                          <div class="mb-3">
+                              <label for="name" class="form-label">Name</label>
+                              <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="email" class="form-label">Email</label>
+                              <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="mobile" class="form-label">Mobile</label>
+                              <input type="text" class="form-control" id="mobile" name="mobile" value="<%= user.mobile %>" required>
+                          </div>
+                          <div class="mb-3">
+                              <label for="status" class="form-label">Status</label>
+                              <select class="form-select" id="status" name="status" required>
+                                  <option value="1" <% if(user.is_verified === 1) { %> selected <% } %>>Verified</option>
+                                  <option value="0" <% if(user.is_verified !== 1) { %> selected <% } %>>Not Verified</option>
+                              </select>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Update customer</button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </section>
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">

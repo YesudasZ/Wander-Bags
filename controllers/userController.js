@@ -55,7 +55,7 @@ const landingLoad = async (req, res) => {
 
   try {
 
-    res.render('home')
+    res.render('landing')
 
   } catch (error) {
 

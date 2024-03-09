@@ -62,7 +62,8 @@ const loadadminpanel = async (req, res) => {
 
 const loadcustomers = async (req, res) => {
   try {
-    res.render('customers');
+    const users = await User.find({is_admin:0})
+    res.render('customers',{users});
   } catch (error) {
     console.log(error.message);
   }
@@ -85,11 +86,27 @@ const loadcategories = async (req, res) => {
   }
 }
 
+
+const loadedituser = async (req, res) => {
+  try {
+    console.log("HI");
+    const id = req.query.id;
+    console.log(id);
+    const userData = await User.findById({_id:id});
+    if(userData){
+      res.render('edit-user',{user:userData});
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   loadLogin,
   verifyLogin,
   loadadminpanel,
   loadcustomers,
   loadproducts,
-  loadcategories
+  loadcategories,
+  loadedituser
 }
