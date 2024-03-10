@@ -166,7 +166,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped" id="customerTable">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Username</th>
@@ -177,7 +177,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Loop through users and display data -->
                             <% if(users.length > 0) { 
                                 for(let i = 0; i < users.length; i++) { %>
                                     <tr>
@@ -191,12 +190,9 @@
                                                 <span class="badge bg-danger">Not Verified</span>
                                             <% } %>
                                         </td>
-                                        <td>
-                                            <% if(users[i].is_verified === 1) { %>
-                                                <button class="btn btn-danger btn-block" onclick="blockUser('<%= users[i]._id %>')">Block</button>
-                                            <% } else { %>
-                                                <button class="btn btn-success btn-block" onclick="unblockUser('<%= users[i]._id %>')">Unblock</button>
-                                            <% } %>
+                                        <td> 
+                                            <button class="btn btn-danger block-user" data-user-id="<%= users[i]._id %>">Block</button>
+                                            <button class="btn btn-success unblock-user" data-user-id="<%= users[i]._id %>">Unblock</button>
                                         </td>
                                     </tr>
                             <% } } else { %>
@@ -209,7 +205,7 @@
                 </div>
             </div>
         </section>
-            <!-- <div class="pagination-area mt-30 mb-50">
+            <div class="pagination-area mt-30 pb-30">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
                         <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -220,7 +216,7 @@
                         <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
                     </ul>
                 </nav>
-            </div> -->
+            </div>
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
@@ -247,41 +243,49 @@
     <script src="/admin-asset/js/custom-chart.js" type="text/javascript"></script>
 
     <script>
-        // Function to block a user
-        function blockUser(userId) {
-            $.ajax({
-                type: 'POST',
-                url: '/admin/block-user',
-                data: { userId: userId, is_verified: 0 }, // Sending user ID and status to block
-                success: function(data) {
-                    // Update status badge and action button
-                    $('#customerTable').find('tr').each(function() {
-                        if ($(this).find('td').eq(0).text() === userId) {
-                            $(this).find('td').eq(3).html('<span class="badge bg-danger">Not Verified</span>');
-                            $(this).find('td').eq(4).html('<button class="btn btn-success btn-block" onclick="unblockUser(\'' + userId + '\')">Unblock</button>');
-                        }
-                    });
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle block user
+            document.querySelectorAll('.block-user').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var userId = this.getAttribute('data-user-id');
+                    if (confirm("Are you sure you want to block this user?")) {
+                        fetch('/admin/block-user?id=' + userId, {
+                            method: 'POST'
+                        }).then(function(response) {
+                            if (response.ok) {
+                                // Reload the page
+                                window.location.reload();
+                            } else {
+                                console.error('Failed to block user');
+                            }
+                        }).catch(function(error) {
+                            console.error('Error blocking user:', error);
+                        });
+                    }
+                });
             });
-        }
 
-        // Function to unblock a user
-        function unblockUser(userId) {
-            $.ajax({
-                type: 'POST',
-                url: '/admin/block-user',
-                data: { userId: userId, is_verified: 1 }, // Sending user ID and status to unblock
-                success: function(data) {
-                    // Update status badge and action button
-                    $('#customerTable').find('tr').each(function() {
-                        if ($(this).find('td').eq(0).text() === userId) {
-                            $(this).find('td').eq(3).html('<span class="badge bg-success">Verified</span>');
-                            $(this).find('td').eq(4).html('<button class="btn btn-danger btn-block" onclick="blockUser(\'' + userId + '\')">Block</button>');
-                        }
-                    });
-                }
+            // Handle unblock user
+            document.querySelectorAll('.unblock-user').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var userId = this.getAttribute('data-user-id');
+                    if (confirm("Are you sure you want to unblock this user?")) {
+                        fetch('/admin/unblock-user?id=' + userId, {
+                            method: 'POST'
+                        }).then(function(response) {
+                            if (response.ok) {
+                                // Reload the page
+                                window.location.reload();
+                            } else {
+                                console.error('Failed to unblock user');
+                            }
+                        }).catch(function(error) {
+                            console.error('Error unblocking user:', error);
+                        });
+                    }
+                });
             });
-        }
+        });
     </script>
     
 </body>

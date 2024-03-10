@@ -20,6 +20,10 @@ admin_route.get('/products',adminController.loadproducts)
 
 admin_route.get('/categories',adminController.loadcategories)
 
-admin_route.get('/edit-user',adminController.loadedituser)
+admin_route.post('/block-user',adminController.loadblockUser)
+
+admin_route.post('/unblock-user',adminController.loadunblockUser)
+
+
 
 module.exports = admin_route;

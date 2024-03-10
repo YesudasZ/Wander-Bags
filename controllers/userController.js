@@ -94,7 +94,7 @@ const insertuser = async (req, res) => {
       mobile: req.body.mobile,
       password: req.body.password,
       is_admin: 0,
-      verified: false,
+      is_verified: 0,
       otp: otp,
       otpExpiration: Date.now() + 60000
     };

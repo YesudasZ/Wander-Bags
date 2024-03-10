@@ -86,20 +86,34 @@ const loadcategories = async (req, res) => {
   }
 }
 
-
-const loadedituser = async (req, res) => {
+loadblockUser = async (req, res) => {
   try {
-    console.log("HI");
-    const id = req.query.id;
-    console.log(id);
-    const userData = await User.findById({_id:id});
-    if(userData){
-      res.render('edit-user',{user:userData});
-    }
+      const userId = req.query.id;
+      console.log(userId);
+      await User.findByIdAndUpdate(userId, { is_verified: 0 });
+      res.status(200).json({ message: 'User blocked successfully' });
   } catch (error) {
-    console.log(error.message);
+      console.error('Error blocking user:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+loadunblockUser = async (req, res) => {
+  try {
+      const userId = req.query.id;
+      console.log(userId);
+      await User.findByIdAndUpdate(userId, { is_verified: 1 });
+      res.status(200).json({ message: 'User unblocked successfully' });
+  } catch (error) {
+      console.error('Error unblocking user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
+
 
 module.exports = {
   loadLogin,
@@ -108,5 +122,6 @@ module.exports = {
   loadcustomers,
   loadproducts,
   loadcategories,
-  loadedituser
+  loadblockUser,
+  loadunblockUser,
 }
