@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Category = require('../models/categoryModel');
 
 const bcrypt = require('bcrypt')
 
@@ -80,11 +81,83 @@ const loadproducts = async (req, res) => {
 
 const loadcategories = async (req, res) => {
   try {
-    res.render('categories');
+    const categories = await Category.find({});
+    res.render('categories', { categories });
   } catch (error) {
     console.log(error.message);
   }
 }
+
+const addCategory = async (req, res) => {
+  try {
+      const { name } = req.body;
+      if (!name) {
+          return res.status(400).json({ message: 'Category name is required' });
+      }
+      const newCategory = new Category({ name });
+      await newCategory.save();
+      res.redirect('/admin/categories');
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+  }
+};
+
+
+ const updateCategory = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { name, status } = req.body;
+      if (!name) {
+          return res.status(400).json({ message: 'Category name is required' });
+      }
+      const category = await Category.findById(id);
+      if (!category) {
+          return res.status(404).json({ message: 'Category not found' });
+      }
+      category.name = name;
+      category.status = status;
+      await category.save();
+      res.redirect('/admin/categories');
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  try {
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+      if (!category) {
+          return res.status(404).send('Category not found');
+      }
+      // Soft delete: Update category status to 'deleted'
+      category.status = 'delete';
+      await category.save();
+     // req.flash('successMessage', 'Category deleted successfully');
+      res.redirect('/admin/categories');
+  } catch (error) {
+      console.error('Error deleting category:', error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+
+ const getEditCategoryForm = async (req, res) => {
+  try {
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+      if (!category) {
+          return res.status(404).send('Category not found');
+      }
+      res.render('editcategory', { category });
+  } catch (error) {
+      console.error('Error fetching category:', error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
 
 loadblockUser = async (req, res) => {
   try {
@@ -124,4 +197,8 @@ module.exports = {
   loadcategories,
   loadblockUser,
   loadunblockUser,
+  addCategory,
+  updateCategory,
+  deleteCategory,
+  getEditCategoryForm
 }
