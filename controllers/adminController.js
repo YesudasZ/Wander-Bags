@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
-
+const Product = require('../models/productModel');
 const bcrypt = require('bcrypt')
 
 
@@ -184,6 +184,27 @@ loadunblockUser = async (req, res) => {
 };
 
 
+const getProducts = async (req, res) => {
+  try {
+      const products = await Product.find({});
+      console.log(products);
+      res.render('products', { products });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+  }
+};
+
+const addloadProducts = async (req, res) => {
+  try {
+      
+      res.render('addproduct');
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+  }
+};
+
 
 
 
@@ -200,5 +221,7 @@ module.exports = {
   addCategory,
   updateCategory,
   deleteCategory,
-  getEditCategoryForm
+  getEditCategoryForm,
+  getProducts,
+  addloadProducts
 }

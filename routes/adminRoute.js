@@ -16,7 +16,6 @@ admin_route.get('/adminpanel',adminController.loadadminpanel)
 
 admin_route.get('/customers',adminController.loadcustomers)
 
-admin_route.get('/products',adminController.loadproducts)
 
 admin_route.post('/block-user',adminController.loadblockUser)
 
@@ -31,6 +30,11 @@ admin_route.get('/categories/:id/edit',adminController.getEditCategoryForm)
 admin_route.post('/categories/:id',adminController.updateCategory)
 
 admin_route.post('/categories/:id/delete', adminController.deleteCategory)
+
+admin_route.get('/products',adminController.getProducts)
+
+
+admin_route.get('/products/add',adminController.addloadProducts)
 
 
 module.exports = admin_route;
