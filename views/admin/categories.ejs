@@ -27,12 +27,14 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             border-radius: 10px;
+            margin-bottom: 20px; /* Added margin bottom */
         }
 
         .table-container {
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 20px; /* Added margin bottom */
         }
     </style>
 </head>
@@ -176,7 +178,6 @@
             </div>
         </header>
     
-
         <div class="container">
             <section class="content-main">
                 <!-- Add Category Form -->
@@ -192,9 +193,7 @@
                         </form>
                     </div>
                 </div>
-            </section>
 
-            <section class="content-main">
                 <!-- Display Categories -->
                 <div class="row justify-content-center">
                     <div class="col-md-8 table-container">
@@ -226,7 +225,18 @@
                 </div>
             </section>
         </div>
-
+        <div class="pagination-area mt-30 pb-30">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
