@@ -191,8 +191,9 @@
                                             <% } %>
                                         </td>
                                         <td> 
-                                            <button class="btn btn-danger block-user" data-user-id="<%= users[i]._id %>">Block</button>
-                                            <button class="btn btn-success unblock-user" data-user-id="<%= users[i]._id %>">Unblock</button>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#blockModal" data-user-id="<%= users[i]._id %>">Block</button>
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#unblockModal" data-user-id="<%= users[i]._id %>">Unblock</button>
                                         </td>
                                     </tr>
                             <% } } else { %>
@@ -205,6 +206,45 @@
                 </div>
             </div>
         </section>
+        <!-- Block Modal -->
+        <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="blockModalLabel">Block Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to block this user?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmBlock">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Unblock Modal -->
+        <div class="modal fade" id="unblockModal" tabindex="-1" aria-labelledby="unblockModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="unblockModalLabel">Unblock Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to unblock this user?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" id="confirmUnblock">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
             <div class="pagination-area mt-30 pb-30">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
@@ -242,7 +282,68 @@
     <script src="/admin-asset/js/main.js" type="text/javascript"></script>
     <script src="/admin-asset/js/custom-chart.js" type="text/javascript"></script>
 
+  
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let userIdToBlock = null;
+            let userIdToUnblock = null;
+
+            // Handle block user modal
+            $('#blockModal').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                userIdToBlock = button.data('user-id');
+            });
+
+            // Handle unblock user modal
+            $('#unblockModal').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                userIdToUnblock = button.data('user-id');
+            });
+
+            // Handle confirm block action
+            document.getElementById('confirmBlock').addEventListener('click', function() {
+                if (userIdToBlock) {
+                    // Perform block action
+                    fetch('/admin/block-user?id=' + userIdToBlock, {
+                        method: 'POST'
+                    }).then(function(response) {
+                        if (response.ok) {
+                            // Reload the page
+                            window.location.reload();
+                        } else {
+                            console.error('Failed to block user');
+                        }
+                    }).catch(function(error) {
+                        console.error('Error blocking user:', error);
+                    });
+                }
+            });
+
+            // Handle confirm unblock action
+            document.getElementById('confirmUnblock').addEventListener('click', function() {
+                if (userIdToUnblock) {
+                    // Perform unblock action
+                    fetch('/admin/unblock-user?id=' + userIdToUnblock, {
+                        method: 'POST'
+                    }).then(function(response) {
+                        if (response.ok) {
+                            // Reload the page
+                            window.location.reload();
+                        } else {
+                            console.error('Failed to unblock user');
+                        }
+                    }).catch(function(error) {
+                        console.error('Error unblocking user:', error);
+                    });
+                }
+            });
+        });
+    </script>
+
+
+
+
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Handle block user
             document.querySelectorAll('.block-user').forEach(function(button) {
@@ -286,7 +387,7 @@
                 });
             });
         });
-    </script>
+    </script> -->
     
 </body>
 
