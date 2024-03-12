@@ -4,7 +4,7 @@ const Product = require('../models/productModel');
 const bcrypt = require('bcrypt')
 const multer = require('multer');
 const path = require('path');
-
+const mongoose = require('mongoose');
 
 
 
@@ -299,12 +299,26 @@ const editProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
+  const productId = req.params.productId; // Assuming the product ID is passed in the URL params
   try {
-      await Product.findByIdAndUpdate(req.params.id, { status: 'deleted' });
-      res.redirect('/admin/products');
+    // Check if the product ID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).send('Invalid product ID');
+    }
+
+    // Find the product by ID and set its status to 'delete'
+    const product = await Product.findByIdAndUpdate(productId, { status: 'delete' });
+
+    // Check if the product exists
+    if (!product) {
+      return res.status(404).send('Product not found');
+    }
+
+    // Send a success response
+    res.redirect('/admin/products');
   } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
+    console.error(err);
+    res.status(500).send('Server Error');
   }
 };
 
