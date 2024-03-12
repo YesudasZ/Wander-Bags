@@ -2,6 +2,11 @@ const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
 const Product = require('../models/productModel');
 const bcrypt = require('bcrypt')
+const multer = require('multer');
+const path = require('path');
+
+
+
 
 
 
@@ -197,8 +202,8 @@ const getProducts = async (req, res) => {
 
 const addloadProducts = async (req, res) => {
   try {
-      
-      res.render('addproduct');
+    const categories = await Category.find({});  
+    res.render('addproduct', { categories });
   } catch (err) {
       console.error(err);
       res.status(500).send('Server Error');
@@ -206,8 +211,102 @@ const addloadProducts = async (req, res) => {
 };
 
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null,path.join(__dirname,'../public/productimages'))
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ 
+  storage: storage
+ }).array('images', 3);
 
 
+const addProduct = async (req, res) => {
+  try {
+    upload(req, res, async function (err) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send('File upload error.');
+      }
+      const images = req.files.map(file => file.filename);
+      // Create new product object
+      const product = new Product({
+        name: req.body.name,
+        description: req.body.description,
+        images: images,
+        price: req.body.price,
+        category: req.body.category,
+        brand: req.body.brand,
+        status: req.body.status,
+        countInStock: req.body.countInStock,
+        discountPrice: req.body.discountPrice
+      });
+
+      // Save the product to the database
+      await product.save();
+      res.redirect('/admin/products')
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+const editProductPage = async (req, res) => {
+  const productId = req.params.productId; // Assuming you have a route parameter for the product ID
+  try {
+
+    const categories = await Category.find({});  
+  
+
+      // Fetch the product from the database
+      const product = await Product.findById(productId);
+      // Render the edit product page with the product data
+      res.render('editproducts', { product , categories });
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+  }
+};
+
+
+
+const editProduct = async (req, res) => {
+  const productId = req.params.productId; // Assuming you have a route parameter for the product ID
+  try {
+      // Logic to update the product with the provided data
+      const updatedProduct = await Product.findByIdAndUpdate(productId, {
+          name: req.body.name,
+          description: req.body.description,
+          images: req.body.images, // Update with the new image file names
+          price: req.body.price,
+          category: req.body.category,
+          brand: req.body.brand,
+          status: req.body.status,
+          countInStock: req.body.countInStock,
+          discountPrice: req.body.discountPrice
+      }, { new: true });
+
+      res.redirect('/admin/products')
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+      await Product.findByIdAndUpdate(req.params.id, { status: 'deleted' });
+      res.redirect('/admin/products');
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+  }
+};
 
 module.exports = {
   loadLogin,
@@ -223,5 +322,9 @@ module.exports = {
   deleteCategory,
   getEditCategoryForm,
   getProducts,
-  addloadProducts
+  addloadProducts,
+  addProduct,
+  editProductPage,
+  editProduct,
+  deleteProduct
 }

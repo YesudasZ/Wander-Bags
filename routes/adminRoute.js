@@ -36,5 +36,14 @@ admin_route.get('/products',adminController.getProducts)
 
 admin_route.get('/products/add',adminController.addloadProducts)
 
+admin_route.post('/products/add',adminController.addProduct)
+
+admin_route.get('/products/edit/:productId', adminController.editProductPage);
+
+
+admin_route.post('/products/edit/:productId', adminController.editProduct);
+
+
+admin_route.post('/products/delete/:productId', adminController.deleteProduct);
 
 module.exports = admin_route;
