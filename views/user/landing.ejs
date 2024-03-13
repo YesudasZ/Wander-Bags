@@ -15,6 +15,159 @@
     <link rel="shortcut icon" type="image/x-icon" href="user-assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="user-assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+
+
+
+
+.carousel-margin {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.carousel-item img {
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+    content: none;
+}
+
+        .product-item {
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-thumb img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-thumb:hover img {
+    transform: scale(1.05);
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.product-thumb:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-content {
+    padding: 15px;
+}
+
+.product-price {
+    font-size: 14px;
+}
+
+.product-discount-price {
+    font-size: 18px;
+}
+
+.product-category h2 {
+    color: #343a40;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.product-item {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.product-thumb img {
+    border-radius: 10px;
+}
+
+.product-item:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-title {
+    font-size: 16px;
+}
+
+         .section-heading {
+        color: #343a40;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card {
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+    }
+
+    .zoom-on-hover {
+        transition: transform 0.3s ease;
+    }
+
+    .zoom-on-hover:hover {
+        transform: scale(1.05);
+    }
+         .carousel-shadow {
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e9e9e9;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+       .carousel-margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+        .carousel {
+        margin-left: 15px; /* Adjust margin as needed */
+        margin-right: 15px; /* Adjust margin as needed */
+    }
+
+    .carousel-shadow {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        border-radius: 10px; /* Add border radius */
+        overflow: hidden; /* Hide overflow for projection effect */
+    }
+
+    .carousel-inner {
+        perspective: 1000px; /* Add projection effect */
+    }
+
+    .carousel-item {
+        backface-visibility: hidden; /* Hide backface for projection effect */
+    }
+
+    .carousel-item img {
+        border-radius: 10px; /* Add border radius to images */
+    }
+    </style>
 </head>
 
 <body>
@@ -102,18 +255,18 @@
                                     <li><a class="active" href="/home">Home </a>
 
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="page-about.html">About</a>
-                                    </li>
+                                    </li> -->
                                     <li><a href="shop-grid-right.html">Shop </a>
                                         
                                     </li>
 
 
 
-                                    <li>
+                                    <!-- <li>
                                         <a href="page-contact.html">Contact</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </nav>
                         </div>
@@ -127,56 +280,113 @@
     </header>
 
     <main class="main">
-        <section class="home-slider position-relative mb-30">
-            <div class="container">
-                <div class="home-slide-cover bg-grey-10 mt-30">
-                    <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
-                        <div class="single-hero-slider single-animation-wrap">
-                            <div class="container">
-                                <div class="row align-items-center slider-animated-1">
-                                    <div class="col-lg-5 col-md-6">
-                                        <div class="hero-slider-content-2">
-                                            <h4 class="animated">Trade-In Offer</h4>
-                                            <h3 class="animated fw-900">Supper Value Deals</h3>
-                                            <h2 class="animated fw-900 text-brand">On All Products</h2>
-                                            <p class="animated">Save more with coupons & up to 70% off</p>
-                                            <a class="animated btn btn-brush btn-brush-3" href="shop-product-right.html" tabindex="0"> Shop Now </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-6">
-                                        <div class="single-slider-img single-slider-img-1">
-                                            <img class="animated" src="user-assets/imgs/slider/slider-6.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-hero-slider single-animation-wrap">
-                            <div class="container">
-                                <div class="row align-items-center slider-animated-1">
-                                    <div class="col-lg-5 col-md-6">
-                                        <div class="hero-slider-content-2">
-                                            <h4 class="animated">Hot promotions</h4>
-                                            <h3 class="animated fw-900">Fashion Trending</h3>
-                                            <h2 class="animated fw-900 text-brand">Great Collection</h2>
-                                            <p class="animated">Save more with coupons & up to 20% off</p>
-                                            <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html" tabindex="0"> Get It Now </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-6">
-                                        <div class="single-slider-img single-slider-img-1">
-                                            <img class="animated" src="user-assets/imgs/slider/slider-7.png" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slider-arrow hero-slider-1-arrow"></div>
+   
+           
+
+        <div id="carouselExampleControls" class="carousel slide carousel-margin" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="user-assets/imgs/slider/slider-6.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="user-assets/imgs/slider/slider-7.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="user-assets/imgs/slider/slider-8.jpg" class="d-block w-100" alt="...">
                 </div>
             </div>
-        </section>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        
+        
+      
+
+        
+           
   
+        <div class="container">
+            <!-- Bestsellers -->
+            <div class="row mt-5">
+                <h2 class="text-dark fw-bold">BESTSELLERS</h2>
+                <div class="col-12 product-category">
+                    <div class="row justify-content-center">
+                        <% products.filter(product => product.status !== 'delete').slice(0, 4).forEach(product => { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                            <div class="product-item shadow rounded border">
+                                <div class="product-thumb position-relative">
+                                    <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
+                                    <div class="product-overlay"></div>
+                                </div>
+                                <div class="product-content py-3">
+                                    <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
+                                    <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                                    <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+            <!-- Popular -->
+            <div class="row mt-5">
+                <h2 class="text-dark fw-bold">POPULAR</h2>
+                <div class="col-12 product-category">
+                    <div class="row justify-content-center">
+                        <% products.filter(product => product.status !== 'delete').slice(4, 8).forEach(product => { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                            <div class="product-item shadow rounded border">
+                                <div class="product-thumb position-relative">
+                                    <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
+                                    <div class="product-overlay"></div>
+                                </div>
+                                <div class="product-content py-3">
+                                    <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
+                                    <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                                    <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+            <!-- Trendy -->
+            <div class="row mt-5">
+                <h2 class="text-dark fw-bold">TRENDY</h2>
+                <div class="col-12 product-category">
+                    <div class="row justify-content-center">
+                        <% products.filter(product => product.status !== 'delete').slice(8, 12).forEach(product => { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                            <div class="product-item shadow rounded border">
+                                <div class="product-thumb position-relative">
+                                    <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
+                                    <div class="product-overlay"></div>
+                                </div>
+                                <div class="product-content py-3">
+                                    <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
+                                    <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                                    <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        
+
+
     </main>
     <footer class="main">
 
@@ -304,6 +514,37 @@
     <!-- Template  JS -->
     <script src="./user-assets/js/main.js?v=3.4"></script>
     <script src="./user-assets/js/shop.js?v=3.4"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.single-hero-slider');
+            const prevArrow = document.querySelector('.prev-arrow');
+            const nextArrow = document.querySelector('.next-arrow');
+            let currentIndex = 0;
+    
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = i === index ? 'block' : 'none';
+                });
+            }
+    
+            function showNextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                showSlide(currentIndex);
+            }
+    
+            function showPrevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                showSlide(currentIndex);
+            }
+    
+            nextArrow.addEventListener('click', showNextSlide);
+            prevArrow.addEventListener('click', showPrevSlide);
+    
+            // Show the first slide initially
+            showSlide(currentIndex);
+        });
+    </script>
 </body>
 
 </html>

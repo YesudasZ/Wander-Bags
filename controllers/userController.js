@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Product = require('../models/productModel');
 
 const bcrypt = require('bcrypt')
 
@@ -54,8 +55,9 @@ const failureGoogleLogin = (req , res) => {
 const landingLoad = async (req, res) => {
 
   try {
+    const products = await Product.find();
 
-    res.render('landing')
+    res.render('landing', { products });
 
   } catch (error) {
 

@@ -31,12 +31,11 @@ admin_route.post('/categories/:id',adminController.updateCategory)
 
 admin_route.post('/categories/:id/delete', adminController.deleteCategory)
 
-admin_route.get('/products',adminController.getProducts)
-
 admin_route.get('/categories/removed', adminController.getRemovedCategories);
 
 admin_route.post('/categories/:id/restore', adminController.restoreCategory);
 
+admin_route.get('/products',adminController.getProducts)
 
 admin_route.get('/products/add',adminController.addloadProducts)
 
