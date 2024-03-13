@@ -164,6 +164,34 @@ const deleteCategory = async (req, res) => {
 };
 
 
+const getRemovedCategories = async (req, res) => {
+  try {
+      const removedCategories = await Category.find({ status: 'delete' });
+      res.json(removedCategories);
+  } catch (error) {
+      console.error('Error fetching removed categories:', error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+const restoreCategory = async (req, res) => {
+  try {
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+      if (!category) {
+          return res.status(404).send('Category not found');
+      }
+      // Restore the category by changing its status to 'active'
+      category.status = 'active';
+      await category.save();
+      res.redirect('/admin/categories');
+  } catch (error) {
+      console.error('Error restoring category:', error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+
 loadblockUser = async (req, res) => {
   try {
       const userId = req.query.id;
@@ -191,9 +219,10 @@ loadunblockUser = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
+    const removedProducts = await Product.find({ status: 'delete' });
       const products = await Product.find({});
       console.log(products);
-      res.render('products', { products });
+      res.render('products', { products,removedProducts  });
   } catch (err) {
       console.error(err);
       res.status(500).send('Server Error');
@@ -322,6 +351,24 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const restoreProduct = async (req, res) => {
+  const productId = req.params.productId;
+
+  try {
+      // Find the product by ID and update its status to 'active'
+      const restoredProduct = await Product.findByIdAndUpdate(productId, { status: 'active' }, { new: true });
+
+      if (!restoredProduct) {
+          return res.status(404).json({ message: 'Product not found' });
+      }
+
+      return res.status(200).json({ message: 'Product restored successfully', product: restoredProduct });
+  } catch (error) {
+      console.error('Error restoring product:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -340,5 +387,8 @@ module.exports = {
   addProduct,
   editProductPage,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  getRemovedCategories,
+  restoreCategory,
+  restoreProduct
 }

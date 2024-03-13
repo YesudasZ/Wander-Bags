@@ -33,6 +33,10 @@ admin_route.post('/categories/:id/delete', adminController.deleteCategory)
 
 admin_route.get('/products',adminController.getProducts)
 
+admin_route.get('/categories/removed', adminController.getRemovedCategories);
+
+admin_route.post('/categories/:id/restore', adminController.restoreCategory);
+
 
 admin_route.get('/products/add',adminController.addloadProducts)
 
@@ -43,5 +47,7 @@ admin_route.get('/products/edit/:productId', adminController.editProductPage);
 admin_route.post('/products/edit/:productId', adminController.editProduct);
 
 admin_route.post('/products/delete/:productId', adminController.deleteProduct);
+
+admin_route.post('/products/restore/:productId', adminController.restoreProduct);
 
 module.exports = admin_route;

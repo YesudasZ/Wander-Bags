@@ -230,7 +230,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Image</th>
-                                        <th>Description</th>
+                                        <th>Brand</th>
                                         <th>Status</th>
                                         <th>Modify</th>
                                         <th>Action</th>
@@ -243,7 +243,7 @@
                                     <tr>
                                         <td><%= product.name %></td>
                                         <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
-                                        <td><%= product.description %></td>
+                                        <td><%= product.brand %></td>
                                         <td><%= product.status %></td>
                                         <td><a href="/admin/products/edit/<%= product._id %>" class="btn btn-edit">Edit</a></td>
                                         <td>
@@ -280,6 +280,51 @@
                     </div>
                 </div>
             </div>
+
+
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#removedProductsModal">
+                Removed Products
+            </button>
+            
+            <div class="modal fade" id="removedProductsModal" tabindex="-1" aria-labelledby="removedProductsModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="removedProductsModalLabel">Removed Products</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Table to display removed products -->
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Brand</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Loop through removed products and display them in the table -->
+                                    <% removedProducts.forEach(product => { %>
+                                        <tr>
+                                            <td><%= product.name %></td>
+                                            <td><%= product.brand %></td>
+                                            <td><%= product.status %></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-restore" data-product-id="<%= product._id %>">Restore</button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+
       
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
@@ -354,6 +399,41 @@ function confirmDelete() {
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const restoreButtons = document.querySelectorAll('.btn-restore');
+
+    // Add click event listener to each restore button
+    restoreButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+
+            // Make AJAX request to restore the product
+            fetch(`/admin/products/restore/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ restoreProduct: true })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Reload the page after successful restoration
+                    window.location.reload();
+                } else {
+                    // Handle error
+                    console.error('Error restoring product');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+
+
+
     </script>
 </body>
 
