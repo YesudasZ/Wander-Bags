@@ -65,6 +65,7 @@ user_route.post('/resendotp',userController.resendotp)
 
 user_route.get('/home',userController.loadHome)
 
+user_route.get('/shop',userController.loadshop)
 
 user_route.get('/forgetpassword',userController.loadforgetpassword)
 

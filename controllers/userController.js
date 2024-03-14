@@ -257,11 +257,24 @@ const otpverify = async (req, res) => {
 }
 
 
+const loadshop =async (req, res) => {
+  try {
+    const  userData = await User.findById({_id:req.session.user_id})
+    const products = await Product.find();
+
+    res.render('shop', { products,user:userData });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 
 const loadHome = async (req, res) => {
   try {
-    res.render('home');
+    const  userData = await User.findById({_id:req.session.user_id})
+    const products = await Product.find();
+
+    res.render('home', { products,user:userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -311,5 +324,6 @@ module.exports = {
   successGoogleLogin,
   failureGoogleLogin,
   verifylogin,
-  landingLoad
+  landingLoad,
+  loadshop
 }
