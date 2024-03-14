@@ -1,20 +1,148 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!DOCTYPE html>
+<html class="no-js" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Wander Dashboard</title>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="admin-asset/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
-    <link href="admin-asset/css/main.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8">
+  <title>Wander - eCommerce HTML Template</title>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="user-assets/imgs/theme/favicon.svg">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="user-assets/css/main.css?v=3.4">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    /* Footer Styling */
+    footer.main {
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    .widget-about p {
+      color: #a8a8a8;
+      line-height: 1.8;
+    }
+
+    .social-icons a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .widget-title {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .footer-list li {
+      list-style: none;
+    }
+
+    .download-app img {
+      max-width: 130px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .font-sm {
+      font-size: 14px;
+    }
+
+    .text-light {
+      color: #fff !important;
+    }
+
+    .text-muted {
+      color: #a8a8a8 !important;
+    }
+
+    .header-info-right ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.header-info-right ul li:first-child {
+    margin-left: 0;
+}
+
+.header-info-right a {
+    text-decoration: none;
+    color: #343a40; /* Adjust text color as needed */
+}
+
+.header-info-right a:hover {
+    text-decoration: underline;
+}
+
+.header-info-right .fi-rs-user {
+    margin-right: 5px;
+}
+
+
+    .product-item {
+      transition: transform 0.3s ease-in-out;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .product-thumb img {
+      transition: transform 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+
+    .product-thumb:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease-in-out;
+      opacity: 0;
+    }
+
+    .product-thumb:hover .product-overlay {
+      opacity: 1;
+    }
+
+    .product-content {
+      padding: 15px;
+    }
+
+    .product-title {
+      font-size: 16px;
+      margin-bottom: 5px;
+      text-decoration: none;
+      /* Remove underline */
+      color: #343a40;
+      /* Set text color */
+    }
+
+    .product-price,
+    .product-discount-price {
+      font-size: 14px;
+      margin-bottom: 5px;
+      text-decoration: none;
+      /* Remove underline */
+      color: #6c757d;
+      /* Set text color */
+    }
+
+    .product-category h2 {
+      color: #343a40;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+  </style>
 </head>
 
 <body>

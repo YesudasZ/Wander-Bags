@@ -67,6 +67,8 @@ user_route.get('/home',userController.loadHome)
 
 user_route.get('/shop',userController.loadshop)
 
+user_route.get('/productdetails/:productId',userController.getProductDetails);
+
 user_route.get('/forgetpassword',userController.loadforgetpassword)
 
 
@@ -74,5 +76,8 @@ user_route.get('/forgetpasswordotp',userController.loadforgetpasswordotp)
 
 
 user_route.get('/resetpassword',userController.loadresetpassword)
+
+
+
 
 module.exports = user_route;

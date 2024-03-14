@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname,'views/admin')))
 app.use(express.static(path.join(__dirname,'views/user')))
 
 
+
 //user route
 const userRoute = require ('./routes/userRoute');
 

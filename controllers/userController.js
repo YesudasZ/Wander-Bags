@@ -308,6 +308,19 @@ const loadresetpassword = async (req, res) => {
   }
 }
 
+const getProductDetails = async (req, res) => {
+  try {
+    console.log( req.params.productId);
+    const  userData = await User.findById({_id:req.session.user_id})
+    console.log( req.params.productId);
+      const productId = req.params.productId;
+      const product = await Product.findById(productId);
+      res.render('productdetails', { product,user:userData });
+  } catch (error) {
+      console.error(error);
+     
+  }
+};
 
 
 module.exports = {
@@ -325,5 +338,6 @@ module.exports = {
   failureGoogleLogin,
   verifylogin,
   landingLoad,
-  loadshop
+  loadshop,
+  getProductDetails
 }
