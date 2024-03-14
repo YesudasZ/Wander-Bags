@@ -322,6 +322,13 @@ const getProductDetails = async (req, res) => {
   }
 };
 
+const userLogout = (req,res) => {
+  req.session.user_id = null;
+  req.session.user = false;
+  res.redirect('/');
+}
+
+
 
 module.exports = {
   loginLoad,
@@ -339,5 +346,6 @@ module.exports = {
   verifylogin,
   landingLoad,
   loadshop,
-  getProductDetails
+  getProductDetails,
+  userLogout
 }

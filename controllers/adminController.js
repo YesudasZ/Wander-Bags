@@ -39,7 +39,8 @@ const verifyLogin = async (req, res) => {
           res.render('login', { message: "Unauthorized" });
         }
         else {
-          req.session.user_id = userData._id;
+          req.session.admin_id = userData._id;
+          req.session.admin = true;
           res.redirect("/admin/adminpanel");
         }
       }
@@ -195,7 +196,7 @@ const restoreCategory = async (req, res) => {
 loadblockUser = async (req, res) => {
   try {
       const userId = req.query.id;
-      console.log(userId);
+  
       await User.findByIdAndUpdate(userId, { is_verified: 0 });
       res.status(200).json({ message: 'User blocked successfully' });
   } catch (error) {
@@ -207,7 +208,7 @@ loadblockUser = async (req, res) => {
 loadunblockUser = async (req, res) => {
   try {
       const userId = req.query.id;
-      console.log(userId);
+  
       await User.findByIdAndUpdate(userId, { is_verified: 1 });
       res.status(200).json({ message: 'User unblocked successfully' });
   } catch (error) {
@@ -221,7 +222,7 @@ const getProducts = async (req, res) => {
   try {
     const removedProducts = await Product.find({ status: 'delete' });
       const products = await Product.find({});
-      console.log(products);
+     
       res.render('products', { products,removedProducts  });
   } catch (err) {
       console.error(err);
@@ -295,6 +296,7 @@ const editProductPage = async (req, res) => {
       // Fetch the product from the database
       const product = await Product.findById(productId);
       // Render the edit product page with the product data
+
       res.render('editproducts', { product , categories });
   } catch (err) {
       console.error(err.message);
@@ -306,6 +308,10 @@ const editProductPage = async (req, res) => {
 
 const editProduct = async (req, res) => {
   const productId = req.params.productId; // Assuming you have a route parameter for the product ID
+  console.log(productId);
+  console.log(req.body);
+  console.log(req.body.name);
+
   try {
       // Logic to update the product with the provided data
       const updatedProduct = await Product.findByIdAndUpdate(productId, {
@@ -319,7 +325,7 @@ const editProduct = async (req, res) => {
           countInStock: req.body.countInStock,
           discountPrice: req.body.discountPrice
       }, { new: true });
-
+console.log(updatedProduct);
       res.redirect('/admin/products')
   } catch (err) {
       console.error(err.message);
@@ -369,6 +375,13 @@ const restoreProduct = async (req, res) => {
   }
 };
 
+
+const logout = async(req,res) => {
+  req.session.admin_id = "";
+  req.session.admin = false;
+  res.redirect('/admin');
+}
+
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -390,5 +403,6 @@ module.exports = {
   deleteProduct,
   getRemovedCategories,
   restoreCategory,
-  restoreProduct
+  restoreProduct,
+  logout
 }

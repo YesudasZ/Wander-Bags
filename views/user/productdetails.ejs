@@ -82,7 +82,43 @@
 .header-info-right .fi-rs-user {
     margin-right: 5px;
 }
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.9); 
+    padding-top: 60px; 
+}
 
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px; 
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
 
   </style>
 </head>
@@ -170,32 +206,6 @@
           <div class="logo logo-width-1 d-block d-lg-none">
             <a href="index.html"><img src="../user-assets/imgs/theme/logo.svg" alt="logo"></a>
           </div>
-          <div class="header-nav d-none d-lg-flex">
-
-            <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
-              <nav>
-                <ul>
-                  <li><a href="/home">Home </a>
-
-                  </li>
-                  <!-- <li>
-                                        <a href="page-about.html">About</a>
-                                    </li> -->
-                  <li><a class="active" href="/shop">Shop </a>
-
-                  </li>
-
-
-
-                  <!-- <li>
-                                        <a href="page-contact.html">Contact</a>
-                                    </li> -->
-                </ul>
-              </nav>
-            </div>
-          </div>
-
-
 
         </div>
       </div>
@@ -203,77 +213,142 @@
   </header>
 
   <main class="main">
-
-
-
-
-    <div class="col-md-6 col-sm-12 col-xs-12">
-      <div class="detail-info">
-          <h2 class="title-detail"><%= product.name  %></h2>
-          <div class="product-detail-rating">
-              <div class="pro-details-brand">
-                  <% if (product.status === 'out-of-stock') { %>
-                      <span> Currently unavailable: <a href="#" class="text-danger"><%= product.status %></a></span>
-                  <% } %> <br>
-                  <span> Category: <a href="#"><%= product.category %></a></span>
-              </div>
-              <div class="product-rate-cover text-end">
-                  <div class="product-rate d-inline-block">
-                      <div class="product-rating" style="width:90%">
-                      </div>
-                  </div>
-                  <span class="font-small ml-5 text-muted"> (25 reviews)</span>
-              </div>
-          </div>
-          <div class="clearfix product-price-cover">
-              <div class="product-price primary-color float-left">
-                
-                  <ins><span class="old-price font-md ml-15">Rs.<%= product.price%>/-</span></ins>
-                  <span class="save-price  font-md color3 ml-15"><%= product.discountPrice %>% off</span>
-              </div>
-          </div>
-          <div class="bt-1 border-color-1 mt-15 mb-15"></div>
-          <div class="short-desc mb-30">
-             
-              <% if (product.countInStock <= 10 && product.countInStock >= 1 ) { %>
-                  <span class="text-danger"> Hurry up only <%= product.countInStock %> stocks left</span><br>
-                  <% } else  { %>
-                   
-              <% } %>
-          </div>
-          <div class="product_sort_info font-xs mb-30">
-              <ul>
-                  <li class="mb-10 text-dark"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
-                  <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
-              </ul>
-          </div>
-          <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-          <div class="detail-extralink">
-              <div class="product-extra-link2">
-                  <button type="submit" class="button button-add-to-cart text-white" onclick="addToCart('<%= product._id %>', '<%= product.countInStock %>')">
-                      ADD TO CART <i class=" fi-rs-shopping-bag-add"></i>
-                  </button>
-                  <button type="submit" class="button button-add-to-cart text-white" onclick="proceedCheckoutPage('<%= product._id %>', '<%= product.countInStock %>')">
-                      BUY NOW
-                  </button>
-                  <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                  <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-              </div>
+    <div class="page-header breadcrumb-wrap">
+      <div class="container">
+          <div class="breadcrumb">
+              <a href="/home" rel="nofollow" style="color: #000000;">Home</a>
+              <span></span>
+              <a href="/shop" rel="nofollow" style="color: #000000;">Shop</a>
+              <span></span> Product
           </div>
       </div>
-      <!-- Detail Info -->
   </div>
+    <section class="mt-50 mb-50">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="product-detail accordion-detail">
+                      <div class="row mb-50">
+                          <div class="col-md-5 col-sm-12 col-xs-12">
+                              <div id="imageModal" class="modal">
+                                  <span class="close">&times;</span>
+                                  <img class="modal-content" id="zoomedImage">
+                              </div>
+                              <div class="detail-gallery mr-50">
+                                  <!-- MAIN SLIDES -->
+                                  <div class="product-image-slider" >
+                                      <% if (product.images && product.images.length > 0) { %>
+                                          <% product.images.forEach((productImage) => { %>
+                                              <div class="border-radius-10" >
+                                                  <img src="/productimages/<%= productImage%>" alt="product image"   class="img-fluid rounded" onclick="openModal('/productimages/<%= productImage%>')">
+                                              </div>
+                                          <% }) %>
+                                      <% } %>
+                                  </div>                                        
+                                  <!-- THUMBNAILS -->
+                                  <div class="slider-nav-thumbnails ">
+                                      <% if (product.images && product.images.length > 0) { %>
+                                          <% product.images.forEach((productImage, index) => { %>
+                                              <div>
+                                                  <img  src="/productimages/<%= productImage %>" alt="<%= product.title %>" data-index="<%= index %>"  class="img-fluid rounded">
+                                              </div>
+                                          <% }) %>
+                                      <% } %>
+                                  </div>
+                              </div>
+                              <!-- End Gallery -->
+                              <div class="social-icons single-share">
+                                  <ul class="text-grey-5 d-inline-block">
+                                      <li><strong class="mr-10">Share this:</strong></li>
+                                      <li class="social-facebook"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
+                                      <li class="social-twitter"> <a href="#"><img src="../user-assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
+                                      <li class="social-instagram"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
+                                      <li class="social-linkedin"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div class="col-md-6 col-sm-12 col-xs-12">
+                              <div class="detail-info">
+                                  <h2 class="title-detail"><%= product.name  %></h2>
+                                  <div class="product-detail-rating">
+                                      <div class="pro-details-brand">
+                                          <% if (product.status === 'out-of-stock') { %>
+                                              <span> Currently unavailable: <a href="#" class="text-danger"><%= product.status %></a></span>
+                                          <% } %> <br>
+                                          <span> Category: <a href="#"><%= product.category %></a></span>
+                                      </div>
+                                      <div class="product-rate-cover text-end">
+                                          <div class="product-rate d-inline-block">
+                                              <div class="product-rating" style="width:90%">
+                                              </div>
+                                          </div>
+                                          <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                      </div>
+                                  </div>
+                                  <div class="clearfix product-price-cover">
+                                      <div class="product-price primary-color float-left">
+                                        
+                                          <ins><span class="old-price font-md ml-15">Rs.<%= product.price%>/-</span></ins>
+                                          <span class="save-price  font-md color3 ml-15">Rs.<%= product.discountPrice %></span>
+                                      </div>
+                                  </div>
+                                  <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                  <div class="short-desc mb-30">
+                                      <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock' ) { %>
+                                          <span class="text-danger"> Hurry up only <%= product.countInStock %> stocks left</span><br>
+                                          <% } else  { %>
+                                           
+                                      <% } %>
+                                  </div>
+                               
+                                  <div class="product_sort_info font-xs mb-30">
+                                      <ul>
+                                          <li class="mb-10 text-dark"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
+                                          <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                      </ul>
+                                  </div>
+                                  <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                  <div class="detail-extralink">
+                                      <div class="product-extra-link2">
+                                          <button type="submit" class="button button-add-to-cart text-white" >
+                                              ADD TO CART <i class=" fi-rs-shopping-bag-add"></i>
+                                          </button>
+                                          <button type="submit" class="button button-add-to-cart text-white">
+                                              BUY NOW
+                                          </button>
+                                          <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                          <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="tab-style3 mt-50">
+                                <ul class="nav nav-tabs text-uppercase">
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-secondary" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                                    </li>
+      
+                                </ul>
+                                <div class="tab-content shop_info_tab entry-main-content">
+                                    <div class="tab-pane fade show active" id="Description">
+                                       <div class="">
+                                        <p>><%= product.description %></p>                       
+                                        </div>
+                                    </div>
+      
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                 
+                    
 
 
+                  </div>
+              </div>
 
-
-
-
-
-
-
-
-
+          </div>
+      </div>
+  </section>
   </main>
   <footer class="main bg-secondary text-light">
 
@@ -403,7 +478,26 @@
   <!-- Template  JS -->
   <script src="./../user-assets/js/main.js?v=3.4"></script>
   <script src="./../user-assets/js/shop.js?v=3.4"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<script>
+  function openModal(imageUrl) {
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("zoomedImage");
+        modal.style.display = "block";
+        modalImg.src = imageUrl;
+    }
+
+    // Close the modal when the close button is clicked
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        var modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+    }
+
+</script>
 
 </body>
 

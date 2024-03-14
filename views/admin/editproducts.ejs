@@ -196,7 +196,7 @@
         <div class="container">
           <div class="edit-category-container">
               <h1 class="text-center mb-4">Edit Product</h1>
-              <form action="/admin/products/edit/<%= product._id %>" method="post" enctype="multipart/form-data">
+              <form action="/admin/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
                   <div class="mb-3">
                       <label for="name" class="form-label">Name:</label>
                       <input type="text" id="name" name="name" value="<%= product.name %>" class="form-control" required>

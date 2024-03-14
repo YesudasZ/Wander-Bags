@@ -7,14 +7,24 @@ require('dotenv').config();
 const express = require("express");
 
 const app = express();
+const session = require("express-session");
+const nocache = require("nocache");
 
+app.use(express.urlencoded({ extended: true }));
 
-
-const nodemailer = require("nodemailer");
+// Replace bodyParser.json() with express.json()
+app.use(express.json());
 
 const path = require("path");
 
-
+app.use(
+  session({
+    secret:process.env.SESSION_SECRET ,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(nocache())
 app.use(express.static(path.join(__dirname,'views')))
 app.use(express.static(path.join(__dirname,'public')))
 app.use(express.static(path.join(__dirname,'views/admin')))
