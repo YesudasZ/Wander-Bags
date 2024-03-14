@@ -13,6 +13,8 @@
     <meta property="og:image" content="">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/admin-asset/imgs/theme/favicon.svg">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Template CSS -->
     <link href="/admin-asset/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -23,20 +25,27 @@
             <div class="card mx-auto card-login">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Sign in</h4>
-                    <form method="post">
+                    <% if(typeof message !== 'undefined'){ %>
+                        <h4 style="color: red;"><%=message %></h4>
+                    <% } %>
+
+                    <form id="loginForm" method="post" onsubmit="return validateForm()">
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Email" type="text" name="email">
+                            
+                            <input class="form-control" placeholder="Email" type="text" name="email" id="email">
+                            <span id="emailError" class="error"></span>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Password" type="password" name="password">
+                            <input class="form-control" placeholder="Password" type="password" name="password" id="password">
+                            <span id="passwordError" class="error"></span>
                         </div> <!-- form-group// -->
                         
                         <div class="mb-4">
                             <button type="submit" class="btn btn-primary w-100" name="login"> Login </button>
                         </div> <!-- form-group// -->
                     </form>
-                   
-                 
+                </div>
+            </div>
         </section>
         <footer class="main-footer text-center">
             <p class="font-xs">
@@ -47,11 +56,38 @@
             <p class="font-xs mb-30">All rights reserved</p>
         </footer>
     </main>
-    <script src="/admin-asset/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="/admin-asset/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="/admin-asset/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Main Script -->
-    <script src="/admin-asset/js/main.js" type="text/javascript"></script>
-    </body>
-    
-    </html>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function validateForm() {
+            var email = document.getElementById("email").value.trim();
+            var password = document.getElementById("password").value.trim();
+            var emailError = document.getElementById("emailError");
+            var passwordError = document.getElementById("passwordError");
+            var isValid = true;
+
+            // Reset error messages
+            emailError.innerText = "";
+            passwordError.innerText = "";
+
+            // Validate email
+            if (email === "") {
+                emailError.innerText = "Email is required";
+                emailError.style.color = 'red';
+                isValid = false;
+            }
+
+            // Validate password
+            if (password === "") {
+                passwordError.innerText = "Password is required";
+                passwordError.style.color = 'red';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+
+</html>

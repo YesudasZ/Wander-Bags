@@ -223,132 +223,129 @@
           </div>
       </div>
   </div>
-    <section class="mt-50 mb-50">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="product-detail accordion-detail">
-                      <div class="row mb-50">
-                          <div class="col-md-5 col-sm-12 col-xs-12">
-                              <div id="imageModal" class="modal">
-                                  <span class="close">&times;</span>
-                                  <img class="modal-content" id="zoomedImage">
-                              </div>
-                              <div class="detail-gallery mr-50">
-                                  <!-- MAIN SLIDES -->
-                                  <div class="product-image-slider" >
-                                      <% if (product.images && product.images.length > 0) { %>
-                                          <% product.images.forEach((productImage) => { %>
-                                              <div class="border-radius-10" >
-                                                  <img src="/productimages/<%= productImage%>" alt="product image"   class="img-fluid rounded" onclick="openModal('/productimages/<%= productImage%>')">
-                                              </div>
-                                          <% }) %>
-                                      <% } %>
-                                  </div>                                        
-                                  <!-- THUMBNAILS -->
-                                  <div class="slider-nav-thumbnails ">
-                                      <% if (product.images && product.images.length > 0) { %>
-                                          <% product.images.forEach((productImage, index) => { %>
-                                              <div>
-                                                  <img  src="/productimages/<%= productImage %>" alt="<%= product.title %>" data-index="<%= index %>"  class="img-fluid rounded">
-                                              </div>
-                                          <% }) %>
-                                      <% } %>
-                                  </div>
-                              </div>
-                              <!-- End Gallery -->
-                              <div class="social-icons single-share">
-                                  <ul class="text-grey-5 d-inline-block">
-                                      <li><strong class="mr-10">Share this:</strong></li>
-                                      <li class="social-facebook"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
-                                      <li class="social-twitter"> <a href="#"><img src="../user-assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
-                                      <li class="social-instagram"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
-                                      <li class="social-linkedin"><a href="#"><img src="../user-assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
-                                  </ul>
-                              </div>
-                          </div>
-                          <div class="col-md-6 col-sm-12 col-xs-12">
-                              <div class="detail-info">
-                                  <h2 class="title-detail"><%= product.name  %></h2>
-                                  <div class="product-detail-rating">
-                                      <div class="pro-details-brand">
-                                          <% if (product.status === 'out-of-stock') { %>
-                                              <span> Currently unavailable: <a href="#" class="text-danger"><%= product.status %></a></span>
-                                          <% } %> <br>
-                                          <span> Category: <a href="#"><%= product.category %></a></span>
-                                      </div>
-                                      <div class="product-rate-cover text-end">
-                                          <div class="product-rate d-inline-block">
-                                              <div class="product-rating" style="width:90%">
-                                              </div>
-                                          </div>
-                                          <span class="font-small ml-5 text-muted"> (25 reviews)</span>
-                                      </div>
-                                  </div>
-                                  <div class="clearfix product-price-cover">
-                                      <div class="product-price primary-color float-left">
-                                        
-                                          <ins><span class="old-price font-md ml-15">Rs.<%= product.price%>/-</span></ins>
-                                          <span class="save-price  font-md color3 ml-15">Rs.<%= product.discountPrice %></span>
-                                      </div>
-                                  </div>
-                                  <div class="bt-1 border-color-1 mt-15 mb-15"></div>
-                                  <div class="short-desc mb-30">
-                                      <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock' ) { %>
-                                          <span class="text-danger"> Hurry up only <%= product.countInStock %> stocks left</span><br>
-                                          <% } else  { %>
-                                           
-                                      <% } %>
-                                  </div>
-                               
-                                  <div class="product_sort_info font-xs mb-30">
-                                      <ul>
-                                          <li class="mb-10 text-dark"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
-                                          <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
-                                      </ul>
-                                  </div>
-                                  <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                  <div class="detail-extralink">
-                                      <div class="product-extra-link2">
-                                          <button type="submit" class="button button-add-to-cart text-white" >
-                                              ADD TO CART <i class=" fi-rs-shopping-bag-add"></i>
-                                          </button>
-                                          <button type="submit" class="button button-add-to-cart text-white">
-                                              BUY NOW
-                                          </button>
-                                          <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                          <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="tab-style3 mt-50">
-                                <ul class="nav nav-tabs text-uppercase">
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-secondary" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
-                                    </li>
-      
-                                </ul>
-                                <div class="tab-content shop_info_tab entry-main-content">
-                                    <div class="tab-pane fade show active" id="Description">
-                                       <div class="">
-                                        <p>><%= product.description %></p>                       
-                                        </div>
+  <section class="product-details-section mt-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div id="imageModal" class="modal">
+                        <span class="close">&times;</span>
+                        <img class="modal-content" id="zoomedImage">
+                    </div>
+                    <div class="main-images mb-3">
+                        <div class="product-image-slider">
+                            <% if (product.images && product.images.length > 0) { %>
+                                <% product.images.forEach((productImage) => { %>
+                                    <div class="border-radius-10">
+                                        <img src="/productimages/<%= productImage %>" alt="product image" class="img-fluid rounded" onclick="openModal('/productimages/<%= productImage %>')">
                                     </div>
-      
-                                </div>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="thumbnails">
+                        <div class="slider-nav-thumbnails">
+                            <% if (product.images && product.images.length > 0) { %>
+                                <% product.images.forEach((productImage, index) => { %>
+                                    <div>
+                                        <img src="/productimages/<%= productImage %>" alt="<%= product.title %>" data-index="<%= index %>" class="img-fluid rounded">
+                                    </div>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Product Gallery -->
+
+                <!-- Social Icons -->
+                <div class="social-icons single-share mt-3">
+                    <ul class="list-inline">
+                        <li><strong class="mr-2">Share:</strong></li>
+                        <li><a href="#"><i class="bi bi-facebook"></i></a></li>
+                        <li><a href="#"><i class="bi bi-twitter"></i></a></li>
+                        <li><a href="#"><i class="bi bi-instagram"></i></a></li>
+                        <li><a href="#"><i class="bi bi-pinterest"></i></a></li>
+                    </ul>
+                </div>
+                <!-- End Social Icons -->
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <!-- Product Details -->
+                <div class="product-details">
+                    <h2 class="title-detail"><%= product.name %></h2>
+                    <div class="product-detail-rating">
+                        <div class="pro-details-brand">
+                            <% if (product.status === 'out-of-stock') { %>
+                                <span class="text-danger">Currently Unavailable: <%= product.status %></span>
+                            <% } else { %>
+                                <span>Category: <%= product.category %></span>
+                            <% } %>
+                        </div>
+                        <div class="product-rate-cover text-end">
+                            <div class="product-rate d-inline-block">
+                                <div class="product-rating" style="width:90%"></div>
                             </div>
-                          </div>
-                      </div>
-                 
-                    
+                            <span class="font-small ml-2 text-muted">(25 reviews)</span>
+                        </div>
+                    </div>
+                    <div class="product-price-cover mt-3">
+                        <div class="product-price">
+                            <ins class="font-weight-bold">Rs.<%= product.discountPrice %></ins>
+                            <del class="old-price ml-2">Rs.<%= product.price %>/-</del>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="short-desc mt-3">
+                        <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock') { %>
+                            <span class="text-danger">Hurry! Only <%= product.countInStock %> left in stock</span>
+                        <% } %>
+                    </div>
+                    <div class="product-sort-info font-sm mt-3">
+                        <ul class="list-unstyled">
+                            <li class="mb-1 text-dark"><i class="bi bi-arrow-repeat mr-1"></i>30 Day Return Policy</li>
+                            <li><i class="bi bi-currency-dollar mr-1"></i>Cash on Delivery Available</li>
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="product-actions mt-3">
+                        <div class="product-extra-links">
+                            <button type="submit" class="btn btn-primary mr-2">
+                                ADD TO CART <i class="bi bi-bag-plus ml-1"></i>
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                BUY NOW
+                            </button>
+                            <a aria-label="Add To Wishlist" class="btn btn-light ml-2" href="shop-wishlist.html"><i class="bi bi-heart"></i></a>
+                            <a aria-label="Compare" class="btn btn-light ml-2" href="shop-compare.html"><i class="bi bi-shuffle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Product Details -->
+
+                <!-- Product Description Tab -->
+                <div class="product-description-tab mt-4">
+                    <ul class="nav nav-tabs text-uppercase">
+                        <li class="nav-item">
+                            <a class="nav-link active text-secondary" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content shop-info-tab-content mt-3">
+                        <div class="tab-pane fade show active" id="Description">
+                            <div class="product-description">
+                                <p><%= product.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Product Description Tab -->
+            </div>
+        </div>
+    </div>
+</section>
 
 
-                  </div>
-              </div>
-
-          </div>
-      </div>
-  </section>
   </main>
   <footer class="main bg-secondary text-light">
 
