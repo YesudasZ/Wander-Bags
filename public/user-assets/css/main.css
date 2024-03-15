@@ -5349,8 +5349,9 @@ h6.post-title {
 }
 
 .logo.logo-width-1 a img {
-  width: 120px;
+  width: 300px;
   min-width: 120px;
+  height: 100;
 }
 
 .search-style-1 form {

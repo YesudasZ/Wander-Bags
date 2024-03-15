@@ -18,6 +18,140 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
   <style>
+
+
+
+
+/* Custom CSS for Product Details Section */
+.product-details-section {
+    background-color: #f9f9f9;
+    padding: 40px 0;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-details-section .title-detail {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.product-details-section .product-gallery .main-images {
+    margin-bottom: 20px;
+}
+
+.product-details-section .product-gallery .thumbnails {
+    margin-top: 10px;
+}
+
+.product-details-section .product-gallery .thumbnails .slider-nav-thumbnails img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.product-details-section .social-icons ul {
+    padding: 0;
+    margin: 0;
+}
+
+.product-details-section .social-icons ul li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.product-details-section .social-icons ul li a {
+    color: #333;
+    font-size: 18px;
+}
+
+.product-details-section .social-icons ul li a:hover {
+    color: #ff6600;
+}
+
+.product-details-section .product-details .product-detail-rating {
+    margin-top: 20px;
+}
+
+.product-details-section .product-details .product-detail-rating .pro-details-brand span {
+    font-size: 16px;
+    color: #333;
+}
+
+.product-details-section .product-details .product-detail-rating .product-rate-cover {
+    margin-top: 10px;
+}
+
+.product-details-section .product-details .product-detail-rating .product-rate-cover .product-rate .product-rating {
+    background-color: #ffcc00;
+    height: 8px;
+    border-radius: 5px;
+}
+
+.product-details-section .product-details .product-detail-rating .product-rate-cover .font-small {
+    font-size: 14px;
+    color: #666;
+}
+
+.product-details-section .product-details .product-price-cover hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.product-details-section .product-details .short-desc {
+    font-size: 16px;
+    color: #666;
+}
+
+.product-details-section .product-details .product-sort-info ul li {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.product-details-section .product-details .product-sort-info ul li .bi {
+    font-size: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.product-details-section .product-details .product-actions {
+    margin-top: 20px;
+}
+
+.product-details-section .product-details .product-actions .product-extra-links .btn {
+    font-size: 16px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+.product-details-section .product-details .product-description-tab .nav-tabs .nav-item .nav-link {
+    font-size: 16px;
+    color: #666;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 15px;
+    background-color: transparent;
+}
+
+.product-details-section .product-details .product-description-tab .nav-tabs .nav-item .nav-link.active {
+    color: #333;
+    border-bottom-color: #ff6600;
+}
+
+.product-details-section .product-details .product-description-tab .tab-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    background-color: #fff;
+}
+
     /* Footer Styling */
     footer.main {
       padding-top: 40px;
@@ -213,7 +347,7 @@
   </header>
 
   <main class="main">
-    <div class="page-header breadcrumb-wrap">
+    <div class="page-header breadcrumb-wrap " style="background-color: #fff;">
       <div class="container">
           <div class="breadcrumb">
               <a href="/home" rel="nofollow" style="color: #000000;">Home</a>
@@ -223,33 +357,33 @@
           </div>
       </div>
   </div>
-  <section class="product-details-section mt-5 mb-5">
-    <div class="container">
+  <section class="product-details-section mt-5 mb-5 trendy-product-details-section">
+    <div class="container trendy-container">
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <!-- Product Gallery -->
-                <div class="product-gallery">
-                    <div id="imageModal" class="modal">
-                        <span class="close">&times;</span>
-                        <img class="modal-content" id="zoomedImage">
+                <div class="product-gallery trendy-product-gallery">
+                    <div id="imageModal" class="modal trendy-modal">
+                        <span class="close trendy-close">&times;</span>
+                        <img class="modal-content trendy-modal-content" id="zoomedImage">
                     </div>
-                    <div class="main-images mb-3">
-                        <div class="product-image-slider">
+                    <div class="main-images mb-3 trendy-main-images">
+                        <div class="product-image-slider trendy-product-slider">
                             <% if (product.images && product.images.length > 0) { %>
                                 <% product.images.forEach((productImage) => { %>
-                                    <div class="border-radius-10">
-                                        <img src="/productimages/<%= productImage %>" alt="product image" class="img-fluid rounded" onclick="openModal('/productimages/<%= productImage %>')">
+                                    <div class="border-radius-10 trendy-image-wrapper">
+                                        <img src="/productimages/<%= productImage %>" alt="product image" class="img-fluid rounded trendy-image" onclick="openModal('/productimages/<%= productImage %>')">
                                     </div>
                                 <% }) %>
                             <% } %>
                         </div>
                     </div>
-                    <div class="thumbnails">
-                        <div class="slider-nav-thumbnails">
+                    <div class="thumbnails trendy-thumbnails">
+                        <div class="slider-nav-thumbnails trendy-slider-nav">
                             <% if (product.images && product.images.length > 0) { %>
                                 <% product.images.forEach((productImage, index) => { %>
-                                    <div>
-                                        <img src="/productimages/<%= productImage %>" alt="<%= product.title %>" data-index="<%= index %>" class="img-fluid rounded">
+                                    <div class="trendy-thumbnail-wrapper">
+                                        <img src="/productimages/<%= productImage %>" alt="<%= product.title %>" data-index="<%= index %>" class="img-fluid rounded trendy-thumbnail">
                                     </div>
                                 <% }) %>
                             <% } %>
@@ -259,13 +393,13 @@
                 <!-- End Product Gallery -->
 
                 <!-- Social Icons -->
-                <div class="social-icons single-share mt-3">
-                    <ul class="list-inline">
-                        <li><strong class="mr-2">Share:</strong></li>
-                        <li><a href="#"><i class="bi bi-facebook"></i></a></li>
-                        <li><a href="#"><i class="bi bi-twitter"></i></a></li>
-                        <li><a href="#"><i class="bi bi-instagram"></i></a></li>
-                        <li><a href="#"><i class="bi bi-pinterest"></i></a></li>
+                <div class="social-icons single-share mt-3 trendy-social-icons">
+                    <ul class="list-inline trendy-social-list">
+                        <li><strong class="mr-2 trendy-share-text">Share:</strong></li>
+                        <li><a href="#" class="trendy-social-link"><i class="fab fa-facebook-f trendy-social-icon"></i></a></li>
+                        <li><a href="#" class="trendy-social-link"><i class="fab fa-twitter trendy-social-icon"></i></a></li>
+                        <li><a href="#" class="trendy-social-link"><i class="fab fa-instagram trendy-social-icon"></i></a></li>
+                        <li><a href="#" class="trendy-social-link"><i class="fab fa-pinterest trendy-social-icon"></i></a></li>
                     </ul>
                 </div>
                 <!-- End Social Icons -->
@@ -273,67 +407,67 @@
 
             <div class="col-lg-6 col-md-12">
                 <!-- Product Details -->
-                <div class="product-details">
-                    <h2 class="title-detail"><%= product.name %></h2>
-                    <div class="product-detail-rating">
-                        <div class="pro-details-brand">
+                <div class="product-details trendy-product-details">
+                    <h2 class="title-detail trendy-title"><%= product.name %></h2>
+                    <div class="product-detail-rating trendy-rating">
+                        <div class="pro-details-brand trendy-brand">
                             <% if (product.status === 'out-of-stock') { %>
-                                <span class="text-danger">Currently Unavailable: <%= product.status %></span>
+                                <span class="text-danger trendy-status">Currently Unavailable: <%= product.status %></span>
                             <% } else { %>
-                                <span>Category: <%= product.category %></span>
+                                <span class="trendy-category">Category: <%= product.category %></span>
                             <% } %>
                         </div>
-                        <div class="product-rate-cover text-end">
-                            <div class="product-rate d-inline-block">
-                                <div class="product-rating" style="width:90%"></div>
+                        <div class="product-rate-cover text-end trendy-rate-cover">
+                            <div class="product-rate d-inline-block trendy-rating-bar">
+                                <div class="product-rating trendy-rating" style="width:90%"></div>
                             </div>
-                            <span class="font-small ml-2 text-muted">(25 reviews)</span>
+                            <span class="font-small ml-2 text-muted trendy-review-text">(25 reviews)</span>
                         </div>
                     </div>
-                    <div class="product-price-cover mt-3">
-                        <div class="product-price">
-                            <ins class="font-weight-bold">Rs.<%= product.discountPrice %></ins>
-                            <del class="old-price ml-2">Rs.<%= product.price %>/-</del>
+                    <div class="product-price-cover mt-3 trendy-price-cover">
+                        <div class="product-price trendy-product-price">
+                            <ins class="font-weight-bold trendy-discount-price">Rs.<%= product.discountPrice %></ins>
+                            <del class="old-price ml-2 trendy-old-price">Rs.<%= product.price %>/-</del>
                         </div>
                     </div>
                     <hr>
-                    <div class="short-desc mt-3">
+                    <div class="short-desc mt-3 trendy-short-desc">
                         <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock') { %>
-                            <span class="text-danger">Hurry! Only <%= product.countInStock %> left in stock</span>
+                            <span class="text-danger trendy-stock">Hurry! Only <%= product.countInStock %> left in stock</span>
                         <% } %>
                     </div>
-                    <div class="product-sort-info font-sm mt-3">
-                        <ul class="list-unstyled">
-                            <li class="mb-1 text-dark"><i class="bi bi-arrow-repeat mr-1"></i>30 Day Return Policy</li>
-                            <li><i class="bi bi-currency-dollar mr-1"></i>Cash on Delivery Available</li>
+                    <div class="product-sort-info font-sm mt-3 trendy-sort-info">
+                        <ul class="list-unstyled trendy-list">
+                            <li class="mb-1 text-dark trendy-list-item"><i class="bi bi-arrow-repeat mr-1 trendy-icon"></i>30 Day Return Policy</li>
+                            <li class="trendy-list-item"><i class="bi bi-currency-dollar mr-1 trendy-icon"></i>Cash on Delivery Available</li>
                         </ul>
                     </div>
                     <hr>
-                    <div class="product-actions mt-3">
-                        <div class="product-extra-links">
-                            <button type="submit" class="btn btn-primary mr-2">
-                                ADD TO CART <i class="bi bi-bag-plus ml-1"></i>
+                    <div class="product-actions mt-3 trendy-actions">
+                        <div class="product-extra-links trendy-extra-links">
+                            <button type="submit" class="btn btn-primary mr-2 trendy-btn">
+                                ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
                             </button>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-success trendy-btn">
                                 BUY NOW
                             </button>
-                            <a aria-label="Add To Wishlist" class="btn btn-light ml-2" href="shop-wishlist.html"><i class="bi bi-heart"></i></a>
-                            <a aria-label="Compare" class="btn btn-light ml-2" href="shop-compare.html"><i class="bi bi-shuffle"></i></a>
+                            <a aria-label="Add To Wishlist" class="btn btn-light ml-2 trendy-btn" href="shop-wishlist.html"><i class="bi bi-heart trendy-icon"></i></a>
+                            <a aria-label="Compare" class="btn btn-light ml-2 trendy-btn" href="shop-compare.html"><i class="bi bi-shuffle trendy-icon"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- End Product Details -->
 
                 <!-- Product Description Tab -->
-                <div class="product-description-tab mt-4">
-                    <ul class="nav nav-tabs text-uppercase">
+                <div class="product-description-tab mt-4 trendy-description-tab">
+                    <ul class="nav nav-tabs text-uppercase trendy-tab-list">
                         <li class="nav-item">
-                            <a class="nav-link active text-secondary" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                            <a class="nav-link active text-secondary trendy-tab" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
                         </li>
                     </ul>
                     <div class="tab-content shop-info-tab-content mt-3">
-                        <div class="tab-pane fade show active" id="Description">
-                            <div class="product-description">
+                        <div class="tab-pane fade show active trendy-tab-content" id="Description">
+                            <div class="product-description trendy-description">
                                 <p><%= product.description %></p>
                             </div>
                         </div>
@@ -344,6 +478,10 @@
         </div>
     </div>
 </section>
+
+
+
+
 
 
   </main>

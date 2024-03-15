@@ -385,10 +385,12 @@ footer.main {
                         <% products.filter(product => product.status !== 'delete').slice(0, 4).forEach(product => { %>
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="product-item shadow rounded border">
+                                <a href="/productdetails/<%= product.id %>" class="product-link">
                                 <div class="product-thumb position-relative">
                                     <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
                                     <div class="product-overlay"></div>
                                 </div>
+                            </a>
                                 <div class="product-content py-3">
                                     <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
                                     <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
@@ -408,10 +410,12 @@ footer.main {
                         <% products.filter(product => product.status !== 'delete').slice(4, 8).forEach(product => { %>
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="product-item shadow rounded border">
+                                <a href="/productdetails/<%= product.id %>" class="product-link">
                                 <div class="product-thumb position-relative">
                                     <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
                                     <div class="product-overlay"></div>
                                 </div>
+                            </a>
                                 <div class="product-content py-3">
                                     <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
                                     <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
@@ -431,10 +435,12 @@ footer.main {
                         <% products.filter(product => product.status !== 'delete').slice(8, 12).forEach(product => { %>
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="product-item shadow rounded border">
+                                <a href="/productdetails/<%= product.id %>" class="product-link">
                                 <div class="product-thumb position-relative">
                                     <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
                                     <div class="product-overlay"></div>
                                 </div>
+                            </a>
                                 <div class="product-content py-3">
                                     <h4 class="product-title text-black fw-bold"><%= product.name %></h4>
                                     <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
