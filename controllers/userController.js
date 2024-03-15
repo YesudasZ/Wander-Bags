@@ -84,7 +84,7 @@ const insertuser = async (req, res) => {
       return res.render("signup", { message: "Mobile already exists" })
     }
 
-    res.redirect('/otpverify')
+  
 
     const otp = generateOTP();
 
@@ -104,7 +104,9 @@ const insertuser = async (req, res) => {
     req.session.details = details
     req.session.save();
 
-  
+    res.redirect('/otpverify')
+
+  console.log(req.session.otp);
 
     const mailoptions = {
       from: "wanderbags29@gmail.com",
@@ -224,7 +226,11 @@ const loadotpverify = async (req, res) => {
 const otpverify = async (req, res) => {
   try {
     const otpcheck = await parseInt(req.body.otp);
+    console.log( otpcheck);
+    
+    console.log(req.session.details.otp);
     const dbotp = req.session.details.otp
+    console.log(dbotp);
 
     // Check if OTP matches
     if (dbotp == otpcheck) {
@@ -243,7 +249,7 @@ const otpverify = async (req, res) => {
       });
       await user.save();
 
-      return res.redirect('/home')
+       res.redirect('/home')
     }
 
     else {

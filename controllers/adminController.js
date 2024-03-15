@@ -70,7 +70,8 @@ const loadadminpanel = async (req, res) => {
 const loadcustomers = async (req, res) => {
   try {
     const users = await User.find({is_admin:0})
-    res.render('customers',{users});
+    const actionType = 'block';
+    res.render('customers', { users, actionType });
   } catch (error) {
     console.log(error.message);
   }
