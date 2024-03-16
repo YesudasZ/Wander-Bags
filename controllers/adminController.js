@@ -98,17 +98,24 @@ const loadcategories = async (req, res) => {
 
 const addCategory = async (req, res) => {
   try {
-      const { name } = req.body;
-      if (!name) {
-          return res.status(400).json({ message: 'Category name is required' });
-      }
-      const newCategory = new Category({ name });
-      await newCategory.save();
-      res.redirect('/admin/categories');
-  } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
-  }
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ message: 'Category name is required' });
+    }
+
+    // Check if category already exists
+    const existingCategory = await Category.findOne({ name });
+    if (existingCategory) {
+        return res.status(400).json({ message: 'Category already exists' });
+    }
+
+    const newCategory = new Category({ name });
+    await newCategory.save();
+    res.status(201).json({ message: 'Category added successfully' });
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+}
 };
 
 
@@ -254,7 +261,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
   storage: storage
- }).array('images', 3);
+ }).array('images', 10);
 
 
 
@@ -282,7 +289,7 @@ const upload = multer({
  
          images.push(resizedFilename);
        }
- 
+       
        // Create new product object
        const product = new Product({
          name: req.body.name,
@@ -327,18 +334,21 @@ const editProductPage = async (req, res) => {
 
 
 
+const uploadForEditProduct = multer({ storage: storage }).array('newImages[]', 10);
+
 const editProduct = async (req, res) => {
-  const productId = req.params.productId; // Assuming you have a route parameter for the product ID
-  console.log(productId);
-  console.log(req.body);
-  console.log(req.body.name);
+  const productId = req.params.productId;
 
   try {
+    uploadForEditProduct(req, res, async function (err) {
+      if (err) {
+        console.error(err);
+        return res.status(400).send('File upload error.');
+      }
       // Logic to update the product with the provided data
       const updatedProduct = await Product.findByIdAndUpdate(productId, {
           name: req.body.name,
           description: req.body.description,
-          images: req.body.images, // Update with the new image file names
           price: req.body.price,
           category: req.body.category,
           brand: req.body.brand,
@@ -346,13 +356,33 @@ const editProduct = async (req, res) => {
           countInStock: req.body.countInStock,
           discountPrice: req.body.discountPrice
       }, { new: true });
-console.log(updatedProduct);
-      res.redirect('/admin/products')
+
+      // Logic to delete selected images
+      if (req.body.deleteImages && req.body.deleteImages.length > 0) {
+          for (const image of req.body.deleteImages) {
+              // Delete image file from the server or mark it for deletion depending on your logic
+              // Example: fs.unlinkSync(path.join(__dirname, '../public/productimages', image));
+          }
+          // Remove deleted images from the product
+          updatedProduct.images = updatedProduct.images.filter(image => !req.body.deleteImages.includes(image));
+      }
+
+      // Logic to add new images
+      if (req.files && req.files.length > 0) {
+          const newImages = req.files.map(file => file.filename);
+          updatedProduct.images = updatedProduct.images.concat(newImages);
+      }
+
+      await updatedProduct.save();
+
+      res.redirect('/admin/products');
+    });
   } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
   }
 };
+
 
 const deleteProduct = async (req, res) => {
   const productId = req.params.productId; // Assuming the product ID is passed in the URL params

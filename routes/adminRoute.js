@@ -38,6 +38,8 @@ admin_route.get('/categories/removed',auth.isAdminLogin, adminController.getRemo
 
 admin_route.post('/categories/:id/restore',auth.isAdminLogin, adminController.restoreCategory);
 
+
+
 admin_route.get('/products',auth.isAdminLogin,adminController.getProducts)
 
 admin_route.get('/products/add',auth.isAdminLogin,adminController.addloadProducts)
