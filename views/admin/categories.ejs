@@ -183,21 +183,31 @@
     
         <div class="container">
             <section class="content-main">
+                <!-- Add Category Form -->
+                <!-- <div class="row justify-content-center mb-5">
+                    <div class="col-md-6 category-form-container">
+                        <form id="add-category-form" action="/admin/categories" method="POST">
+                            <div class="form-group">
+                                <label for="categoryName">Category Name</label>
+                                <input type="text" class="form-control" id="categoryName" name="name" placeholder="Enter category name">
+                                <div id="categoryNameError" class="invalid-feedback"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Category</button>
+                        </form>
+                    </div>
+                </div> -->
 
-                <div class="row justify-content-center mb-4">
-                    <div class="col-md-8">
-                        <div class="d-flex justify-content-between align-items-center">
-                           
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                Add Category
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#removedCategoriesModal">
-                                View Removed Categories
-                            </button>
-                        </div>
-                      
+                <div class="row justify-content-center mb-5">
+                    <div class="col-md-6 category-form-container">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                            Add Category
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#removedCategoriesModal">
+                            Removed Categories
+                        </button>
                     </div>
                 </div>
+        
 
                 <!-- Display Categories -->
                 <div class="row justify-content-center">
@@ -245,8 +255,7 @@
                         </table>
                     </div>
                 </div>
-            </section>
-        </div>
+
           
                 <div class="modal fade" id="removedCategoriesModal" tabindex="-1" aria-labelledby="removedCategoriesModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -312,8 +321,9 @@
     </div>
 </div>
 
-        
-        <!-- <div class="pagination-area mt-30 pb-30">
+            </section>
+        </div>
+        <div class="pagination-area mt-30 pb-30">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
                     <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -324,7 +334,7 @@
                     <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
                 </ul>
             </nav>
-        </div> -->
+        </div>
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
