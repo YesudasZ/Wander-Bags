@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt')
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose');
-
+const sharp = require('sharp');
+const fs = require('fs')
 
 
 
@@ -256,36 +257,55 @@ const upload = multer({
  }).array('images', 3);
 
 
-const addProduct = async (req, res) => {
-  try {
-    upload(req, res, async function (err) {
-      if (err) {
-        console.error(err);
-        return res.status(400).send('File upload error.');
-      }
-      const images = req.files.map(file => file.filename);
-      // Create new product object
-      const product = new Product({
-        name: req.body.name,
-        description: req.body.description,
-        images: images,
-        price: req.body.price,
-        category: req.body.category,
-        brand: req.body.brand,
-        status: req.body.status,
-        countInStock: req.body.countInStock,
-        discountPrice: req.body.discountPrice
-      });
 
-      // Save the product to the database
-      await product.save();
-      res.redirect('/admin/products')
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-};
+
+ const addProduct = async (req, res) => {
+   try {
+     upload(req, res, async function (err) {
+       if (err) {
+         console.error(err);
+         return res.status(400).send('File upload error.');
+       }
+       const images = [];
+ 
+       // Process each uploaded image
+       for (const file of req.files) {
+         // Resize image to default size using sharp
+         const resizedImageBuffer = await sharp(file.path)
+           .resize({ width: 1500, height: 1500 }) // Adjust width and height as needed
+           .toBuffer();
+ 
+         // Save resized image with a unique filename
+         const resizedFilename = Date.now() + '-' + file.originalname;
+         const imagePath = path.join(__dirname, '../public/productimages', resizedFilename);
+         fs.writeFileSync(imagePath, resizedImageBuffer);
+ 
+         images.push(resizedFilename);
+       }
+ 
+       // Create new product object
+       const product = new Product({
+         name: req.body.name,
+         description: req.body.description,
+         images: images,
+         price: req.body.price,
+         category: req.body.category,
+         brand: req.body.brand,
+         status: req.body.status,
+         countInStock: req.body.countInStock,
+         discountPrice: req.body.discountPrice
+       });
+ 
+       // Save the product to the database
+       await product.save();
+       res.redirect('/admin/products')
+     });
+   } catch (err) {
+     console.error(err.message);
+     res.status(500).send('Server Error');
+   }
+ };
+ 
 
 const editProductPage = async (req, res) => {
   const productId = req.params.productId; // Assuming you have a route parameter for the product ID

@@ -29,7 +29,7 @@ const Product = mongoose.Schema({
     ,
     status: {
         type: String,
-        enum: ['active', 'out-of-stock', 'inactive','deleted','Draft'],
+        enum: ['active', 'inactive','deleted'],
         default: 'active'
     },
     countInStock:{

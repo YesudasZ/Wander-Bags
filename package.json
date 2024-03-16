@@ -27,6 +27,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "path": "^0.12.7",
-    "session": "^0.1.0"
+    "session": "^0.1.0",
+    "sharp": "^0.33.2"
   }
 }

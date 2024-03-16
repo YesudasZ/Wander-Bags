@@ -11,10 +11,6 @@ const categoryName = mongoose.Schema({
         enum: ['active', 'inactive','delete'],
         default: 'active'
     },
-    is_published:{
-        type:Number,
-        default:0
-    },
     updated_at: {
         type: Date,
         default: Date.now
