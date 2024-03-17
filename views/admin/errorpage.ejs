@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.error-container {
+    text-align: center;
+}
+
+.error-image {
+    width: 200px;
+    height: auto;
+}
+
+h1 {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img src="/admin-asset/imgs/theme/error.svg" alt="Oops" class="error-image">
+        <h1>Oops! Something went wrong</h1>
+        <p>We encountered an error while processing your request.</p>
+        <button onclick="goToHome()">Go to Home</button>
+    </div>
+    <script>
+        function goToHome() {
+            window.location.href = "/admin/adminpanel";
+        }
+    </script>
+</body>
+</html>

@@ -1,21 +1,17 @@
-const mongoose = require("mongoose");
-
-mongoose.connect("mongodb://127.0.0.1:27017/WanderBags");
-
-require('dotenv').config();
-
 const express = require("express");
-
 const app = express();
 const session = require("express-session");
 const nocache = require("nocache");
+const path = require("path");
+const dbConnection = require('./config/dbconnect')
+require('dotenv').config();
+dbConnection()
 
-app.use(express.urlencoded({ extended: true }));
 
 // Replace bodyParser.json() with express.json()
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const path = require("path");
 
 app.use(
   session({

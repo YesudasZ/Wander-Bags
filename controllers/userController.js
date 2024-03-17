@@ -50,6 +50,10 @@ const failureGoogleLogin = (req , res) => {
 }
 
 
+const pagenotfound = async(req,res)=>{
+  res.render('pagenotfound')
+}
+
 
 
 const landingLoad = async (req, res) => {
@@ -62,6 +66,7 @@ const landingLoad = async (req, res) => {
   } catch (error) {
 
     console.log(error.message);
+    res.redirect('/pagenotfound')
 
   }
 
@@ -120,6 +125,7 @@ const insertuser = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -134,9 +140,14 @@ const sendotp = (email,otp) =>{
 }
 
 const regenerateOTP = (email)=>{
-  const otp = generateOTP();
-  sendotp(email,otp);
-  return otp;
+  try {
+    const otp = generateOTP();
+    sendotp(email,otp);
+    return otp;
+  
+  } catch (error) {
+    res.redirect('/pagenotfound')
+  }
 
 }
 
@@ -168,7 +179,7 @@ const loginLoad = async (req, res) => {
   } catch (error) {
 
     console.log(error.message);
-
+    res.redirect('/pagenotfound')
   }
 
 }
@@ -179,6 +190,7 @@ const loadRegister = async (req, res) => {
     res.render('signup');
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -209,6 +221,7 @@ const verifylogin = async (req, res) => {
 
          } catch (error) {
         console.log(error.message)
+        res.redirect('/pagenotfound')
     }
 };
 
@@ -220,6 +233,7 @@ const loadotpverify = async (req, res) => {
     res.render('otpverify');
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -247,9 +261,13 @@ const otpverify = async (req, res) => {
         is_admin: 0,
         is_verified: 1
       });
-      await user.save();
+     const userData = await user.save();
 
-       res.redirect('/home')
+      req.session.user_id = userData._id;
+      req.session.user = true;
+      res.redirect('/home');
+
+      
     }
 
     else {
@@ -258,6 +276,7 @@ const otpverify = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
    
   }
 }
@@ -271,6 +290,7 @@ const loadshop =async (req, res) => {
     res.render('shop', { products,user:userData });
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -283,6 +303,7 @@ const loadHome = async (req, res) => {
     res.render('home', { products,user:userData });
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -292,6 +313,7 @@ const loadforgetpassword = async (req, res) => {
     res.render('forgetpassword')
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -311,6 +333,7 @@ const loadresetpassword = async (req, res) => {
     res.render('passwordreset')
   } catch (error) {
     console.log(error.message);
+    res.redirect('/pagenotfound')
   }
 }
 
@@ -324,14 +347,22 @@ const getProductDetails = async (req, res) => {
       res.render('productdetails', { product,user:userData });
   } catch (error) {
       console.error(error);
+      res.redirect('/pagenotfound')
      
   }
 };
 
 const userLogout = (req,res) => {
-  req.session.user_id = null;
-  req.session.user = false;
-  res.redirect('/');
+  try {
+    req.session.user_id = null;
+    req.session.user = false;
+    res.redirect('/');
+    
+  } catch (error) {
+    console.error(error);
+    res.redirect('/pagenotfound')
+  }
+ 
 }
 
 
@@ -353,5 +384,6 @@ module.exports = {
   landingLoad,
   loadshop,
   getProductDetails,
-  userLogout
+  userLogout,
+  pagenotfound
 }
