@@ -62,4 +62,6 @@ user_route.get('/resetpassword',userController.loadresetpassword)
 
 user_route.get('/logout',auth.isLogin, userController.userLogout)
 
+user_route.get('/profile',auth.isLogin,userController.loadprofile)
+
 module.exports = user_route;
