@@ -64,6 +64,12 @@ user_route.get('/logout',auth.isLogin, userController.userLogout)
 
 user_route.get('/profile',auth.isLogin,userController.loadprofile)
 
+// POST route to update user's name
+user_route.post('/profile/updateName', auth.isLogin, userController.updateName);
+
+// POST route to change user's password
+user_route.post('/profile/changePassword', auth.isLogin, userController.changePassword);
+
 
 
 module.exports = user_route;

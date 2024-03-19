@@ -293,37 +293,24 @@
                                 <h5>Account Details</h5>
                             </div>
                             <div class="card-body">
-                                <form method="post" action="/profile/update">
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Name <span class="required">*</span></label>
-                                            <input  class="form-control square" placeholder="<%= user.name %>" name="name" type="text">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Mobile <span class="required">*</span></label>
-                                            <input  class="form-control square" placeholder="<%= user.mobile %>" name="mobile" type="number">
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Email Address <span class="required">*</span></label>
-                                            <input class="form-control square" placeholder="<%= user.email %>" name="email" type="email">
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Current Password <span class="required">*</span></label>
-                                            <input  class="form-control square" name="password" type="password">
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>New Password</label>
-                                            <input class="form-control square" name="npassword" type="password">
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <label>Confirm Password</label>
-                                            <input class="form-control square" name="cpassword" type="password">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                        </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Name <span class="required">*</span></label>
+                                        <input class="form-control square" value="<%= user.name %>" name="name" type="text" readonly>
+                                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editNameModal">Edit</button>
                                     </div>
-                                </form>
+                                    <div class="form-group col-md-6">
+                                        <label>Mobile <span class="required">*</span></label>
+                                        <input class="form-control square" value="<%= user.mobile %>" name="mobile" type="number" readonly>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Email Address <span class="required">*</span></label>
+                                        <input class="form-control square" value="<%= user.email %>" name="email" type="email" readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,7 +332,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <tr> 
                                                     <!-- Order details -->
                                                 </tr>
                                             </tbody>
@@ -431,6 +418,65 @@
         </div>
     </section>
 </main>
+
+
+
+<!-- Edit Name Modal -->
+<div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="editNameForm">
+                  <div class="form-group">
+                      <label for="newName">New Name</label>
+                      <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name">
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="changePasswordForm">
+                  <div class="form-group">
+                      <label for="currentPassword">Current Password</label>
+                      <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+                  </div>
+                  <div class="form-group">
+                      <label for="newPassword">New Password</label>
+                      <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
+                  </div>
+                  <div class="form-group">
+                      <label for="confirmPassword">Confirm Password</label>
+                      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
+          </div>
+      </div>
+  </div>
+</div>
+
 
   <footer class="main bg-secondary text-light">
 
@@ -561,6 +607,69 @@
   <script src="./user-assets/js/main.js?v=3.4"></script>
   <script src="./user-assets/js/shop.js?v=3.4"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Function to handle editing the name
+    document.getElementById('saveNameBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('newName').value.trim();
+
+        try {
+            const response = await fetch('/profile/updateName', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newName })
+            });
+
+            if (response.ok) {
+                // Update the name in the profile section without refreshing
+                document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+                $('#editNameModal').modal('hide');
+            } else {
+                // Handle error if any
+                console.error('Error updating name');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    // Function to handle changing the password
+    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+        const currentPassword = document.getElementById('currentPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+        if (newPassword !== confirmPassword) {
+            // Show error message if passwords don't match
+            alert('New password and confirm password must match.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/profile/changePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+
+            if (response.ok) {
+                // Password changed successfully
+                $('#changePasswordModal').modal('hide');
+            } else {
+                // Handle error if any
+                alert('Failed to change password. Please check your current password.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+</script>
+
+
 
 </body>
 

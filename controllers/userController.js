@@ -375,6 +375,50 @@ res.render('profile',{user:userData, errorMessage: null,successMessage: null})
   }
 }
 
+// Function to update user's name
+const updateName = async (req, res) => {
+  try {
+      const { newName } = req.body;
+      const userId = req.session.user_id;
+
+      // Update user's name in the database
+      await User.findByIdAndUpdate(userId, { name: newName });
+
+      res.status(200).send('Name updated successfully');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+// Function to change user's password
+const changePassword = async (req, res) => {
+  try {
+      const { currentPassword, newPassword } = req.body;
+      const userId = req.session.user_id;
+
+      // Find the user by ID
+      const user = await User.findById(userId);
+
+      // Compare current password with the hashed password stored in the database
+      const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!passwordMatch) {
+          return res.status(400).send('Current password is incorrect');
+      }
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Update user's password in the database
+      await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+      res.status(200).send('Password changed successfully');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
 
 
 
@@ -399,4 +443,8 @@ module.exports = {
   userLogout,
   pagenotfound,
   loadprofile,
-  }
+  changePassword,
+  updateName
+
+  
+}
