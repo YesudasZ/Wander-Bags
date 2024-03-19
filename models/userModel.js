@@ -25,7 +25,37 @@ const userSchema = new mongoose.Schema({
   is_verified: {
     type: Number,
     default: 0
-  }
+  },
+  address: [{
+      houseName:{
+        type:String,
+        required:true
+      },
+      street:{
+          type:String,
+          required:true
+      },
+      city:{
+          type:String,
+          required:true
+      },
+      state:{
+          type:String,
+          required: true
+      },
+      country:{
+          type:String,
+          required: true
+      },
+      postalCode:{
+          type:String,
+          required:true
+      },
+      type:{
+          type:String,
+          default:'home'
+      }
+  }]
 })
 
 module.exports = mongoose.model('User', userSchema);

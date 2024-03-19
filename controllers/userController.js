@@ -368,14 +368,14 @@ const userLogout = (req,res) => {
 const loadprofile = async(req,res)=>{
   try {
     const  userData = await User.findById({_id:req.session.user_id})
-res.render('profile',{user:userData})
-    
+res.render('profile',{user:userData, errorMessage: null,successMessage: null})
   } catch (error) {
-    
     console.error(error);
     res.redirect('/pagenotfound')
   }
 }
+
+
 
 
 
@@ -398,5 +398,5 @@ module.exports = {
   getProductDetails,
   userLogout,
   pagenotfound,
-  loadprofile
-}
+  loadprofile,
+  }
