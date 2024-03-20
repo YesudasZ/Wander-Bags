@@ -70,6 +70,7 @@ user_route.post('/profile/updateName', auth.isLogin, userController.updateName);
 // POST route to change user's password
 user_route.post('/profile/changePassword', auth.isLogin, userController.changePassword);
 
+user_route.post('/profile/addAddress', auth.isLogin, userController.addAddress);
 
 
 module.exports = user_route;

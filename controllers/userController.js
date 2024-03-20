@@ -419,9 +419,19 @@ const changePassword = async (req, res) => {
   }
 };
 
-
-
-
+const addAddress = async (req, res) => {
+  try {
+      const { houseName, street, city, state, country, postalCode, addressType } = req.body;
+      const userId = req.session.user_id;
+      const user = await User.findById(userId);
+      user.address.push({ houseName, street, city, state, country, postalCode, type: addressType });
+      await user.save();
+      res.status(200).send('Address added successfully');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+};
 
 module.exports = {
   loginLoad,
@@ -444,7 +454,8 @@ module.exports = {
   pagenotfound,
   loadprofile,
   changePassword,
-  updateName
+  updateName,
+  addAddress
 
   
 }

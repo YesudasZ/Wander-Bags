@@ -16,6 +16,7 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href="user-assets/css/main.css?v=3.4">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
 
   <style>
 
@@ -347,36 +348,38 @@
                                   <h5>Add Address</h5>
                               </div>
                               <div class="card-body">
-                                 
-                                  <form method="post" name="enq">
+                                  <form id="addAddressForm" method="post" name="enq">
                                       <div class="row">
                                           <div class="form-group col-md-6">
-                                              <label><span class="required">*</span></label>
-                                              <input required="" class="form-control square"  name="name" type="text">
+                                              <label>House Name / Flat No.<span class="required">*</span></label>
+                                              <input required="" class="form-control square"  name="houseName" id="houseName" type="text">
                                           </div>
                                           <div class="form-group col-md-6">
-                                              <label>Last Name <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="phone">
+                                              <label>Street<span class="required">*</span></label>
+                                              <input required="" class="form-control square" name="street" id="street" type="text">
                                           </div>
                                           <div class="form-group col-md-12">
-                                              <label>Display Name <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="dname" type="text">
+                                              <label>City <span class="required">*</span></label>
+                                              <input required="" class="form-control square" name="city" id="city" type="text">
                                           </div>
                                           <div class="form-group col-md-12">
-                                              <label>Email Address <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="email" type="email">
+                                              <label>State <span class="required">*</span></label>
+                                              <input required="" class="form-control square" name="state" id="state" type="text">
                                           </div>
                                           <div class="form-group col-md-12">
-                                              <label>Current Password <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="password" type="password">
+                                              <label>Country <span class="required">*</span></label>
+                                              <input required="" class="form-control square" name="country" id="country" type="text">
                                           </div>
                                           <div class="form-group col-md-12">
-                                              <label>New Password <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="npassword" type="password">
+                                              <label>Postalcode <span class="required">*</span></label>
+                                              <input required="" class="form-control square" name="postalCode" id="postalCode" type="text">
                                           </div>
                                           <div class="form-group col-md-12">
-                                              <label>Confirm Password <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="cpassword" type="password">
+                                              <label>Type <span class="required">*</span></label>
+                                              <select class="form-control" id="addressType" name="addressType">
+                                                  <option value="home">Home</option>
+                                                  <option value="office">Office</option>
+                                              </select>
                                           </div>
                                           <div class="col-md-12">
                                               <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
@@ -391,7 +394,7 @@
                                 <div class="col-lg-6">
                                     <div class="card mb-3 mb-lg-0">
                                         <div class="card-header">
-                                            <h5 class="mb-0">Billing Address</h5>
+                                            <h5 class="mb-0">Home Address</h5>
                                         </div>
                                         <div class="card-body">
                                             <!-- Billing address details -->
@@ -402,7 +405,7 @@
                                 <div class="col-lg-6">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 class="mb-0">Shipping Address</h5>
+                                            <h5 class="mb-0">Office Address</h5>
                                         </div>
                                         <div class="card-body">
                                             <!-- Shipping address details -->
@@ -607,7 +610,7 @@
   <script src="./user-assets/js/main.js?v=3.4"></script>
   <script src="./user-assets/js/shop.js?v=3.4"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
   <script>
     // Function to handle editing the name
     document.getElementById('saveNameBtn').addEventListener('click', async () => {
@@ -626,6 +629,7 @@
                 // Update the name in the profile section without refreshing
                 document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
                 $('#editNameModal').modal('hide');
+                window.location.reload();
             } else {
                 // Handle error if any
                 console.error('Error updating name');
@@ -659,6 +663,7 @@
             if (response.ok) {
                 // Password changed successfully
                 $('#changePasswordModal').modal('hide');
+                window.location.reload();
             } else {
                 // Handle error if any
                 alert('Failed to change password. Please check your current password.');
@@ -667,6 +672,80 @@
             console.error('Error:', error);
         }
     });
+
+
+    document.getElementById("addAddressForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    // Retrieve form data
+    var houseName = document.getElementById("houseName").value;
+    var street = document.getElementById("street").value;
+    var city = document.getElementById("city").value;
+    var state = document.getElementById("state").value;
+    var country = document.getElementById("country").value;
+    var postalCode = document.getElementById("postalCode").value;
+    var addressType = document.getElementById("addressType").value;
+
+    // Validation logic
+    if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
+        Toastify({
+            text: "Please fill in all fields",
+            duration: 3000,
+            gravity: "top", // toast will be shown at top of the page
+            position: 'right', // toast position
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        }).showToast();
+        return false;
+    }
+
+    try {
+        const response = await fetch('/profile/addAddress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Specify content type as JSON
+            },
+            body: JSON.stringify({ // Convert form data to JSON
+                houseName,
+                street,
+                city,
+                state,
+                country,
+                postalCode,
+                addressType
+            })
+        });
+        if (response.ok) {
+          document.getElementById("addAddressForm").reset();
+            Toastify({
+                text: "Address added successfully",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            }).showToast();
+            // window.location.reload();
+            // Optionally, you can redirect the user or perform any other action here
+        } else {
+            Toastify({
+                text: "Failed to add address",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+            }).showToast();
+        }
+    } catch (error) {
+        console.error(error);
+        Toastify({
+            text: "An error occurred",
+            duration: 3000,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+        }).showToast();
+    }
+});
+
 </script>
 
 
