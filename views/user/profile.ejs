@@ -17,70 +17,70 @@
   <link rel="stylesheet" href="user-assets/css/main.css?v=3.4">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css">
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+Z3+Xf1QojCaB40CKvL+2K4Y5p4ef5uyyJ5fksU" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-
-
-
-/* Dashboard Menu Styles */
-.dashboard-menu {
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-.dashboard-menu .nav-link {
-    color: #343a40;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.dashboard-menu .nav-link:hover {
-    color: #007bff;
-}
-
-/* Dashboard Content Styles */
-.dashboard-content {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-content .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.dashboard-content .card-header h5 {
-    color: #343a40;
-}
-
-.dashboard-content .btn-small {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.dashboard-content .btn-small:hover {
-    background-color: #0056b3;
-}
-
-@media (max-width: 767.98px) {
+    /* Dashboard Menu Styles */
     .dashboard-menu {
-        margin-bottom: 20px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-}
+
+    .dashboard-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .dashboard-menu .nav-link {
+      color: #343a40;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-menu .nav-link:hover {
+      color: #007bff;
+    }
+
+    /* Dashboard Content Styles */
+    .dashboard-content {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-content .card-header {
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .dashboard-content .card-header h5 {
+      color: #343a40;
+    }
+
+    .dashboard-content .btn-small {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-content .btn-small:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 767.98px) {
+      .dashboard-menu {
+        margin-bottom: 20px;
+      }
+    }
 
     /* Sidebar Styles */
     .sidebar {
@@ -201,7 +201,7 @@
               </div>
               <div class="header-info header-info-right text-end">
                 <ul class="list-inline mb-0">
-                 
+
                   <li class="dropdown nav-item m-5">
                     <a class="dropdown-toggle text-black" href="#" role="button" id="userDropdown"
                       data-bs-toggle="dropdown" aria-expanded="false">
@@ -248,237 +248,376 @@
 
   <main class="main">
     <section class="pt-50 pb-50">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="dashboard-menu">
-                        <ul class="nav flex-column" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail"
-                                    role="tab" aria-controls="account-detail" aria-selected="false">
-                                    <i class="fi-rs-user mr-10"></i>Account details
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab"
-                                  aria-controls="address" aria-selected="true">
-                                  <i class="fi-rs-marker mr-10"></i>My Address
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" id="addaddress-tab" data-bs-toggle="tab" href="#addaddress" role="tab"
-                                aria-controls="addaddress" aria-selected="true">
-                                <i class="fi-rs-marker mr-10"></i>Add Address
-                            </a>
-                        </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab"
-                                    aria-controls="orders" aria-selected="false">
-                                    <i class="fi-rs-shopping-bag mr-10"></i>Orders
-                                </a>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <a class="nav-link" href="page-login-register.html">
-                                    <i class="fi-rs-sign-out mr-10"></i>Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="tab-content dashboard-content">
-                      <div class="tab-pane fade active show" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>Account Details</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label>Name <span class="required">*</span></label>
-                                        <input class="form-control square" value="<%= user.name %>" name="name" type="text" readonly>
-                                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editNameModal">Edit</button>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Mobile <span class="required">*</span></label>
-                                        <input class="form-control square" value="<%= user.mobile %>" name="mobile" type="number" readonly>
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <label>Email Address <span class="required">*</span></label>
-                                        <input class="form-control square" value="<%= user.email %>" name="email" type="email" readonly>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Your Orders</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Order</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Total</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr> 
-                                                    <!-- Order details -->
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
-                          <div class="card">
-                              <div class="card-header">
-                                  <h5>Add Address</h5>
-                              </div>
-                              <div class="card-body">
-                                  <form id="addAddressForm" method="post" name="enq">
-                                      <div class="row">
-                                          <div class="form-group col-md-6">
-                                              <label>House Name / Flat No.<span class="required">*</span></label>
-                                              <input required="" class="form-control square"  name="houseName" id="houseName" type="text">
-                                          </div>
-                                          <div class="form-group col-md-6">
-                                              <label>Street<span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="street" id="street" type="text">
-                                          </div>
-                                          <div class="form-group col-md-12">
-                                              <label>City <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="city" id="city" type="text">
-                                          </div>
-                                          <div class="form-group col-md-12">
-                                              <label>State <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="state" id="state" type="text">
-                                          </div>
-                                          <div class="form-group col-md-12">
-                                              <label>Country <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="country" id="country" type="text">
-                                          </div>
-                                          <div class="form-group col-md-12">
-                                              <label>Postalcode <span class="required">*</span></label>
-                                              <input required="" class="form-control square" name="postalCode" id="postalCode" type="text">
-                                          </div>
-                                          <div class="form-group col-md-12">
-                                              <label>Type <span class="required">*</span></label>
-                                              <select class="form-control" id="addressType" name="addressType">
-                                                  <option value="home">Home</option>
-                                                  <option value="office">Office</option>
-                                              </select>
-                                          </div>
-                                          <div class="col-md-12">
-                                              <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                          </div>
-                                      </div>
-                                  </form>
-                              </div>
-                          </div>
-                      </div>
-                        <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="card mb-3 mb-lg-0">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Home Address</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <!-- Billing address details -->
-                                            <a href="#" class="btn-small">Edit</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Office Address</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <!-- Shipping address details -->
-                                            <a href="#" class="btn-small">Edit</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="dashboard-menu">
+              <ul class="nav flex-column" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail"
+                    role="tab" aria-controls="account-detail" aria-selected="false">
+                    <i class="fi-rs-user mr-10"></i>Account details
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab"
+                    aria-controls="address" aria-selected="true">
+                    <i class="fi-rs-marker mr-10"></i>My Address
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="addaddress-tab" data-bs-toggle="tab" href="#addaddress" role="tab"
+                    aria-controls="addaddress" aria-selected="true">
+                    <i class="fi-rs-marker mr-10"></i>Add Address
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab"
+                    aria-controls="orders" aria-selected="false">
+                    <i class="fi-rs-shopping-bag mr-10"></i>Orders
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="page-login-register.html">
+                    <i class="fi-rs-sign-out mr-10"></i>Logout
+                  </a>
+                </li>
+              </ul>
             </div>
+          </div>
+          <div class="col-md-8">
+            <div class="tab-content dashboard-content">
+              <div class="tab-pane fade active show" id="account-detail" role="tabpanel"
+                aria-labelledby="account-detail-tab">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Account Details</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="form-group col-md-6">
+                        <label>Name <span class="required">*</span></label>
+                        <input class="form-control square" value="<%= user.name %>" name="name" type="text" readonly>
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                          data-bs-target="#editNameModal">Edit</button>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>Mobile <span class="required">*</span></label>
+                        <input class="form-control square" value="<%= user.mobile %>" name="mobile" type="number"
+                          readonly>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input class="form-control square" value="<%= user.email %>" name="email" type="email" readonly>
+                      </div>
+                      <div class="col-md-12">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                          data-bs-target="#changePasswordModal">Change Password</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="mb-0">Your Orders</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <!-- Order details -->
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Add Address</h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="addAddressForm" method="post" name="enq">
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label>House Name / Flat No.<span class="required">*</span></label>
+                          <input required="" class="form-control square" name="houseName" id="houseName" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label>Street<span class="required">*</span></label>
+                          <input required="" class="form-control square" name="street" id="street" type="text">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>City <span class="required">*</span></label>
+                          <input required="" class="form-control square" name="city" id="city" type="text">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>State <span class="required">*</span></label>
+                          <input required="" class="form-control square" name="state" id="state" type="text">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Country <span class="required">*</span></label>
+                          <input required="" class="form-control square" name="country" id="country" type="text">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Postalcode <span class="required">*</span></label>
+                          <input required="" class="form-control square" name="postalCode" id="postalCode" type="text">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Type <span class="required">*</span></label>
+                          <select class="form-control" id="addressType" name="addressType">
+                            <option value="home">Home</option>
+                            <option value="office">Office</option>
+                          </select>
+                        </div>
+                        <div class="col-md-12">
+                          <button type="submit" class="btn btn-fill-out submit" name="submit"
+                            value="Submit">Save</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+<!-- Profile Address Management Section -->
+<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+  <div class="row">
+    <% user.address.forEach((address, index)=> { %>
+      <div class="col-lg-6 mb-4" id="addressSection_<%= address._id %>">
+        <div class="card mb-3 mb-lg-0">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <%= address.type.charAt(0).toUpperCase() + address.type.slice(1) %> Address
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled">
+              <li><strong>House Name / Flat No.:</strong> <span class="house-name"><%= address.houseName %></span></li>
+              <li><strong>Street:</strong> <span class="street"><%= address.street %></span></li>
+              <li><strong>City:</strong> <span class="city"><%= address.city %></span></li>
+              <li><strong>State:</strong> <span class="state"><%= address.state %></span></li>
+              <li><strong>Country:</strong> <span class="country"><%= address.country %></span></li>
+              <li><strong>Postal Code:</strong> <span class="postal-code"><%= address.postalCode %></span></li>
+            </ul>
+            <!-- Edit and Delete buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal<%= index %>">Edit</button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAddressModal<%= index %>">Delete</button>
+            </div>
+          </div>
         </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<!-- Edit Address Modal -->
+<% user.address.forEach((address, index)=> { %>
+  <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form for editing address -->
+          <form id="editAddressForm<%= index %>" class="edit-address-form" data-address-id="<%= address._id %>">
+            <div class="form-group">
+              <label for="houseName<%= index %>">House Name / Flat No.</label>
+              <input type="text" class="form-control" id="houseName<%= index %>" name="houseName" value="<%= address.houseName %>" required>
+            </div>
+            <div class="form-group">
+              <label for="street<%= index %>">Street</label>
+              <input type="text" class="form-control" id="street<%= index %>" name="street" value="<%= address.street %>" required>
+            </div>
+            <div class="form-group">
+              <label for="city<%= index %>">City</label>
+              <input type="text" class="form-control" id="city<%= index %>" name="city" value="<%= address.city %>" required>
+            </div>
+            <div class="form-group">
+              <label for="state<%= index %>">State</label>
+              <input type="text" class="form-control" id="state<%= index %>" name="state" value="<%= address.state %>" required>
+            </div>
+            <div class="form-group">
+              <label for="country<%= index %>">Country</label>
+              <input type="text" class="form-control" id="country<%= index %>" name="country" value="<%= address.country %>" required>
+            </div>
+            <div class="form-group">
+              <label for="postalCode<%= index %>">Postal Code</label>
+              <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode" value="<%= address.postalCode %>" required>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<% }) %>
+
+
+<!-- Delete Address Modal -->
+<% user.address.forEach((address, index)=> { %>
+  <div class="modal fade" id="deleteAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="deleteAddressModalLabel<%= index %>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteAddressModalLabel<%= index %>">Delete Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this address?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" onclick="confirmDeleteAddress(<%= index %>)">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% }) %>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
-</main>
+  </main>
 
 
 
-<!-- Edit Name Modal -->
-<div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+
+
+
+
+
+
+
+  <!-- Edit Name Modal -->
+  <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form id="editNameForm">
-                  <div class="form-group">
-                      <label for="newName">New Name</label>
-                      <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name">
-                  </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
-          </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editNameForm">
+            <div class="form-group">
+              <label for="newName">New Name</label>
+              <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+        </div>
       </div>
+    </div>
   </div>
-</div>
 
-<!-- Change Password Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <!-- Change Password Modal -->
+  <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form id="changePasswordForm">
-                  <div class="form-group">
-                      <label for="currentPassword">Current Password</label>
-                      <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Enter current password">
-                  </div>
-                  <div class="form-group">
-                      <label for="newPassword">New Password</label>
-                      <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
-                  </div>
-                  <div class="form-group">
-                      <label for="confirmPassword">Confirm Password</label>
-                      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
-                  </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
-          </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="changePasswordForm">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+                placeholder="Enter current password">
+            </div>
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input type="password" class="form-control" id="newPassword" name="newPassword"
+                placeholder="Enter new password">
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                placeholder="Confirm new password">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
+        </div>
       </div>
+    </div>
   </div>
-</div>
+
+
+
+  <!-- Toast notification HTML for password mismatch -->
+  <div class="toast" id="passwordMismatchToast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Error</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      New password and confirm password must match.
+    </div>
+  </div>
+
+  <!-- Toast notification HTML for password change success -->
+  <div class="toast" id="passwordSuccessToast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Success</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Password changed successfully.
+    </div>
+  </div>
+
+  <!-- Toast notification HTML for password change error -->
+  <div class="toast" id="passwordErrorToast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Error</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Failed to change password. Please check your current password.
+    </div>
+  </div>
+
+
+
+
+
+
+
+
 
 
   <footer class="main bg-secondary text-light">
@@ -611,142 +750,145 @@
   <script src="./user-assets/js/shop.js?v=3.4"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-0VtUxEz1c4t3ZT5Yel5zPFJfnz9ao0MWr+Q4+agBkoBB1jE2xkkjzr8NT/dWclgl"
+    crossorigin="anonymous"></script>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
   <script>
     // Function to handle editing the name
     document.getElementById('saveNameBtn').addEventListener('click', async () => {
-        const newName = document.getElementById('newName').value.trim();
+      const newName = document.getElementById('newName').value.trim();
 
-        try {
-            const response = await fetch('/profile/updateName', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ newName })
-            });
-
-            if (response.ok) {
-                // Update the name in the profile section without refreshing
-                document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
-                $('#editNameModal').modal('hide');
-                window.location.reload();
-            } else {
-                // Handle error if any
-                console.error('Error updating name');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-
-    // Function to handle changing the password
-    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
-        const currentPassword = document.getElementById('currentPassword').value.trim();
-        const newPassword = document.getElementById('newPassword').value.trim();
-        const confirmPassword = document.getElementById('confirmPassword').value.trim();
-
-        if (newPassword !== confirmPassword) {
-            // Show error message if passwords don't match
-            alert('New password and confirm password must match.');
-            return;
-        }
-
-        try {
-            const response = await fetch('/profile/changePassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ currentPassword, newPassword })
-            });
-
-            if (response.ok) {
-                // Password changed successfully
-                $('#changePasswordModal').modal('hide');
-                window.location.reload();
-            } else {
-                // Handle error if any
-                alert('Failed to change password. Please check your current password.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-
-
-    document.getElementById("addAddressForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    // Retrieve form data
-    var houseName = document.getElementById("houseName").value;
-    var street = document.getElementById("street").value;
-    var city = document.getElementById("city").value;
-    var state = document.getElementById("state").value;
-    var country = document.getElementById("country").value;
-    var postalCode = document.getElementById("postalCode").value;
-    var addressType = document.getElementById("addressType").value;
-
-    // Validation logic
-    if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
-        Toastify({
-            text: "Please fill in all fields",
-            duration: 3000,
-            gravity: "top", // toast will be shown at top of the page
-            position: 'right', // toast position
-            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-        }).showToast();
-        return false;
-    }
-
-    try {
-        const response = await fetch('/profile/addAddress', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // Specify content type as JSON
-            },
-            body: JSON.stringify({ // Convert form data to JSON
-                houseName,
-                street,
-                city,
-                state,
-                country,
-                postalCode,
-                addressType
-            })
+      try {
+        const response = await fetch('/profile/updateName', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ newName })
         });
+
         if (response.ok) {
-          document.getElementById("addAddressForm").reset();
-            Toastify({
-                text: "Address added successfully",
-                duration: 3000,
-                gravity: "top",
-                position: 'right',
-                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-            }).showToast();
-            // window.location.reload();
-            // Optionally, you can redirect the user or perform any other action here
+          // Update the name in the profile section without refreshing
+          document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+          $('#editNameModal').modal('hide');
+          window.location.reload();
         } else {
-            Toastify({
-                text: "Failed to add address",
-                duration: 3000,
-                gravity: "top",
-                position: 'right',
-                backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-            }).showToast();
+          // Handle error if any
+          console.error('Error updating name');
         }
-    } catch (error) {
-        console.error(error);
-        Toastify({
-            text: "An error occurred",
-            duration: 3000,
-            gravity: "top",
-            position: 'right',
-            backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-        }).showToast();
-    }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+
+    var passwordMismatchToast = new bootstrap.Toast(document.getElementById('passwordMismatchToast'));
+    var passwordSuccessToast = new bootstrap.Toast(document.getElementById('passwordSuccessToast'));
+    var passwordErrorToast = new bootstrap.Toast(document.getElementById('passwordErrorToast'));
+
+    // Handle click event on change password button
+    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+      const currentPassword = document.getElementById('currentPassword').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+      if (newPassword !== confirmPassword) {
+        // Show error toast message if passwords don't match
+        passwordMismatchToast.show();
+        return;
+      }
+
+      try {
+        const response = await fetch('/profile/changePassword', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+
+        if (response.ok) {
+          // Password changed successfully
+          $('#changePasswordModal').modal('hide');
+          passwordSuccessToast.show();
+          // Optionally, you can redirect the user or perform any other action here
+          window.location.reload()
+        } else {
+          // Handle error if any
+          passwordErrorToast.show();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const editAddressForms = document.querySelectorAll('.edit-address-form');
+
+  editAddressForms.forEach((form, index) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const addressId = form.dataset.addressId;
+      const formData = new FormData(form);
+      const addressData = {};
+
+      for (const [key, value] of formData.entries()) {
+        addressData[key] = value;
+      }
+
+      try {
+        const response = await fetch(`/profile/update-address/${addressId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(addressData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Error updating address');
+        }
+
+        const data = await response.json();
+
+        // Update the address section on the page without refreshing
+        const addressSection = document.querySelector(`#addressSection_${addressId}`);
+        addressSection.querySelector('.house-name').textContent = data.address.houseName;
+        addressSection.querySelector('.street').textContent = data.address.street;
+        addressSection.querySelector('.city').textContent = data.address.city;
+        addressSection.querySelector('.state').textContent = data.address.state;
+        addressSection.querySelector('.country').textContent = data.address.country;
+        addressSection.querySelector('.postal-code').textContent = data.address.postalCode;
+
+        // Close the modal
+        const modal = document.querySelector(`#editAddressModal${index}`);
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        modalInstance.hide();
+      } catch (err) {
+        console.error(err);
+       
+      }
+    });
+  });
 });
 
-</script>
+  </script>
 
 
 

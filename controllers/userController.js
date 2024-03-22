@@ -198,9 +198,9 @@ const loadRegister = async (req, res) => {
 const verifylogin = async (req, res) => {
     try {
         const {email,password} = req.body;
-        console.log(email);
+      
         const userData = await User.findOne({ email: email });
-        console.log(userData);
+      
         if(userData){
             const passwordMatch = await bcrypt.compare(password,userData.password)
             if(passwordMatch){
@@ -433,6 +433,44 @@ const addAddress = async (req, res) => {
   }
 };
 
+
+const updateAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    
+    const updatedAddress = {
+      houseName: req.body.houseName,
+      street: req.body.street,
+      city: req.body.city,
+      state: req.body.state,
+      country: req.body.country,
+      postalCode: req.body.postalCode,
+    };
+   
+    
+
+    const user = await User.findOneAndUpdate(
+      {_id:req.session.user_id,'address._id': addressId },
+      { $set: { 'address.$': updatedAddress } },
+      { new: true }
+    );
+   
+ 
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Address not found' });
+    }
+    
+    const updatedAddresss = user.address.find(addr => addr._id.toString() === addressId);
+   console.log(updatedAddresss);
+    return res.json({ success: true, address: updatedAddresss });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+
+
 module.exports = {
   loginLoad,
   loadRegister,
@@ -455,7 +493,8 @@ module.exports = {
   loadprofile,
   changePassword,
   updateName,
-  addAddress
+  addAddress,
+  updateAddress
 
   
 }
