@@ -17,6 +17,8 @@ user_route.set('views','./views/user')
 
 const userController = require ('../controllers/userController');
 
+const cartController = require ('../controllers/cartController')
+
 user_route.get('/pagenotfound',userController.pagenotfound)
 
 user_route.get('/',auth.isLogout,userController.landingLoad)
@@ -72,6 +74,7 @@ user_route.post('/profile/addAddress', auth.isLogin, userController.addAddress);
 
 user_route.put('/profile/update-address/:addressId', auth.isLogin, userController.updateAddress);
 
+user_route.get('/cart',auth.isLogin,cartController.loadCart)
 
 
 module.exports = user_route;

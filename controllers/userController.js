@@ -447,8 +447,6 @@ const updateAddress = async (req, res) => {
       postalCode: req.body.postalCode,
     };
    
-    
-
     const user = await User.findOneAndUpdate(
       {_id:req.session.user_id,'address._id': addressId },
       { $set: { 'address.$': updatedAddress } },
@@ -460,9 +458,8 @@ const updateAddress = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Address not found' });
     }
     
-    const updatedAddresss = user.address.find(addr => addr._id.toString() === addressId);
-   console.log(updatedAddresss);
-    return res.json({ success: true, address: updatedAddresss });
+    return res.json({ success: true});
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, error: 'Server Error' });

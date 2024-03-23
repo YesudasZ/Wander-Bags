@@ -193,7 +193,7 @@
                   </a>
                 </div>
                 <div class="header-action-icon-2">
-                  <a class="mini-cart-icon" href="shop-cart.html">
+                  <a class="mini-cart-icon" href="/cart">
                     <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
                     <span class="pro-count blue">2</span>
                   </a>
@@ -621,7 +621,6 @@
 
 
   <footer class="main bg-secondary text-light">
-
     <section class="section-padding footer-mid">
       <div class="container pt-15 pb-20">
         <div class="row">
@@ -759,6 +758,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -836,7 +838,6 @@
     });
 
 
-
     document.addEventListener('DOMContentLoaded', () => {
   const editAddressForms = document.querySelectorAll('.edit-address-form');
 
@@ -865,24 +866,22 @@
           throw new Error('Error updating address');
         }
 
-        const data = await response.json();
-
-        // Update the address section on the page without refreshing
-        const addressSection = document.querySelector(`#addressSection_${addressId}`);
-        addressSection.querySelector('.house-name').textContent = data.address.houseName;
-        addressSection.querySelector('.street').textContent = data.address.street;
-        addressSection.querySelector('.city').textContent = data.address.city;
-        addressSection.querySelector('.state').textContent = data.address.state;
-        addressSection.querySelector('.country').textContent = data.address.country;
-        addressSection.querySelector('.postal-code').textContent = data.address.postalCode;
-
         // Close the modal
         const modal = document.querySelector(`#editAddressModal${index}`);
-        const modalInstance = bootstrap.Modal.getInstance(modal);
-        modalInstance.hide();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+
+        // Reload the page
+        window.location.reload();
       } catch (err) {
         console.error(err);
-       
+        alert(err.message);
       }
     });
   });
