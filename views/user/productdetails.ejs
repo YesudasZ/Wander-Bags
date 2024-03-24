@@ -406,56 +406,56 @@
             </div>
 
             <div class="col-lg-6 col-md-12">
-                <!-- Product Details -->
-                <div class="product-details trendy-product-details">
-                    <h2 class="title-detail trendy-title"><%= product.name %></h2>
-                    <div class="product-detail-rating trendy-rating">
-                        <div class="pro-details-brand trendy-brand">
-                            <% if (product.status === 'out-of-stock') { %>
-                                <span class="text-danger trendy-status">Currently Unavailable: <%= product.status %></span>
-                            <% } else { %>
-                                <span class="trendy-category">Category: <%= product.category %></span>
-                            <% } %>
-                        </div>
-                        <div class="product-rate-cover text-end trendy-rate-cover">
-                            <div class="product-rate d-inline-block trendy-rating-bar">
-                                <div class="product-rating trendy-rating" style="width:90%"></div>
-                            </div>
-                            <span class="font-small ml-2 text-muted trendy-review-text">(25 reviews)</span>
-                        </div>
-                    </div>
-                    <div class="product-price-cover mt-3 trendy-price-cover">
-                        <div class="product-price trendy-product-price">
-                            <ins class="font-weight-bold trendy-discount-price">₹.<%= product.discountPrice %></ins>
-                            <del class="old-price ml-2 trendy-old-price">₹.<%= product.price %>/-</del>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="short-desc mt-3 trendy-short-desc">
-                        <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock') { %>
-                            <span class="text-danger trendy-stock">Hurry! Only <%= product.countInStock %> left in stock</span>
-                        <% } %>
-                    </div>
-                    <div class="product-sort-info font-sm mt-3 trendy-sort-info">
-                        <ul class="list-unstyled trendy-list">
-                            <li class="mb-1 text-dark trendy-list-item"><i class="bi bi-arrow-repeat mr-1 trendy-icon"></i>30 Day Return Policy</li>
-                            <li class="trendy-list-item"><i class="bi bi-currency-dollar mr-1 trendy-icon"></i>Cash on Delivery Available</li>
-                        </ul>
-                    </div>
-                    <hr>
-                    <div class="product-actions mt-3 trendy-actions">
-                        <div class="product-extra-links trendy-extra-links">
-                            <button type="submit" class="btn btn-primary mr-2 trendy-btn">
-                                ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
-                            </button>
-                            <button type="submit" class="btn btn-success trendy-btn">
-                                BUY NOW
-                            </button>
-                            <a aria-label="Add To Wishlist" class="btn btn-light ml-2 trendy-btn" href="shop-wishlist.html"><i class="bi bi-heart trendy-icon"></i></a>
-                            <a aria-label="Compare" class="btn btn-light ml-2 trendy-btn" href="shop-compare.html"><i class="bi bi-shuffle trendy-icon"></i></a>
-                        </div>
-                    </div>
-                </div>
+<!-- Product Details -->
+<div class="product-details trendy-product-details">
+  <h2 class="title-detail trendy-title"><%= product.name %></h2>
+  <div class="product-detail-rating trendy-rating">
+      <div class="pro-details-brand trendy-brand">
+          <% if (product.status === 'out-of-stock') { %>
+              <span class="text-danger trendy-status">Currently Unavailable: <%= product.status %></span>
+          <% } else { %>
+              <span class="trendy-category">Category: <%= product.category %></span>
+          <% } %>
+      </div>
+      <div class="product-rate-cover text-end trendy-rate-cover">
+          <div class="product-rate d-inline-block trendy-rating-bar">
+              <div class="product-rating trendy-rating" style="width:90%"></div>
+          </div>
+          <span class="font-small ml-2 text-muted trendy-review-text">(25 reviews)</span>
+      </div>
+  </div>
+  <div class="product-price-cover mt-3 trendy-price-cover">
+      <div class="product-price trendy-product-price">
+          <ins class="font-weight-bold trendy-discount-price">₹.<%= product.discountPrice %></ins>
+          <del class="old-price ml-2 trendy-old-price">₹.<%= product.price %>/-</del>
+      </div>
+  </div>
+  <hr>
+  <div class="short-desc mt-3 trendy-short-desc">
+      <% if (product.countInStock <= 10 && product.countInStock >= 1 && product.status !== 'out-of-stock') { %>
+          <span class="text-danger trendy-stock">Hurry! Only <%= product.countInStock %> left in stock</span>
+      <% } %>
+  </div>
+  <div class="product-sort-info font-sm mt-3 trendy-sort-info">
+      <ul class="list-unstyled trendy-list">
+          <li class="mb-1 text-dark trendy-list-item"><i class="bi bi-arrow-repeat mr-1 trendy-icon"></i>30 Day Return Policy</li>
+          <li class="trendy-list-item"><i class="bi bi-currency-dollar mr-1 trendy-icon"></i>Cash on Delivery Available</li>
+      </ul>
+  </div>
+  <hr>
+  <div class="product-actions mt-3 trendy-actions">
+      <div class="product-extra-links trendy-extra-links">
+          <button type="button" class="btn btn-primary mr-2 trendy-btn" id="addToCartBtn" data-productid="<%= product._id %>">
+              ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
+          </button>
+          <button type="submit" class="btn btn-success trendy-btn">
+              BUY NOW
+          </button>
+          <a aria-label="Add To Wishlist" class="btn btn-light ml-2 trendy-btn" href="shop-wishlist.html"><i class="bi bi-heart trendy-icon"></i></a>
+          <a aria-label="Compare" class="btn btn-light ml-2 trendy-btn" href="shop-compare.html"><i class="bi bi-shuffle trendy-icon"></i></a>
+      </div>
+  </div>
+</div>
                 <!-- End Product Details -->
 
                 <!-- Product Description Tab -->
@@ -617,6 +617,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
   function openModal(imageUrl) {
         var modal = document.getElementById("imageModal");
@@ -625,13 +628,49 @@
         modalImg.src = imageUrl;
     }
 
-    // Close the modal when the close button is clicked
+  
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function() {
         var modal = document.getElementById("imageModal");
         modal.style.display = "none";
     }
 
+    document.getElementById('addToCartBtn').addEventListener('click', function() {
+        var productId = this.getAttribute('data-productid');
+        
+      
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId: productId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: data.message
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!'
+            });
+        });
+    });
 </script>
 
 </body>

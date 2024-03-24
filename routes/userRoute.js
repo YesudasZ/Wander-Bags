@@ -76,5 +76,7 @@ user_route.put('/profile/update-address/:addressId', auth.isLogin, userControlle
 
 user_route.get('/cart',auth.isLogin,cartController.loadCart)
 
+user_route.post('/cart/add', cartController.addToCart)
+
 
 module.exports = user_route;
