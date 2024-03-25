@@ -766,9 +766,133 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
 
   <script>
+
+  // Function to handle editing the name
+  document.getElementById('saveNameBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('newName').value.trim();
+        try {
+            const response = await fetch('/profile/updateName', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newName })
+            });
+            if (response.ok) {
+                // Update the name in the profile section without refreshing
+                document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+                $('#editNameModal').modal('hide');
+                window.location.reload();
+            } else {
+                // Handle error if any
+                console.error('Error updating name');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+    // Function to handle changing the password
+    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+        const currentPassword = document.getElementById('currentPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        if (newPassword !== confirmPassword) {
+            // Show error message if passwords don't match
+            alert('New password and confirm password must match.');
+            return;
+        }
+        try {
+            const response = await fetch('/profile/changePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+            if (response.ok) {
+                // Password changed successfully
+                $('#changePasswordModal').modal('hide');
+                window.location.reload();
+            } else {
+                // Handle error if any
+                alert('Failed to change password. Please check your current password.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+    document.getElementById("addAddressForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    // Retrieve form data
+    var houseName = document.getElementById("houseName").value;
+    var street = document.getElementById("street").value;
+    var city = document.getElementById("city").value;
+    var state = document.getElementById("state").value;
+    var country = document.getElementById("country").value;
+    var postalCode = document.getElementById("postalCode").value;
+    var addressType = document.getElementById("addressType").value;
+    // Validation logic
+    if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
+        Toastify({
+            text: "Please fill in all fields",
+            duration: 3000,
+            gravity: "top", // toast will be shown at top of the page
+            position: 'right', // toast position
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        }).showToast();
+        return false;
+    }
+    try {
+        const response = await fetch('/profile/addAddress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Specify content type as JSON
+            },
+            body: JSON.stringify({ // Convert form data to JSON
+                houseName,
+                street,
+                city,
+                state,
+                country,
+                postalCode,
+                addressType
+            })
+        });
+        if (response.ok) {
+          document.getElementById("addAddressForm").reset();
+            Toastify({
+                text: "Address added successfully",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            }).showToast();
+            // window.location.reload();
+            // Optionally, you can redirect the user or perform any other action here
+        } else {
+            Toastify({
+                text: "Failed to add address",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+            }).showToast();
+        }
+    } catch (error) {
+        console.error(error);
+        Toastify({
+            text: "An error occurred",
+            duration: 3000,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+        }).showToast();
+    }
+});
+
     // Function to handle editing the name
     document.getElementById('saveNameBtn').addEventListener('click', async () => {
       const newName = document.getElementById('newName').value.trim();

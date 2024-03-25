@@ -79,4 +79,19 @@ user_route.get('/cart',auth.isLogin,cartController.loadCart)
 user_route.post('/cart/add', cartController.addToCart)
 
 
+
+user_route.put('/cart/update/:productId', cartController.updateCartItemQuantity);
+
+
+user_route.delete('/cart/remove/:productId', cartController.removeCartItem);
+
+
+user_route.put('/cart/update', cartController.updateCart);
+
+
+user_route.delete('/cart/clear', cartController.clearCart);
+
+
+user_route.get('/cart/totals', cartController.getCartTotals);
+
 module.exports = user_route;

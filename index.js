@@ -8,7 +8,7 @@ require('dotenv').config();
 dbConnection()
 
 
-// Replace bodyParser.json() with express.json()
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
