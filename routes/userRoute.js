@@ -19,6 +19,8 @@ const userController = require ('../controllers/userController');
 
 const cartController = require ('../controllers/cartController')
 
+const orderController = require ('../controllers/orderController')
+
 user_route.get('/pagenotfound',userController.pagenotfound)
 
 user_route.get('/',auth.isLogout,userController.landingLoad)
@@ -93,5 +95,7 @@ user_route.delete('/cart/clear', cartController.clearCart);
 
 
 user_route.get('/cart/totals', cartController.getCartTotals);
+
+user_route.get('/checkout',orderController.loadCheckout)
 
 module.exports = user_route;

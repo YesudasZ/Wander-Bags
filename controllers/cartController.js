@@ -255,6 +255,9 @@ const getCartTotals = async (req, res) => {
     }
 };
 
+
+
+
 module.exports = {
 loadCart,
 addToCart,
