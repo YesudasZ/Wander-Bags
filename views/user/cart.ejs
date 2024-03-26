@@ -190,105 +190,106 @@
       </div>
   </div>
 
-<section class="mt-5 mb-5">
-  <div class="container">
-      <div class row="row">
-          <div class="col-lg-12">
-              <div class="table-responsive shadow p-3 mb-5 bg-body rounded">
-                  <table class="table shopping-summery text-center">
-                      <thead>
-                          <tr class="main-heading">
-                              <th scope="col">Image</th>
-                              <th scope="col">Product Name</th>
-                              <th scope="col">Price</th>
-                              <th scope="col">Quantity</th>
-                              <th scope="col">Total</th>
-                              <th scope="col">Remove</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <% if (cart && cart.items.length > 0) { %>
-                              <% cart.items.forEach((item, index) => { %>
-                                  <tr id="item-<%= index + 1 %>">
-                                      <td class="image product-thumbnail"><img src="/productImages/<%= item.image[0] %>" alt="#" style="max-width: 100px;"></td>
-                                      <td class="product-des product-name">
-                                          <h5><a href="#" class="text-dark"><%= item.title %></a></h5>
-                                          <% if (item.productStatus === 'Limit-Exceeded') { %>
-                                              <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Maximum quantity limit reached</p>
-                                          <% } else if (item.countInStock <= 0) { %>
-                                              <p class="font-xs text-danger">Out of Stock</p>
-                                          <% } else if (item.countInStock <= 10) { %>
-                                              <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Only <%= item.countInStock %> stocks Left</p>
-                                          <% } else { %>
-                                              <p class="font-xs text-info" id="countInStock-<%= item._id %>">In Stock</p>
-                                          <% } %>
-                                      </td>
-                                      <td class="price" data-title="Price"><span>Rs.<%= item.productPrice %>/-</span></td>
-                                      <td class="text-center" data-title="Quantity">
-                                          <div class="cart-product-quantity">
-                                              <button class="btn btn-sm btn-danger decrease-quantity" data-id="<%= item._id %>">-</button>
-                                              <input type="number" class="form-control black-border black-spin-buttons trendy-quantity-input" value="<%= item.quantity %>" min="1" max="5" data-id="<%= item._id %>">
-                                              <button class="btn btn-sm btn-success increase-quantity" data-id="<%= item._id %>">+</button>
-                                          </div>
-                                      </td>
-                                      <td class="text-right subtotal" data-title="Total" id="price-<%= item._id %>">
-                                          <span>Rs.<%= item.price %>/-</span>
-                                      </td>
-                                      <td class="action" data-title="Remove">
-                                          <button class="btn btn-sm btn-danger remove-item" data-id="<%= item._id %>"><i class="fi-rs-trash"></i></button>
-                                      </td>
-                                  </tr>
-                              <% }); %>
-                              <tr>
-                                  <td colspan="6" class="text-end">
-                                      <button class="btn btn-danger clear-cart"><i class="fi-rs-trash"></i> Clear Cart</button>
-                                  </td>
-                              </tr>
-                          <% } else { %>
-                              <tr>
-                                  <td colspan="6" class="text-center">Your cart is empty</td>
-                              </tr>
-                          <% } %>
-                      </tbody>
-                  </table>
-              </div>
-              <div class="cart-action text-end mb-4">
-                  <button class="btn btn-secondary mr-2 update-cart"><i class="fi-rs-shuffle"></i> Update Cart</button>
-                  <a href="#" class="btn btn-primary"><i class="fi-rs-shopping-bag"></i> Continue Shopping</a>
-              </div>
+  <section class="mt-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive shadow p-3 mb-5 bg-body rounded">
+                    <table class="table shopping-summery text-center">
+                        <thead>
+                            <tr class="main-heading">
+                                <th scope="col">Image</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (cart && cart.items.length > 0) { %>
+                            <% cart.items.forEach((item, index) => { %>
+                            <tr id="item-<%= index + 1 %>">
+                                <td class="image product-thumbnail"><img src="/productImages/<%= item.image[0] %>" alt="#" style="max-width: 100px;"></td>
+                                <td class="product-des product-name">
+                                    <h5><a href="#" class="text-dark"><%= item.title %></a></h5>
+                                    <% if (item.productStatus === 'Limit-Exceeded') { %>
+                                    <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Maximum quantity limit reached</p>
+                                    <% } else if (item.countInStock <= 0) { %>
+                                    <p class="font-xs text-danger">Out of Stock</p>
+                                    <% } else if (item.countInStock <= 10) { %>
+                                    <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Only <%= item.countInStock %> stocks Left</p>
+                                    <% } else { %>
+                                    <p class="font-xs text-info" id="countInStock-<%= item._id %>">In Stock</p>
+                                    <% } %>
+                                </td>
+                                <td class="price" data-title="Price"><span>Rs.<%= item.productPrice %>/-</span></td>
+                                <td class="text-center" data-title="Quantity" style="width: 200px;">
+                                  <div class="d-flex justify-content-center align-items-center">
+                                        <button class="btn btn-sm  btn-outline-secondary  decrease-quantity" data-id="<%= item._id %>">-</button>
+                                        <input type="number" class="form-control black-border black-spin-buttons trendy-quantity-input text-center" value="<%= item.quantity %>" min="1" max="4" data-id="<%= item._id %>" readonly>
+                                        <button class="btn btn-sm btn-outline-success  increase-quantity" data-id="<%= item._id %>">+</button>
+                                    </div>
+                                </td>
+                                <td class="text-right subtotal" data-title="Total" id="price-<%= item._id %>">
+                                    <span>Rs.<%= item.price %>/-</span>
+                                </td>
+                                <td class="action" data-title="Remove">
+                                    <button class="btn btn-sm btn-danger remove-item" data-id="<%= item._id %>"><i class="fi-rs-trash"></i></button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                            <tr>
+                                <td colspan="6" class="text-end">
+                                    <button class="btn btn-danger clear-cart"><i class="fi-rs-trash"></i> Clear Cart</button>
+                                </td>
+                            </tr>
+                            <% } else { %>
+                            <tr>
+                                <td colspan="6" class="text-center">Your cart is empty</td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-action text-end mb-4">
+                    <button class="btn btn-secondary mr-2 update-cart"><i class="fi-rs-shuffle"></i> Update Cart</button>
+                    <a href="#" class="btn btn-primary"><i class="fi-rs-shopping-bag"></i> Continue Shopping</a>
+                </div>
 
-              <div class="row">
-                  <div class="col-lg-6 col-md-12 mx-auto">
-                      <div class="border p-md-4 p-3 rounded cart-totals shadow">
-                          <div class="heading_s1 mb-3">
-                              <h4>Cart Totals</h4>
-                          </div>
-                          <div class="table-responsive">
-                              <table class="table">
-                                  <tbody>
-                                      <tr>
-                                          <td class="cart_total_label">Cart Subtotal</td>
-                                          <td class="cart_total_amount"><span class="font-lg fw-bold text-brand" id="cart-subtotal"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td class="cart_total_label">Shipping</td>
-                                          <td class="cart_total_amount"><i class="ti-gift mr-1"></i> Free Shipping</td>
-                                      </tr>
-                                      <tr>
-                                          <td class="cart_total_label">Total</td>
-                                          <td class="cart_total_amount"><strong><span class="font-xl fw-bold text-brand" id="cart-total"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></strong></td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-                          </div>
-                          <a href="#" class="btn btn-success"><i class="fi-rs-box-alt"></i> Proceed To Checkout</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 mx-auto">
+                        <div class="border p-md-4 p-3 rounded cart-totals shadow">
+                            <div class="heading_s1 mb-3">
+                                <h4>Cart Totals</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="cart_total_label">Cart Subtotal</td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-bold text-brand" id="cart-subtotal"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Shipping</td>
+                                            <td class="cart_total_amount"><i class="ti-gift mr-1"></i> Free Shipping</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Total</td>
+                                            <td class="cart_total_amount"><strong><span class="font-xl fw-bold text-brand" id="cart-total"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="#" class="btn btn-success"><i class="fi-rs-box-alt"></i> Proceed To Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
 
 
 

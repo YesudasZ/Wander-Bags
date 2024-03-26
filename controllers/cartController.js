@@ -89,7 +89,7 @@ const addToCart = async (req, res) => {
 };
 
 
-// Update cart item quantity
+
 const updateCartItemQuantity = async (req, res) => {
     try {
         
@@ -140,7 +140,7 @@ const updateCartItemQuantity = async (req, res) => {
     }
 };
 
-// Remove item from cart
+
 const removeCartItem = async (req, res) => {
     try {
         
@@ -169,7 +169,7 @@ const removeCartItem = async (req, res) => {
     }
 };
 
-// Update cart
+
 const updateCart = async (req, res) => {
     try {
         let userCart = await Cart.findOne({ owner: req.session.user_id });
@@ -219,7 +219,7 @@ const updateCart = async (req, res) => {
     }
 };
 
-// Clear cart
+
 const clearCart = async (req, res) => {
     try {
         let userCart = await Cart.findOne({ owner: req.session.user_id });
@@ -239,7 +239,7 @@ const clearCart = async (req, res) => {
     }
 };
 
-// Get cart totals
+
 const getCartTotals = async (req, res) => {
     try {
         const userCart = await Cart.findOne({ owner: req.session.user_id });
