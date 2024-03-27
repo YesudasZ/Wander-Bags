@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -21,100 +20,85 @@
 
   <style>
 
-.address-card .card {
-  border: 1px solid #ccc;
-}
 
-.address-card .form-check {
-  display: flex;
-  align-items: center;
-}
-
-.address-card .form-check-label {
-  flex-grow: 1;
-  margin-left: 10px;
-}
-
-.address-card .edit-icon {
-  cursor: pointer;
-}
-
-.cart-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-.cart-item .card-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.cart-item-actions,
-.cart-item-total,
-.cart-item-select {
-  margin-top: 10px;
-}
-
-.cart-item-actions .btn {
-  padding: 0.25rem 0.5rem;
-}
-
-
-/* .address-box {
+     .cart-section{
       border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-      position: relative;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+     }
+
+    .address-card .card {
+      border: none;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .address-box input[type="radio"] {
-      margin-right: 10px;
+    .address-card .card:hover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    .edit-icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .address-card .form-check {
+      display: flex;
+      align-items: center;
+    }
+
+    .address-card .form-check-label {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+
+    .address-card .edit-icon {
       cursor: pointer;
+      color: #007bff;
+      transition: all 0.3s ease;
+    }
+
+    .address-card .edit-icon:hover {
+      color: #0056b3;
     }
 
     .cart-item {
-      display: flex;
-      align-items: center;
       border: 1px solid #ccc;
       padding: 10px;
-      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .cart-item img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      margin-right: 10px;
+    .cart-item:hover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    .cart-item-details {
-      flex-grow: 1;
-    }
-
-    .cart-item-actions {
-      margin-right: 10px;
-    }
-
-    .cart-item-total {
-      margin-right: 10px;
-    }
-
-    .cart-item-select {
+    .cart-item .card-body {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
     }
 
-    .cart-item-select input[type="checkbox"] {
-      margin-right: 5px;
-    } */
+    .cart-item-actions,
+    .cart-item-total,
+    .cart-item-select {
+      margin-top: 10px;
+    }
+
+    .cart-item-actions .btn {
+      padding: 0.25rem 0.5rem;
+    }
+
+    .payment-section {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .place-order-btn {
+      width: 100%;
+      margin-top: 20px;
+    }
+
 
     /* Footer Styling */
     footer.main {
@@ -160,27 +144,27 @@
     }
 
     .header-info-right ul li {
-    display: inline;
-    margin-left: 20px;
-}
+      display: inline;
+      margin-left: 20px;
+    }
 
-.header-info-right ul li:first-child {
-    margin-left: 0;
-}
+    .header-info-right ul li:first-child {
+      margin-left: 0;
+    }
 
-.header-info-right a {
-    text-decoration: none;
-    color: #343a40; /* Adjust text color as needed */
-}
+    .header-info-right a {
+      text-decoration: none;
+      color: #343a40;
+      /* Adjust text color as needed */
+    }
 
-.header-info-right a:hover {
-    text-decoration: underline;
-}
+    .header-info-right a:hover {
+      text-decoration: underline;
+    }
 
-.header-info-right .fi-rs-user {
-    margin-right: 5px;
-}
-
+    .header-info-right .fi-rs-user {
+      margin-right: 5px;
+    }
   </style>
 </head>
 
@@ -203,23 +187,23 @@
           </div>
           <div class="col-xl-3 col-lg-4">
             <div class="header-info header-info-right text-end">
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                        <a class="language-dropdown-active text-dark" href="#"> <i class="fi-rs-world"></i> English</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <i class="fi-rs-user"></i>
-                        <a href="/profile" class="text-black">
-                          <%=user.name %>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="/logout">Logout</a>
-                    </li>
-                </ul>
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                  <a class="language-dropdown-active text-dark" href="#"> <i class="fi-rs-world"></i> English</a>
+                </li>
+                <li class="list-inline-item">
+                  <i class="fi-rs-user"></i>
+                  <a href="/profile" class="text-black">
+                    <%=user.name %>
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="/logout">Logout</a>
+                </li>
+              </ul>
             </div>
-        </div>
-        
+          </div>
+
         </div>
       </div>
     </div>
@@ -277,318 +261,492 @@
 
 
   <main>
-    <div class="container mt-5">
-      <h1 class="text-center mb-4">Checkout</h1>
+    <div class="container mt-5 mb-5">
+      <h1 class="text-center mb-4"></h1>
       <div class="row">
         <div class="col-md-4">
           <div class="address-section">
             <h3>Delivery Address</h3>
             <div class="existing-address">
-              <h4>Existing Addresses</h4>
               <div class="address-list">
                 <!-- Display existing addresses dynamically -->
-                <% user.address.forEach(address => { %>
-                  <div class="address-card mb-3">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="form-check">
-                          <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" class="form-check-input">
-                          <label for="<%= address._id %>" class="form-check-label">
-                            <%= address.houseName %> <br> <%= address.street %><br>  <%= address.city %><br>  <%= address.state %><br>  <%= address.country %><br> <%= address.postalCode %>
-                          </label>
-                        </div>
-                        <span class="edit-icon"><i class="bi bi-pencil"></i></span>
+                <% user.address.forEach((address, index)=> { %>
+                <div class="address-card mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="form-check">
+                        <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" class="form-check-input">
+                        <label for="<%= address._id %>" class="form-check-label">
+                          <%= address.houseName %> <br>
+                          <%= address.street %><br>
+                          <%= address.city %><br>
+                          <%= address.state %><br>
+                          <%= address.country %><br>
+                          <%= address.postalCode %>
+                        </label>
                       </div>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal<%= index %>">Edit</button>
                     </div>
                   </div>
+                </div>
                 <% }); %>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-8">
-          <div class="cart-section">
-            <h3>Cart Items</h3>
+          <div class="cart-section p-5">
+            <div class="mb-20">
+              <h4>Your Orders</h4>
+            </div>
             <div class="cart-items">
               <!-- Cart items -->
-              <% cart.items.forEach(item => { %>
-                <div class="cart-item mb-3">
-                  <div class="row g-0">
-                    <div class="col-md-3">
-                      <img src="/productImages/<%= item.image[0] %>" alt="Product Image" class="img-fluid">
-                    </div>
-                    <div class="col-md-9">
-                      <div class="card-body">
-                        <h5 class="card-title"><%= item.title %></h5>
-                        <p class="card-text">Discounted Price: $<%= item.productPrice %></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="cart-item-actions">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="decrementQuantity(this, '<%= item._id %>')">-</button>
-                            <span class="mx-2 item-quantity"><%= item.quantity %></span>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="incrementQuantity(this, '<%= item._id %>')">+</button>
-                          </div>
-                          <div class="cart-item-total">
-                            <strong>Total: $<span class="item-total"><%= item.price %></span></strong>
-                          </div>
-                          <div class="cart-item-select">
-                            <div class="form-check">
-                              <input type="checkbox" id="<%= item._id %>" name="selectedItems" value="<%= item._id %>" class="form-check-input item-checkbox" onchange="updateTotal(this, '<%= item.price %>')">
-                              <label for="<%= item._id %>" class="form-check-label">Select</label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+              <% cart.items.forEach(item=> { %>
+              <div class="cart-item mb-3">
+                <div class="row g-0 align-items-center">
+                  <div class="col-md-3">
+                    <img src="/productImages/<%= item.image[0] %>" alt="Product Image" class="img-fluid">
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= item.title %></h5>
+                      <p class="card-text">Discounted Price: ₹.<%= item.productPrice %></p>
                     </div>
                   </div>
+                  <div class="col-md-3">
+                    <div class="quantity-wrapper d-flex align-items-center justify-content-end">
+                      <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-id="<%= item._id %>" data-price="<%= item.productPrice %>">-</button>
+                      <input type="number" class="form-control black-border black-spin-buttons trendy-quantity-input text-center quantity" value="<%= item.quantity %>" min="1" max="4" data-id="<%= item._id %>" data-price="<%= item.productPrice %>"  readonly>
+                      <button class="btn btn-sm btn-outline-success increase-quantity" data-id="<%= item._id %>" data-price="<%= item.productPrice %>">+</button>
+                    </div>
+                    <div class="text-right subtotal mt-2" data-title="Total" id="price-<%= item._id %>">
+                      <strong>Total: ₹.<span class="item-total"><%= item.price %></span></strong>
+                    </div>
+                    <!-- <div class="cart-item-select mt-2">
+                      <div class="form-check">
+                        <input type="checkbox" id="<%= item._id %>" name="selectedItems" value="<%= item._id %>" class="form-check-input item-checkbox" onchange="updateTotal(this, '<%= item.price %>')">
+                        <label for="<%= item._id %>" class="form-check-label">Select</label>
+                      </div>
+                    </div> -->
+                  </div>
                 </div>
+              </div>
               <% }); %>
             </div>
-            <div class="payment-options">
-              <h4>Payment Options</h4>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="paymentOption" id="cashOnDelivery" checked>
-                <label class="form-check-label" for="cashOnDelivery">
-                  Cash on Delivery
-                </label>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th colspan="3" id="cart-subtotal">SubTotal</th>
+                  <td id="subtotalAmount">₹.<%= cart.billTotal %></td>
+                </tr>
+                <tr>
+                  <th colspan="3">Shipping</th>
+                  <td><em>Free Shipping</em></td>
+                </tr>
+                <tr>
+                  <th colspan="3">Total</th>
+                  <td><span class="font-xl text-brand fw-900" id="totalAmount">₹.<%= cart.billTotal %></span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+            <div class="payment_method">
+              <div class="mb-25">
+                <h5>Payment</h5>
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="paymentOption" id="creditCard">
-                <label class="form-check-label" for="creditCard">
-                  Credit Card
-                </label>
+              <div class="payment_option">
+                <div class="custome-radio">
+                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" checked="">
+                  <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">ATM Card / Credit Card</label>
+                  <div class="form-group collapse in" id="bankTranfer">
+                    <p class="text-muted mt-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
+                  </div>
+                </div>
+                <div class="custome-radio">
+                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" checked="">
+                  <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Cash On Delivery</label>
+                  <div class="form-group collapse in" id="checkPayment">
+                    <p class="text-muted mt-5">Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </p>
+                  </div>
+                </div>
+                <div class="custome-radio">
+                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" checked="">
+                  <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Paypal</label>
+                  <div class="form-group collapse in" id="paypal">
+                    <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="cart-total">
-              <h5>Total: $<span id="totalAmount"><%= cart.billTotal %></span></h5>
-            </div>
-            <button class="btn btn-success place-order-btn">Place Order</button>
+            <button type="button" class="btn btn-success btn-lg btn-block mt-30" id="placeOrderBtn">Place Order</button>
           </div>
         </div>
       </div>
     </div>
   </main>
-
-
-
-
-  <footer class="main bg-secondary text-light">
-    <section class="section-padding footer-mid">
-      <div class="container pt-15 pb-20">
-        <div class="row">
-          <div class="col-lg-4 col-md-6">
-            <div class="widget-about font-md mb-md-5 mb-lg-0">
-              <div class="logo logo-width-1 wow fadeIn animated">
-                <a href="index.html"><img src="../user-assets/imgs/theme/logo.svg" alt="logo"></a>
+  <!-- Edit Address Modal -->
+  <% user.address.forEach((address, index)=> { %>
+    <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog"
+      aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Form for editing address -->
+            <form id="editAddressForm<%= index %>" class="edit-address-form" data-address-id="<%= address._id %>">
+              <div class="form-group">
+                <label for="houseName<%= index %>">House Name / Flat No.</label>
+                <input type="text" class="form-control" id="houseName<%= index %>" name="houseName"
+                  value="<%= address.houseName %>" required>
               </div>
-              <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
-              <p class="wow fadeIn animated">
-                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
-              </p>
-              <p class="wow fadeIn animated">
-                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
-              </p>
-              <p class="wow fadeIn animated">
-                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
-              </p>
-              <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
-              <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                <a href="#"><img src="../user-assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                <a href="#"><img src="../user-assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
-                <a href="#"><img src="../user-assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                <a href="#"><img src="../user-assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
-                <a href="#"><img src="../user-assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+              <div class="form-group">
+                <label for="street<%= index %>">Street</label>
+                <input type="text" class="form-control" id="street<%= index %>" name="street"
+                  value="<%= address.street %>" required>
               </div>
-            </div>
+              <div class="form-group">
+                <label for="city<%= index %>">City</label>
+                <input type="text" class="form-control" id="city<%= index %>" name="city" value="<%= address.city %>"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="state<%= index %>">State</label>
+                <input type="text" class="form-control" id="state<%= index %>" name="state" value="<%= address.state %>"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="country<%= index %>">Country</label>
+                <input type="text" class="form-control" id="country<%= index %>" name="country"
+                  value="<%= address.country %>" required>
+              </div>
+              <div class="form-group">
+                <label for="postalCode<%= index %>">Postal Code</label>
+                <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode"
+                  value="<%= address.postalCode %>" required>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </div>
+            </form>
           </div>
-          <div class="col-lg-2 col-md-3">
-            <h5 class="widget-title wow fadeIn animated">About</h5>
-            <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Delivery Information</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms &amp; Conditions</a></li>
-              <li><a href="#">Contact Us</a></li>
-              <li><a href="#">Support Center</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2  col-md-3">
-            <h5 class="widget-title wow fadeIn animated">My Account</h5>
-            <ul class="footer-list wow fadeIn animated">
-              <li><a href="#">Sign In</a></li>
-              <li><a href="#">View Cart</a></li>
-              <li><a href="#">My Wishlist</a></li>
-              <li><a href="#">Track My Order</a></li>
-              <li><a href="#">Help</a></li>
-              <li><a href="#">Order</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-4">
-            <h5 class="widget-title wow fadeIn animated">Install App</h5>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+
+
+
+      <footer class="main bg-secondary text-light">
+        <section class="section-padding footer-mid">
+          <div class="container pt-15 pb-20">
             <div class="row">
-              <div class="col-md-8 col-lg-12">
-                <p class="wow fadeIn animated">From App Store or Google Play</p>
-                <div class="download-app wow fadeIn animated">
-                  <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
-                      src="../user-assets/imgs/theme/app-store.jpg" alt=""></a>
-                  <a href="#" class="hover-up"><img src="../user-assets/imgs/theme/google-play.jpg" alt=""></a>
+              <div class="col-lg-4 col-md-6">
+                <div class="widget-about font-md mb-md-5 mb-lg-0">
+                  <div class="logo logo-width-1 wow fadeIn animated">
+                    <a href="index.html"><img src="../user-assets/imgs/theme/logo.svg" alt="logo"></a>
+                  </div>
+                  <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                  <p class="wow fadeIn animated">
+                    <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                  </p>
+                  <p class="wow fadeIn animated">
+                    <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                  </p>
+                  <p class="wow fadeIn animated">
+                    <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                  </p>
+                  <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                  <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                    <a href="#"><img src="../user-assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="../user-assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="../user-assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="../user-assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="../user-assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
-                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                <img class="wow fadeIn animated" src="../user-assets/imgs/theme/payment-method.png" alt="">
+              <div class="col-lg-2 col-md-3">
+                <h5 class="widget-title wow fadeIn animated">About</h5>
+                <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                  <li><a href="#">About Us</a></li>
+                  <li><a href="#">Delivery Information</a></li>
+                  <li><a href="#">Privacy Policy</a></li>
+                  <li><a href="#">Terms &amp; Conditions</a></li>
+                  <li><a href="#">Contact Us</a></li>
+                  <li><a href="#">Support Center</a></li>
+                </ul>
+              </div>
+              <div class="col-lg-2  col-md-3">
+                <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                <ul class="footer-list wow fadeIn animated">
+                  <li><a href="#">Sign In</a></li>
+                  <li><a href="#">View Cart</a></li>
+                  <li><a href="#">My Wishlist</a></li>
+                  <li><a href="#">Track My Order</a></li>
+                  <li><a href="#">Help</a></li>
+                  <li><a href="#">Order</a></li>
+                </ul>
+              </div>
+              <div class="col-lg-4">
+                <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                <div class="row">
+                  <div class="col-md-8 col-lg-12">
+                    <p class="wow fadeIn animated">From App Store or Google Play</p>
+                    <div class="download-app wow fadeIn animated">
+                      <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                          src="../user-assets/imgs/theme/app-store.jpg" alt=""></a>
+                      <a href="#" class="hover-up"><img src="../user-assets/imgs/theme/google-play.jpg" alt=""></a>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                    <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                    <img class="wow fadeIn animated" src="../user-assets/imgs/theme/payment-method.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+          <div class="row">
+            <div class="col-12 mb-20">
+              <div class="footer-bottom"></div>
+            </div>
+            <div class="col-lg-6">
+              <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Wander</strong> -
+                HTML Ecommerce Template </p>
+            </div>
+            <div class="col-lg-6">
+              <p class="text-lg-end text-start font-sm text-muted mb-0">
+                Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!-- Preloader Start -->
+      <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+          <div class="preloader-inner position-relative">
+            <div class="text-center">
+              <h5 class="mb-5">Now Loading</h5>
+              <div class="loader">
+                <div class="bar bar1"></div>
+                <div class="bar bar2"></div>
+                <div class="bar bar3"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <div class="container pb-20 wow fadeIn animated">
-      <div class="row">
-        <div class="col-12 mb-20">
-          <div class="footer-bottom"></div>
-        </div>
-        <div class="col-lg-6">
-          <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Wander</strong> -
-            HTML Ecommerce Template </p>
-        </div>
-        <div class="col-lg-6">
-          <p class="text-lg-end text-start font-sm text-muted mb-0">
-            Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- Preloader Start -->
-  <div id="preloader-active">
-    <div class="preloader d-flex align-items-center justify-content-center">
-      <div class="preloader-inner position-relative">
-        <div class="text-center">
-          <h5 class="mb-5">Now Loading</h5>
-          <div class="loader">
-            <div class="bar bar1"></div>
-            <div class="bar bar2"></div>
-            <div class="bar bar3"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Vendor JS-->
-  <script src="../user-assets/js/vendor/modernizr-3.6.0.min.js"></script>
-  <script src="../user-assets/js/vendor/jquery-3.6.0.min.js"></script>
-  <script src="../user-assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-  <script src="../user-assets/js/vendor/bootstrap.bundle.min.js"></script>
-  <script src="../user-assets/js/plugins/slick.js"></script>
-  <script src="../user-assets/js/plugins/jquery.syotimer.min.js"></script>
-  <script src="../user-assets/js/plugins/wow.js"></script>
-  <script src="../user-assets/js/plugins/jquery-ui.js"></script>
-  <script src="../user-assets/js/plugins/perfect-scrollbar.js"></script>
-  <script src="../user-assets/js/plugins/magnific-popup.js"></script>
-  <script src="../user-assets/js/plugins/select2.min.js"></script>
-  <script src="../user-assets/js/plugins/waypoints.js"></script>
-  <script src="../user-assets/js/plugins/counterup.js"></script>
-  <script src="../user-assets/js/plugins/jquery.countdown.min.js"></script>
-  <script src="../user-assets/js/plugins/images-loaded.js"></script>
-  <script src="../user-assets/js/plugins/isotope.js"></script>
-  <script src="../user-assets/js/plugins/scrollup.js"></script>
-  <script src="../user-assets/js/plugins/jquery.vticker-min.js"></script>
-  <script src="../user-assets/js/plugins/jquery.theia.sticky.js"></script>
-  <script src="../user-assets/js/plugins/jquery.elevatezoom.js"></script>
-  <!-- Template  JS -->
-  <script src="./../user-assets/js/main.js?v=3.4"></script>
-  <script src="./../user-assets/js/shop.js?v=3.4"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Vendor JS-->
+      <script src="../user-assets/js/vendor/modernizr-3.6.0.min.js"></script>
+      <script src="../user-assets/js/vendor/jquery-3.6.0.min.js"></script>
+      <script src="../user-assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+      <script src="../user-assets/js/vendor/bootstrap.bundle.min.js"></script>
+      <script src="../user-assets/js/plugins/slick.js"></script>
+      <script src="../user-assets/js/plugins/jquery.syotimer.min.js"></script>
+      <script src="../user-assets/js/plugins/wow.js"></script>
+      <script src="../user-assets/js/plugins/jquery-ui.js"></script>
+      <script src="../user-assets/js/plugins/perfect-scrollbar.js"></script>
+      <script src="../user-assets/js/plugins/magnific-popup.js"></script>
+      <script src="../user-assets/js/plugins/select2.min.js"></script>
+      <script src="../user-assets/js/plugins/waypoints.js"></script>
+      <script src="../user-assets/js/plugins/counterup.js"></script>
+      <script src="../user-assets/js/plugins/jquery.countdown.min.js"></script>
+      <script src="../user-assets/js/plugins/images-loaded.js"></script>
+      <script src="../user-assets/js/plugins/isotope.js"></script>
+      <script src="../user-assets/js/plugins/scrollup.js"></script>
+      <script src="../user-assets/js/plugins/jquery.vticker-min.js"></script>
+      <script src="../user-assets/js/plugins/jquery.theia.sticky.js"></script>
+      <script src="../user-assets/js/plugins/jquery.elevatezoom.js"></script>
+      <!-- Template  JS -->
+      <script src="./../user-assets/js/main.js?v=3.4"></script>
+      <script src="./../user-assets/js/shop.js?v=3.4"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/icons/pencil-square.min.svg"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/icons/pencil-square.min.svg"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
-      
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-       <script>
 
-        let cartTotal = parseFloat("<%= cart.billTotal %>");
-        
-    function decrementQuantity(button, itemId) {
-      const quantitySpan = button.parentNode.querySelector('.item-quantity');
-      const totalSpan = button.parentNode.parentNode.querySelector('.item-total');
-      const checkboxInput = button.parentNode.parentNode.querySelector('.item-checkbox');
 
-      let quantity = parseInt(quantitySpan.textContent);
-      if (quantity > 1) {
-        quantity--;
-        quantitySpan.textContent = quantity;
+      <script>
 
-        // Update the item total
-        const price = parseFloat(checkboxInput.nextElementSibling.textContent.replace('$', ''));
-        const itemTotal = price * quantity;
-        totalSpan.textContent = itemTotal.toFixed(2);
+let totalAmount = parseFloat("<%= cart.billTotal %>");
+let subtotalAmount = parseFloat("<%= cart.billTotal %>");
 
-        // Update the overall total if the item is selected
-        if (checkboxInput.checked) {
-          totalAmount -= price;
-          updateTotalAmount();
+function updateQuantity(input, change) {
+  const productId = input.dataset.id;
+  const currentQuantity = parseInt(input.value);
+  const newQuantity = currentQuantity + change;
+  const itemPrice = parseFloat(input.dataset.price);
+
+  if (newQuantity >= 1 && newQuantity <= 5) {
+    fetch(`/cart/update/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ quantity: newQuantity })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          input.value = newQuantity;
+          const priceElement = document.getElementById(`price-${productId}`);
+          const newItemTotal = itemPrice * newQuantity;
+          priceElement.querySelector('.item-total').textContent = `${newItemTotal.toFixed(2)}`;
+
+          updateTotals(newItemTotal - (itemPrice * currentQuantity));
+          showAlert(data.message, 'success');
+        } else {
+          showAlert(data.message, 'error');
         }
-      }
-    }
-
-    function incrementQuantity(button, itemId) {
-      const quantitySpan = button.parentNode.querySelector('.item-quantity');
-      const totalSpan = button.parentNode.parentNode.querySelector('.item-total');
-      const checkboxInput = button.parentNode.parentNode.querySelector('.item-checkbox');
-
-      let quantity = parseInt(quantitySpan.textContent);
-      quantity++;
-      quantitySpan.textContent = quantity;
-
-      // Update the item total
-      const price = parseFloat(checkboxInput.nextElementSibling.textContent.replace('$', ''));
-      const itemTotal = price * quantity;
-      totalSpan.textContent = itemTotal.toFixed(2);
-
-      // Update the overall total if the item is selected
-      if (checkboxInput.checked) {
-        totalAmount += price;
-        updateTotalAmount();
-      }
-    }
-
-    function updateTotal(checkbox, itemPrice) {
-      const isChecked = checkbox.checked;
-      const price = parseFloat(itemPrice);
-
-      if (isChecked) {
-        totalAmount += price;
-      } else {
-        totalAmount -= price;
-      }
-
-      updateTotalAmount();
-    }
-
-    function updateTotalAmount() {
-      document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
-    }
-
-    // Add event listeners for address radio buttons
-    const addressRadios = document.querySelectorAll('.address-radio');
-    addressRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        const selectedAddress = radio.parentNode;
-        addressRadios.forEach(r => r.parentNode.classList.remove('selected'));
-        selectedAddress.classList.add('selected');
+      })
+      .catch(error => {
+        console.error('Error updating quantity:', error);
+        showAlert('An error occurred while updating the quantity.', 'error');
       });
-    });
-  </script>
+  } else {
+    showAlert('Quantity must be between 1 and 5.', 'error');
+  }
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+function updateTotals(priceChange) {
+  subtotalAmount += priceChange;
+  totalAmount += priceChange;
+
+  document.getElementById('subtotalAmount').textContent = `₹.${subtotalAmount.toFixed(2)}`;
+  document.getElementById('totalAmount').textContent = `₹.${totalAmount.toFixed(2)}`;
+}
+
+// Add event listeners for quantity buttons
+const quantityButtons = document.querySelectorAll('.decrease-quantity, .increase-quantity');
+quantityButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const input = button.parentNode.querySelector('input.trendy-quantity-input');
+    const change = button.classList.contains('increase-quantity') ? 1 : -1;
+    updateQuantity(input, change);
+  });
+});
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const editAddressForms = document.querySelectorAll('.edit-address-form');
+
+          editAddressForms.forEach((form, index) => {
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+
+              const addressId = form.dataset.addressId;
+              const formData = new FormData(form);
+              const addressData = {};
+
+              for (const [key, value] of formData.entries()) {
+                addressData[key] = value;
+              }
+
+              try {
+                const response = await fetch(`/profile/update-address/${addressId}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(addressData),
+                });
+
+                if (!response.ok) {
+                  throw new Error('Error updating address');
+                }
+
+                // Close the modal
+                const modal = document.querySelector(`#editAddressModal${index}`);
+                const modalBackdrop = document.querySelector('.modal-backdrop');
+
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+
+                if (modalBackdrop) {
+                  modalBackdrop.remove();
+                }
+
+                // Reload the page
+                window.location.reload();
+              } catch (err) {
+                console.error(err);
+                alert(err.message);
+              }
+            });
+          });
+        });
+
+
+
+        // const quantityInputs = document.querySelectorAll('.trendy-quantity-input');
+        // quantityInputs.forEach(input => {
+        //   const decreaseBtn = input.parentNode.querySelector('.decrease-quantity');
+        //   const increaseBtn = input.parentNode.querySelector('.increase-quantity');
+
+        //   decreaseBtn.addEventListener('click', () => updateQuantity(input, -1));
+        //   increaseBtn.addEventListener('click', () => updateQuantity(input, 1));
+        // });
+
+        // function updateQuantity(input, change) {
+        //   const productId = input.dataset.id;
+        //   const currentQuantity = parseInt(input.value);
+        //   const newQuantity = currentQuantity + change;
+
+        //   if (newQuantity >= 1 && newQuantity <= 5) {
+        //     fetch(`/cart/update/${productId}`, {
+        //       method: 'PUT',
+        //       headers: {
+        //         'Content-Type': 'application/json'
+        //       },
+        //       body: JSON.stringify({ quantity: newQuantity })
+        //     })
+        //       .then(response => response.json())
+        //       .then(data => {
+        //         if (data.success) {
+        //           input.value = newQuantity;
+        //           const priceElement = document.getElementById(`price-${productId}`);
+        //           priceElement.querySelector('span').textContent = `Rs.${data.newPrice}/-`;
+        //           updateTotalAmount();
+        //           showAlert(data.message, 'success');
+
+        //         } else {
+        //           showAlert(data.message, 'error');
+
+        //         }
+        //       })
+        //       .catch(error => {
+        //         console.error('Error updating quantity:', error);
+        //         showAlert('An error occurred while updating the quantity.', 'error');
+
+        //       });
+        //   } else {
+        //     showAlert('Quantity must be between 1 and 5.', 'error');
+
+        //   }
+        // }
 
  
+
+
+      </script>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>
