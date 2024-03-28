@@ -98,4 +98,6 @@ user_route.get('/cart/totals', cartController.getCartTotals);
 
 user_route.get('/checkout',orderController.loadCheckout)
 
+user_route.post('/checkout',orderController.placeOrder)
+
 module.exports = user_route;

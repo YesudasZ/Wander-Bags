@@ -170,75 +170,57 @@
 
 <body>
   <!-- Quick view -->
-
   <header class="header-area header-style-4 header-height-2">
-    <div class="header-top header-top-ptb-1 d-none d-lg-block" style="background-color: #f8f9fa;">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-xl-3 col-lg-4">
-            <div class="header-info">
-              <!-- Your content here -->
-            </div>
-          </div>
-          <div class="col-xl-6 col-lg-4">
-            <div class="text-center">
-              <!-- Your content here -->
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-4">
-            <div class="header-info header-info-right text-end">
-              <ul class="list-inline mb-0">
-                <li class="list-inline-item">
-                  <a class="language-dropdown-active text-dark" href="#"> <i class="fi-rs-world"></i> English</a>
-                </li>
-                <li class="list-inline-item">
-                  <i class="fi-rs-user"></i>
-                  <a href="/profile" class="text-black">
-                    <%=user.name %>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="/logout">Logout</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
     <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
       <div class="container">
-        <div class="header-wrap">
+        <div class="header-wrap d-flex justify-content-between align-items-center">
           <div class="logo logo-width-1">
-            <a href="index.html"><img src="../user-assets/imgs/theme/logo.svg" alt="logo"></a>
+            <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
           </div>
-          <div class="header-right">
+          <div class="header-right d-flex align-items-center">
             <div class="search-style-2">
               <form action="#">
                 <select class="select-active">
                   <option>All Categories</option>
-
                 </select>
                 <input type="text" placeholder="Search for items...">
               </form>
             </div>
-            <div class="header-action-right">
+            <div class="header-action-right d-flex align-items-center">
               <div class="header-action-2">
                 <div class="header-action-icon-2">
                   <a href="shop-wishlist.html">
-                    <img class="svgInject" alt="Wander" src="../user-assets/imgs/theme/icons/icon-heart.svg">
-                    <span class="pro-count blue">4</span>
+                    <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
+                  
                   </a>
                 </div>
                 <div class="header-action-icon-2">
-                  <a class="mini-cart-icon" href="shop-cart.html">
-                    <img alt="Wander" src="../user-assets/imgs/theme/icons/icon-cart.svg">
-                    <span class="pro-count blue">2</span>
+                  <a class="mini-cart-icon" href="/cart">
+                    <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
+                  
                   </a>
-
                 </div>
+              </div>
+              <div class="header-info header-info-right text-end">
+                <ul class="list-inline mb-0">
+
+                  <li class="dropdown nav-item m-5">
+                    <a class="dropdown-toggle text-black" href="/profile" role="button" id="userDropdown"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fi-rs-user"></i>
+                      <%= user.name %>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                      <a class="dropdown-item" href="/profile"><i class="material-icons md-perm_identity"></i>Profile</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Orders</a>
+                      <a class="dropdown-item" href="#"><i
+                          class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-danger" href="/logout"><i
+                          class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -249,9 +231,18 @@
       <div class="container">
         <div class="header-wrap header-space-between position-relative">
           <div class="logo logo-width-1 d-block d-lg-none">
-            <a href="index.html"><img src="../user-assets/imgs/theme/logo.svg" alt="logo"></a>
+            <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
           </div>
-
+          <div class="header-nav d-none d-lg-flex">
+            <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
+              <nav>
+                <ul>
+                  <li><a href="/home">Home</a></li>
+                  <li><a class="active" href="/shop">Shop</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -270,26 +261,28 @@
             <div class="existing-address">
               <div class="address-list">
                 <!-- Display existing addresses dynamically -->
-                <% user.address.forEach((address, index)=> { %>
-                <div class="address-card mb-3">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="form-check">
-                        <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" class="form-check-input">
-                        <label for="<%= address._id %>" class="form-check-label">
-                          <%= address.houseName %> <br>
-                          <%= address.street %><br>
-                          <%= address.city %><br>
-                          <%= address.state %><br>
-                          <%= address.country %><br>
-                          <%= address.postalCode %>
-                        </label>
+                <form id="placeOrderForm">
+                  <% user.address.forEach((address, index)=> { %>
+                  <div class="address-card mb-3">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="form-check">
+                          <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" class="form-check-input" required>
+                          <label for="<%= address._id %>" class="form-check-label">
+                            <%= address.houseName %> <br>
+                            <%= address.street %><br>
+                            <%= address.city %><br>
+                            <%= address.state %><br>
+                            <%= address.country %><br>
+                            <%= address.postalCode %>
+                          </label>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal<%= index %>">Edit</button>
                       </div>
-                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal<%= index %>">Edit</button>
                     </div>
                   </div>
-                </div>
-                <% }); %>
+                  <% }); %>
+                </form>
               </div>
             </div>
           </div>
@@ -322,12 +315,6 @@
                     <div class="text-right subtotal mt-2" data-title="Total" id="price-<%= item._id %>">
                       <strong>Total: ₹.<span class="item-total"><%= item.price %></span></strong>
                     </div>
-                    <!-- <div class="cart-item-select mt-2">
-                      <div class="form-check">
-                        <input type="checkbox" id="<%= item._id %>" name="selectedItems" value="<%= item._id %>" class="form-check-input item-checkbox" onchange="updateTotal(this, '<%= item.price %>')">
-                        <label for="<%= item._id %>" class="form-check-label">Select</label>
-                      </div>
-                    </div> -->
                   </div>
                 </div>
               </div>
@@ -350,34 +337,51 @@
               </tbody>
             </table>
             <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-            <div class="payment_method">
-              <div class="mb-25">
-                <h5>Payment</h5>
-              </div>
-              <div class="payment_option">
-                <div class="custome-radio">
-                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" checked="">
-                  <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">ATM Card / Credit Card</label>
-                  <div class="form-group collapse in" id="bankTranfer">
-                    <p class="text-muted mt-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
-                  </div>
-                </div>
-                <div class="custome-radio">
-                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" checked="">
-                  <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Cash On Delivery</label>
-                  <div class="form-group collapse in" id="checkPayment">
-                    <p class="text-muted mt-5">Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </p>
-                  </div>
-                </div>
-                <div class="custome-radio">
-                  <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" checked="">
-                  <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Paypal</label>
-                  <div class="form-group collapse in" id="paypal">
-                    <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
-                  </div>
-                </div>
-              </div>
+
+<!-- <div class="payment_method">
+  <div class="mb-25">
+    <h5>Payment</h5>
+  </div>
+  <div class="payment_option">
+    <div class="custome-radio">
+      <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" value="ATM Card / Credit Card" checked>
+      <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">ATM Card / Credit Card</label>
+      <div class="form-group collapse in" id="bankTranfer"></div>
+    </div>
+    <div class="custome-radio">
+      <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" value="Cash On Delivery">
+      <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Cash On Delivery</label>
+      <div class="form-group collapse in" id="checkPayment"></div>
+    </div>
+    <div class="custome-radio">
+      <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" value="Paypal">
+      <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Paypal</label>
+      <div class="form-group collapse in" id="paypal"></div>
+    </div>
+  </div>
+</div> -->
+
+            <div class="form-group">
+              <label for="orderNotes">Order Notes (Optional)</label>
+              <textarea class="form-control" id="orderNotes" rows="3"></textarea>
             </div>
+            <div class="form-group">
+              <label>Payment Method:</label><br>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="Credit Card">
+                  <label class="form-check-label" for="creditCard">Credit Card</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="Paypal" >
+                  <label class="form-check-label" for="paypal">Paypal</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="Cash On Delivery">
+                  <label class="form-check-label" for="cashOnDelivery">Cash On Delivery</label>
+              </div>
+              <div id="PaymentTypeError" class="error" style="color: red;"></div>
+          </div>
+
             <button type="button" class="btn btn-success btn-lg btn-block mt-30" id="placeOrderBtn">Place Order</button>
           </div>
         </div>
@@ -692,55 +696,62 @@ quantityButtons.forEach(button => {
 
 
 
-        // const quantityInputs = document.querySelectorAll('.trendy-quantity-input');
-        // quantityInputs.forEach(input => {
-        //   const decreaseBtn = input.parentNode.querySelector('.decrease-quantity');
-        //   const increaseBtn = input.parentNode.querySelector('.increase-quantity');
+       // JavaScript
+const placeOrderForm = document.getElementById('placeOrderForm');
+const placeOrderBtn = document.getElementById('placeOrderBtn');
 
-        //   decreaseBtn.addEventListener('click', () => updateQuantity(input, -1));
-        //   increaseBtn.addEventListener('click', () => updateQuantity(input, 1));
-        // });
+placeOrderBtn.addEventListener('click', () => {
+  const addressRadios = placeOrderForm.querySelectorAll('input[name="address"]');
+  const selectedAddress = Array.from(addressRadios).find(radio => radio.checked);
 
-        // function updateQuantity(input, change) {
-        //   const productId = input.dataset.id;
-        //   const currentQuantity = parseInt(input.value);
-        //   const newQuantity = currentQuantity + change;
+  if (!selectedAddress) {
+    alert('Please select a delivery address');
+    return;
+  }
 
-        //   if (newQuantity >= 1 && newQuantity <= 5) {
-        //     fetch(`/cart/update/${productId}`, {
-        //       method: 'PUT',
-        //       headers: {
-        //         'Content-Type': 'application/json'
-        //       },
-        //       body: JSON.stringify({ quantity: newQuantity })
-        //     })
-        //       .then(response => response.json())
-        //       .then(data => {
-        //         if (data.success) {
-        //           input.value = newQuantity;
-        //           const priceElement = document.getElementById(`price-${productId}`);
-        //           priceElement.querySelector('span').textContent = `Rs.${data.newPrice}/-`;
-        //           updateTotalAmount();
-        //           showAlert(data.message, 'success');
+  const paymentMethodRadio = document.querySelectorAll('input[name="paymentMethod"]');
+  let paymentMethod = null;
+    paymentMethodRadio.forEach(method => {
+        if (method.checked) {
+            paymentMethod = method.value;
+        }
+    });
 
-        //         } else {
-        //           showAlert(data.message, 'error');
+  console.log("working");
+  if (!paymentMethod) {
+    alert('Please select a payment');
+    return;
+  }
 
-        //         }
-        //       })
-        //       .catch(error => {
-        //         console.error('Error updating quantity:', error);
-        //         showAlert('An error occurred while updating the quantity.', 'error');
+  const addressId = selectedAddress.value;
+ // const paymentMethod = selectedPayment.value;
+  const orderNotes = document.getElementById('orderNotes').value;
 
-        //       });
-        //   } else {
-        //     showAlert('Quantity must be between 1 and 5.', 'error');
-
-        //   }
-        // }
-
- 
-
+  // Send the order details to the server
+  fetch('/checkout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // Include CSRF token if needed
+    },
+    body: JSON.stringify({ addressId, paymentMethod, orderNotes }),
+  })
+    .then(response => {
+      if (response.ok) {
+        // Handle successful order placement
+        console.log('Order placed successfully');
+        // Redirect to order confirmation page or display a success message
+      } else {
+        // Handle error
+        console.error('Failed to place order');
+        // Display an error message
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle network error
+    });
+});
 
       </script>
 

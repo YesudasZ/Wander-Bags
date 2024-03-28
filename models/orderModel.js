@@ -1,5 +1,5 @@
-import { ObjectId } from 'mongodb';
-import { Schema, model } from 'mongoose';
+const { ObjectId } = require('mongodb');
+const { Schema, model } = require('mongoose');
 const objectID = Schema.Types.ObjectId;
 
 const orderSchema = Schema({
@@ -85,5 +85,5 @@ const orderSchema = Schema({
     timestamps: true,
 });
 
-export default model('Order',orderSchema);
+module.exports = model('Order', orderSchema);
 
