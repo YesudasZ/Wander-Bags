@@ -100,4 +100,9 @@ user_route.get('/checkout',orderController.loadCheckout)
 
 user_route.post('/checkout',orderController.placeOrder)
 
+user_route.get('/orderPlaced',orderController.loadOderplaced)
+
+user_route.put('/orders/:id/cancel', orderController.cancelOrder);
+
+
 module.exports = user_route;

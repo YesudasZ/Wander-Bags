@@ -14,7 +14,7 @@ const loadCheckout = async(req,res)=>{
     const cart = await Cart.findOne({owner:req.session.user_id})
     res.render('checkOut', { cart:cart,user:userData });
   } catch (error) {
-    
+    return res.redirect('/admin/errorpage')
   }
 }
 
@@ -50,7 +50,7 @@ console.log("WOrking order");
         return {
           productId: product._id,
           title: product.name,
-          image: product.image,
+          image: product.images,
           productPrice: item.productPrice,
           quantity: item.quantity,
           price: item.price,
@@ -87,8 +87,62 @@ console.log("test -2");
   }
 };
 
+const loadOderplaced = async(req,res)=>{
+  try {
+    const user_id = req.session.user_id
+    const userData = await User.findById({_id:user_id})
+    const order= await Order.findOne({user:user_id})
+   res.render('orderPlaced',{user:userData,orders:order});
+  } catch (error) {
+    return res.redirect('/admin/errorpage')
+  }
+}
+
+
+const loadOrders = async(req,res)=>{
+  try {
+    const user_id = req.session.user_id
+    const userData = await User.findById({_id:user_id})
+    const order= await Order.findOne({user:user_id})
+   res.render('oders',{user:userData,orders:order});
+  } catch (error) {
+    return res.redirect('/admin/errorpage')
+  }
+}
+
+
+const cancelOrder = async (req, res) => {
+  try {
+    console.log("working");
+    const orderId = req.params.id;
+    const { cancellationReason } = req.body;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      {
+        orderStatus: 'Cancelled',
+        cancellationReason
+      },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    res.json({ success: true, message: 'Order cancelled successfully' });
+  } catch (error) {
+    console.error('Error cancelling order:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while cancelling the order' });
+  }
+};
+
+
 
 module.exports = {
   loadCheckout,
-  placeOrder
+  placeOrder,
+  loadOderplaced,
+  loadOrders,
+  cancelOrder
 }

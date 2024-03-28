@@ -21,6 +21,8 @@
     integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+Z3+Xf1QojCaB40CKvL+2K4Y5p4ef5uyyJ5fksU" crossorigin="anonymous">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="SHA-384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
   <style>
     /* Dashboard Menu Styles */
     .dashboard-menu {
@@ -324,28 +326,69 @@
                   <div class="card-header">
                     <h5 class="mb-0">Your Orders</h5>
                   </div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Order</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Total</th>
-                            <th>Actions</th>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% orders.forEach(order => { %>
+                        <% order.items.forEach(item => { %>
+                          <tr class="order-row" data-order-id="<%= order._id %>">
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <img src="productimages/<%= item.image[0] %>" alt="<%= item.title %>" class="mr-3" style="width: 100px; height: 100px;">
+                                <span><%= item.title %></span>
+                              </div>
+                            </td>
+                            <td><%= item.quantity %></td>
+                            <td><span class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>"><%= order.orderStatus %></span></td>
+                            <td>
+                              <% if (order.orderStatus.toLowerCase() === 'pending' || order.orderStatus.toLowerCase() === 'confirmed') { %>
+                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                              <% } else { %>
+                                <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
+                              <% } %>
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <!-- Order details -->
-                          </tr>
-                        </tbody>
-                      </table>
+                        <% }) %>
+                      <% }) %>
+                    </tbody>
+                  </table>
+              
+                  <!-- Cancel Order Modal -->
+                  <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to cancel this order?</p>
+                          <form id="cancelOrderForm">
+                            <div class="form-group">
+                              <label for="cancellationReason">Reason for Cancellation</label>
+                              <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-danger" id="confirmCancelOrder">Cancel Order</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              
               <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
                 <div class="card">
                   <div class="card-header">
@@ -491,7 +534,7 @@
           Are you sure you want to delete this address?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" onclick="confirmDeleteAddress(<%= index %>)">Confirm</button>
+          <button type="button" class="btn btn-danger" onclick="confirmDeleteAddress('<%= index %>')">Confirm</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
       </div>
@@ -767,8 +810,12 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="SHA-384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-  <script>
+ 
+ 
+ <script>
 
   // Function to handle editing the name
   document.getElementById('saveNameBtn').addEventListener('click', async () => {
@@ -1010,6 +1057,84 @@
     });
   });
 });
+
+
+
+let selectedOrderId;
+
+// Listen for the 'show.bs.modal' event on the cancelOrderModal
+$('#cancelOrderModal').on('show.bs.modal', function (event) {
+  // Get the button that triggered the modal
+  const button = $(event.relatedTarget);
+
+  // Get the order ID from the button's data attribute
+  selectedOrderId = button.data('order-id');
+  console.log('Modal is being shown for orderId:', selectedOrderId);
+});
+
+$('#confirmCancelOrder').click(function () {
+  const cancellationReason = $('#cancellationReason').val();
+  console.log('Cancelling order with orderId:', selectedOrderId);
+  cancelOrder(selectedOrderId, cancellationReason);
+});
+
+function cancelOrder(orderId, cancellationReason) {
+  console.log('Cancelling order with orderId:', orderId);
+  fetch(`/orders/${orderId}/cancel`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ cancellationReason })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      $('#cancelOrderModal').modal('hide');
+      showToast('Order cancelled successfully', 'success');
+      updateOrderStatus(orderId, 'Cancelled');
+    } else {
+      showToast('Failed to cancel order', 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error cancelling order:', error);
+    showToast('An error occurred while cancelling the order', 'error');
+  });
+}
+
+function updateOrderStatus(orderId, status) {
+  const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
+  const statusBadge = orderRow.find('.order-status');
+  statusBadge.text(status);
+  statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
+  statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
+}
+
+function showToast(message, type) {
+  const toast = $(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+      <div class="toast-header bg-${type} text-white">
+        <strong class="mr-auto">Order Status</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        ${message}
+      </div>
+    </div>
+  `);
+
+  $('.toast-container').append(toast);
+  toast.toast('show');
+}
+
+
+
+
+
+
 
   </script>
 

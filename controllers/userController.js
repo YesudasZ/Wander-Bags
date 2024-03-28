@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
-
+const Order =  require("../models/orderModel");
 const bcrypt = require('bcrypt')
 
 
@@ -367,8 +367,11 @@ const userLogout = (req,res) => {
 
 const loadprofile = async(req,res)=>{
   try {
+    const user_id = req.session.user_id
+    const orders= await Order.find({user:user_id})
+
     const  userData = await User.findById({_id:req.session.user_id})
-res.render('profile',{user:userData, errorMessage: null,successMessage: null})
+    res.render('profile',{user:userData,orders:orders, errorMessage: null,successMessage: null})
   } catch (error) {
     console.error(error);
     res.redirect('/pagenotfound')
