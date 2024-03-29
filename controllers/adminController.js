@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
 const Product = require('../models/productModel');
+const Order =  require("../models/orderModel");
 const bcrypt = require('bcrypt')
 const multer = require('multer');
 const path = require('path');
@@ -128,6 +129,69 @@ const logout = async (req, res) => {
 
 }
 
+const loadOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate('user', 'name')
+      .populate('cart')
+      .populate({
+        path: 'items.productId',
+        model: 'Product',
+        select: 'title image productPrice'
+      });
+
+    res.render('orders', { orders });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/pagenotfound');
+  }
+};
+const getOrderDetails = async (req, res) => {
+  try {
+    console.log("Working");
+      const orderId = req.params.id;
+      const order = await Order.findById(orderId)
+          .populate('user', 'name')
+          .populate({
+              path: 'items.productId',
+              select: 'title image productPrice'
+          });
+
+      if (!order) {
+          return res.status(404).json({ error: 'Order not found' });
+      }
+
+      res.json(order);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const updateOrderStatus = async (req, res) => {
+  try {
+      const orderId = req.params.id;
+      const { orderStatus } = req.body;
+
+      const order = await Order.findByIdAndUpdate(
+          orderId,
+          { orderStatus },
+          { new: true }
+      );
+
+      if (!order) {
+          return res.status(404).json({ error: 'Order not found' });
+      }
+
+      res.json(order);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -136,5 +200,8 @@ module.exports = {
   loadblockUser,
   loadunblockUser,
   logout,
-  errorload
+  errorload,
+  loadOrders,
+  getOrderDetails,
+  updateOrderStatus
 }

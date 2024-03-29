@@ -24,7 +24,6 @@ admin_route.get('/adminpanel',auth.isAdminLogin,adminController.loadadminpanel)
 
 admin_route.get('/customers',auth.isAdminLogin,adminController.loadcustomers)
 
-
 admin_route.post('/block-user',auth.isAdminLogin,adminController.loadblockUser)
 
 admin_route.post('/unblock-user',auth.isAdminLogin,adminController.loadunblockUser)
@@ -43,8 +42,6 @@ admin_route.get('/categories/removed',auth.isAdminLogin, categoryController.getR
 
 admin_route.post('/categories/:id/restore',auth.isAdminLogin, categoryController.restoreCategory);
 
-
-
 admin_route.get('/products',auth.isAdminLogin,productController.getProducts)
 
 admin_route.get('/products/add',auth.isAdminLogin,productController.addloadProducts)
@@ -58,6 +55,10 @@ admin_route.post('/products/edit/:productId',auth.isAdminLogin, productControlle
 admin_route.post('/products/delete/:productId', auth.isAdminLogin,productController.deleteProduct);
 
 admin_route.post('/products/restore/:productId',auth.isAdminLogin, productController.restoreProduct);
+
+admin_route.get('/orders', auth.isAdminLogin, adminController.loadOrders);
+admin_route.get('/orders/:id', auth.isAdminLogin, adminController.getOrderDetails);
+admin_route.put('/orders/:id', auth.isAdminLogin, adminController.updateOrderStatus);
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 

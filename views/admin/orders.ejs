@@ -1,0 +1,471 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Wander Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin-asset/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin-asset/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/admin-asset/imgs/theme/logo.svg" class="logo" alt="Wander Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/adminpanel"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/customers"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Customers</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/categories"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item  active">
+                    <a class="menu-link" href="http://localhost:4000/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                
+                </li>
+          
+     
+                <!-- <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Transactions</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-transactions-1.html">Transaction 1</a>
+                        <a href="page-transactions-2.html">Transaction 2</a>
+                        <a href="page-transactions-details.html">Transaction Details</a>
+                    </div>
+                </li> -->
+                <!-- <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-account-login.html">User login</a>
+                        <a href="page-account-register.html">User registration</a>
+                        <a href="page-error-404.html">Error 404</a>
+                    </div>
+                </li> -->
+                <!-- <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                 
+                </li> -->
+
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin-asset/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+<section>
+
+  <div class="container my-5">
+    <h1 class="text-center mb-4"></h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(order => { %>
+        <tr>
+          <td><%= order.user.name %></td>
+          <td>
+            <% order.items.forEach(item => { %>
+            <% if (item.productId) { %>
+            <div>
+              <% if (item.image && item.image.length > 0) { %>
+              <img src="/productimages/<%=item.image[0] %>" alt="<%= item.productId.title %>" class="img-fluid" style="max-width: 100px;">
+              <% } %>
+              <%= item.title%>
+            </div>
+            <% } else { %>
+            <div>No product found</div>
+            <% } %>
+            <% }) %>
+          </td>
+          <td>
+            <% order.items.forEach(item => { %>
+            <% if (item.productId) { %>
+            <%= item.productPrice %> <br>
+            <% } %>
+            <% }) %>
+          </td>
+          <td>
+            <% order.items.forEach(item => { %>
+            <% if (item.productId) { %>
+            x <%= item.quantity %><br>
+            <% } %>
+            <% }) %>
+          </td>
+          <td><%= order.billTotal %></td>
+          <td><%= order.orderStatus %></td>
+          <td>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#statusModal">
+              Change Status
+            </button>
+           
+            <!-- Modal -->
+            <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalLabel">Change Order Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Add your form elements here for changing order status -->
+                    <select class="form-control">
+                      <option selected>Select Status</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>">
+              View Details
+            </button>
+          </td>
+  
+        </tr>
+        <!-- Order Details Modal -->
+      <div class="modal fade" id="orderDetailsModal<%= order._id %>" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Order Information</h6>
+                  <p><strong>Order ID:</strong> <%= order.oId %></p>
+                  <p><strong>Customer:</strong> <%= order.user.name %></p>
+                  <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleString() %></p>
+                  <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                  <p><strong>Payment Status:</strong> <%= order.paymentStatus %></p>
+                  <p><strong>Shipping Address:</strong> <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.country %>, <%= order.shippingAddress.postalCode %></p>
+                  <p><strong>Order Notes:</strong> <%= order.orderNotes %></p>
+                  <p><strong>Cancellation Reason:</strong> <%= order.cancellationReason %></p>
+                </div>
+                <div class="col-md-6">
+                  <h6>Order Items</h6>
+                  <ul class="list-group">
+                    <% order.items.forEach(item => { %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <div class="d-flex align-items-center">
+                        <% if (item.image && item.image.length > 0) { %>
+                        <img src="/productimages/<%=item.image[0] %>" alt="<%= item.title %>" class="img-fluid mr-3" style="max-width: 50px;">
+                        <% } %>
+                        <%= item.title %>
+                      </div>
+                      <span class="badge badge-primary badge-pill"><%= item.productPrice %> x <%= item.quantity %> = <%= item.price %></span>
+                    </li>
+                    <% }) %>
+                  </ul>
+                  <p class="mt-3"><strong>Bill Total:</strong> <%= order.billTotal %></p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+
+
+
+</main>
+</section>
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Wander - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+  
+    <script src="/admin-asset/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin-asset/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin-asset/js/vendors/select2.min.js"></script>
+    <script src="/admin-asset/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin-asset/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/admin-asset/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/admin-asset/js/main.js" type="text/javascript"></script>
+    <script src="/admin-asset/js/custom-chart.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Fetch and render orders on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchOrders();
+        });
+
+        function fetchOrders() {
+            fetch('/admin/orders')
+                .then(response => response.json())
+                .then(orders => {
+                    renderOrders(orders);
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                });
+        }
+
+        function renderOrders(orders) {
+            const ordersList = document.getElementById('orders-list');
+            ordersList.innerHTML = '';
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.user.name}</td>
+                    <td>
+                        <img src="${order.items[0].image[0]}" alt="${order.items[0].title}" class="img-fluid" style="max-width: 50px;">
+                        ${order.items[0].title}
+                    </td>
+                    <td>${order.items[0].productPrice}</td>
+                    <td>${order.items[0].quantity}</td>
+                    <td>${order.billTotal}</td>
+                    <td>
+                        <select class="form-select order-status-select" data-order-id="${order._id}">
+                            <option value="Pending" ${order.orderStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Confirmed" ${order.orderStatus === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                            <option value="Shipped" ${order.orderStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="Delivered" ${order.orderStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="Cancelled" ${order.orderStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                            <option value="Deleted" ${order.orderStatus === 'Deleted' ? 'selected' : ''}>Deleted</option>
+                            <option value="Returned" ${order.orderStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" onclick="showOrderDetails('${order._id}')">View Details</button>
+                    </td>
+                `;
+                ordersList.appendChild(row);
+            });
+
+            // Add event listeners for order status changes
+            const orderStatusSelects = document.querySelectorAll('.order-status-select');
+            orderStatusSelects.forEach(select => {
+                select.addEventListener('change', () => {
+                    const orderId = select.dataset.orderId;
+                    const newStatus = select.value;
+                    updateOrderStatus(orderId, newStatus);
+                });
+            });
+        }
+
+        function showOrderDetails(orderId) {
+            fetch(`/admin/orders/${orderId}`)
+                .then(response => response.json())
+                .then(order => {
+                    const orderDetailsBody = document.getElementById('orderDetailsBody');
+                    orderDetailsBody.innerHTML = `
+                        <p><strong>Order ID:</strong> ${order.oId}</p>
+                        <p><strong>Customer:</strong> ${order.user.name}</p>
+                        <p><strong>Order Date:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
+                        <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+                        <p><strong>Payment Status:</strong> ${order.paymentStatus}</p>
+                        <p><strong>Shipping Address:</strong> ${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.state}, ${order.shippingAddress.country}, ${order.shippingAddress.postalCode}</p>
+                        <p><strong>Order Notes:</strong> ${order.orderNotes}</p>
+                        <p><strong>Cancellation Reason:</strong> ${order.cancellationReason}</p>
+                        <h5>Order Items:</h5>
+                        <ul>
+                            ${order.items.map(item => `
+                                <li>
+                                    <img src="${item.image[0]}" alt="${item.title}" class="img-fluid" style="max-width: 50px;">
+                                    ${item.title} - ${item.productPrice} x ${item.quantity} = ${item.price}
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <p><strong>Bill Total:</strong> ${order.billTotal}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching order details:', error);
+                });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const data = { orderStatus: newStatus };
+
+            fetch(`/admin/orders/${orderId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(order => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order Status Updated',
+                    text: `Order status changed to ${newStatus}`,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    fetchOrders();
+                });
+            })
+            .catch(error => {
+                console.error('Error updating order status:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while updating the order status.'
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
