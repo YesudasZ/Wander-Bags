@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="SHA-384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     /* Dashboard Menu Styles */
     .dashboard-menu {
@@ -349,7 +353,7 @@
                             <td><span class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>"><%= order.orderStatus %></span></td>
                             <td>
                               <% if (order.orderStatus.toLowerCase() === 'pending' || order.orderStatus.toLowerCase() === 'confirmed') { %>
-                                <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
                               <% } else { %>
                                 <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
                               <% } %>
@@ -874,8 +878,16 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="SHA-384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
  
- 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
  <script>
 
   // Function to handle editing the name
@@ -1120,123 +1132,163 @@
 });
 
 
+$(document).ready(function() {
+let selectedOrderId;
 
-// let selectedOrderId;
+// Listen for the 'show.bs.modal' event on the cancelOrderModal
+$('#cancelOrderModal').on('show.bs.modal', function (event) {
+  // Get the button that triggered the modal
+  const button = $(event.relatedTarget);
 
-// // Listen for the 'show.bs.modal' event on the cancelOrderModal
-// $('#cancelOrderModal').on('show.bs.modal', function (event) {
-//   // Get the button that triggered the modal
-//   const button = $(event.relatedTarget);
-
-//   // Get the order ID from the button's data attribute
-//   selectedOrderId = button.data('order-id');
-//   console.log('Modal is being shown for orderId:', selectedOrderId);
-// });
-
-// $('#confirmCancelOrder').click(function () {
-//   const cancellationReason = $('#cancellationReason').val();
-//   console.log('Cancelling order with orderId:', selectedOrderId);
-//   cancelOrder(selectedOrderId, cancellationReason);
-// });
-
-// function cancelOrder(orderId, cancellationReason) {
-//   console.log('Cancelling order with orderId:', orderId);
-//   fetch(`/orders/${orderId}/cancel`, {
-//     method: 'PUT',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ cancellationReason })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     if (data.success) {
-//       $('#cancelOrderModal').modal('hide');
-//       showToast('Order cancelled successfully', 'success');
-//       updateOrderStatus(orderId, 'Cancelled');
-//     } else {
-//       showToast('Failed to cancel order', 'error');
-//     }
-//   })
-//   .catch(error => {
-//     console.error('Error cancelling order:', error);
-//     showToast('An error occurred while cancelling the order', 'error');
-//   });
-// }
-
-// function updateOrderStatus(orderId, status) {
-//   const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
-//   const statusBadge = orderRow.find('.order-status');
-//   statusBadge.text(status);
-//   statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
-//   statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
-// }
-
-// function showToast(message, type) {
-//   const toast = $(`
-//     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
-//       <div class="toast-header bg-${type} text-white">
-//         <strong class="mr-auto">Order Status</strong>
-//         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-//           <span aria-hidden="true">&times;</span>
-//         </button>
-//       </div>
-//       <div class="toast-body">
-//         ${message}
-//       </div>
-//     </div>
-//   `);
-
-//   $('.toast-container').append(toast);
-//   toast.toast('show');
-// }
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  const cancelOrderModal = document.getElementById('cancelOrderModal');
-  const cancelOrderForm = document.getElementById('cancelOrderForm');
-  const confirmCancelOrderBtn = document.getElementById('confirmCancelOrder');
-
-  cancelOrderModal.addEventListener('show.bs.modal', function(event) {
-    const cancelOrderBtn = event.relatedTarget;
-    const orderId = cancelOrderBtn.getAttribute('data-order-id');
-
-    confirmCancelOrderBtn.addEventListener('click', function() {
-      const cancellationReason = document.getElementById('cancellationReason').value;
-console.log("wook");
-      fetch(`/orders/${orderId}/cancel`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ cancellationReason })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const orderRow = document.querySelector(`.order-row[data-order-id="${orderId}"]`);
-          const orderStatusSpan = orderRow.querySelector('.order-status');
-          orderStatusSpan.textContent = 'Cancelled';
-          orderStatusSpan.classList.remove('badge-warning', 'badge-info', 'badge-primary', 'badge-success');
-          orderStatusSpan.classList.add('badge-danger');
-
-          const cancelOrderBtn = orderRow.querySelector('.btn-danger');
-          cancelOrderBtn.disabled = true;
-          cancelOrderBtn.textContent = 'Order Cancelled';
-
-          cancelOrderModal.hide();
-        } else {
-          alert(data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error cancelling order:', error);
-        alert('An error occurred while cancelling the order');
-      });
-    });
-  });
+  // Get the order ID from the button's data attribute
+  selectedOrderId = button.data('order-id');
+  console.log('Modal is being shown for orderId:', selectedOrderId);
 });
+
+$('#confirmCancelOrder').click(function () {
+  const cancellationReason = $('#cancellationReason').val();
+  console.log('Cancelling order with orderId:', selectedOrderId);
+  cancelOrder(selectedOrderId, cancellationReason);
+});
+
+function cancelOrder(orderId, cancellationReason) {
+  console.log('Cancelling order with orderId:', orderId);
+  fetch(`/orders/${orderId}/cancel`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ cancellationReason })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      
+      $('#cancelOrderModal').modal('hide');
+      showToast('Order cancelled successfully', 'success');
+      updateOrderStatus(orderId, 'Cancelled');
+    
+      Swal.fire({
+            icon: 'success',
+            title: 'Order Cancelled',
+            text: 'Order cancelled successfully',
+            timer: 3000,
+            onClose: () => {
+              updateOrderStatus(orderId, 'Cancelled');
+             
+            }
+          });
+    } else {
+      showToast('Failed to cancel order', 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error cancelling order:', error);
+    showToast('An error occurred while cancelling the order', 'error');
+  });
+}
+})
+function updateOrderStatus(orderId, status) {
+  const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
+  const statusBadge = orderRow.find('.order-status');
+  statusBadge.text(status);
+  statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
+  statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
+}
+
+function showToast(message, type) {
+  const toast = $(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+      <div class="toast-header bg-${type} text-white">
+        <strong class="mr-auto">Order Status</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        ${message}
+      </div>
+    </div>
+  `);
+
+  $('.toast-container').append(toast);
+  toast.toast('show');
+}
+
+
+
+
+// $(document).ready(function() {
+//     let selectedOrderId;
+
+//     // Listen for the 'show.bs.modal' event on the cancelOrderModal
+//     $('#cancelOrderModal').on('show.bs.modal', function (event) {
+//       // Get the button that triggered the modal
+//       const button = $(event.relatedTarget);
+
+//       // Get the order ID from the button's data attribute
+//       selectedOrderId = button.data('order-id');
+//       console.log('Modal is being shown for orderId:', selectedOrderId);
+//     });
+
+//     $('#confirmCancelOrder').click(function () {
+//       const cancellationReason = $('#cancellationReason').val();
+//       console.log('Cancelling order with orderId:', selectedOrderId);
+//       cancelOrder(selectedOrderId, cancellationReason);
+//     });
+
+//     function cancelOrder(orderId, cancellationReason) {
+//       console.log('Cancelling order with orderId:', orderId);
+//       fetch(`/orders/${orderId}/cancel`, {
+//         method: 'PUT',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ cancellationReason })
+//       })
+//       .then(response => response.json())
+//       .then(data => {
+//         if (data.success) {
+//           updateOrderStatus(orderId, 'Cancelled');
+//           $('#cancelOrderModal').modal('hide');
+//           Swal.fire({
+//             icon: 'success',
+//             title: 'Order Cancelled',
+//             text: 'Order cancelled successfully',
+//             timer: 3000,
+//             onClose: () => {
+//               updateOrderStatus(orderId, 'Cancelled');
+//               window.location.reload();
+//             }
+//           });
+//         } else {
+//           Swal.fire({
+//             icon: 'error',
+//             title: 'Failed to Cancel Order',
+//             text: 'Failed to cancel order'
+//           });
+//         }
+//       })
+//       .catch(error => {
+//         console.error('Error cancelling order:', error);
+//         Swal.fire({
+//           icon: 'error',
+//           title: 'Error',
+//           text: 'An error occurred while cancelling the order'
+//         });
+//       });
+//     }
+
+//     function updateOrderStatus(orderId, status) {
+//       const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
+//       const statusBadge = orderRow.find('.order-status');
+//       statusBadge.text(status);
+//       statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
+//       statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
+//     }
+//   });
+
+
   </script>
 
 

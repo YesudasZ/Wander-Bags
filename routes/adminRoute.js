@@ -57,7 +57,9 @@ admin_route.post('/products/delete/:productId', auth.isAdminLogin,productControl
 admin_route.post('/products/restore/:productId',auth.isAdminLogin, productController.restoreProduct);
 
 admin_route.get('/orders', auth.isAdminLogin, adminController.loadOrders);
+
 admin_route.get('/orders/:id', auth.isAdminLogin, adminController.getOrderDetails);
+
 admin_route.put('/orders/:id', auth.isAdminLogin, adminController.updateOrderStatus);
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)

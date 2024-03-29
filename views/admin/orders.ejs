@@ -210,12 +210,13 @@
           <td><%= order.orderStatus %></td>
           <td>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#statusModal">
-              Change Status
-            </button>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#statusModal" data-order-id="<%= order._id %>">
+                Change Status
+              </button>
+    
            
             <!-- Modal -->
-            <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -225,7 +226,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <!-- Add your form elements here for changing order status -->
+                  
                     <select class="form-control">
                       <option selected>Select Status</option>
                       <option value="Processing">Processing</option>
@@ -240,13 +241,12 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </td>
-          <td>
+            </div> -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>">
               View Details
             </button>
           </td>
+         
   
         </tr>
         <!-- Order Details Modal -->
@@ -303,6 +303,40 @@
     </table>
   </div>
 
+ <!-- Status Modal -->
+ <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusModalLabel">Change Order Status</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="statusForm">
+            <div class="form-group">
+              <label for="statusSelect">Select Status</label>
+              <select class="form-control" id="statusSelect">
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Deleted">Deleted</option>
+                <option value="Returned">Returned</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="updateStatusBtn">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -435,36 +469,94 @@
                 });
         }
 
-        function updateOrderStatus(orderId, newStatus) {
-            const data = { orderStatus: newStatus };
 
-            fetch(`/admin/orders/${orderId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(order => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Order Status Updated',
-                    text: `Order status changed to ${newStatus}`,
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    fetchOrders();
-                });
-            })
-            .catch(error => {
-                console.error('Error updating order status:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while updating the order status.'
-                });
-            });
-        }
+
+
+
+
+
+
+        $(document).ready(function() {
+  let selectedOrderId;
+
+  // Open the status modal and store the order ID
+  $('#statusModal').on('show.bs.modal', function(event) {
+    const button = $(event.relatedTarget);
+    selectedOrderId = button.data('order-id');
+  });
+
+  // Update the order status
+  $('#updateStatusBtn').on('click', function() {
+    const newStatus = $('#statusSelect').val();
+    updateOrderStatus(selectedOrderId, newStatus);
+    $('#statusModal').modal('hide');
+  });
+
+  function updateOrderStatus(orderId, newStatus) {
+    const data = { orderStatus: newStatus };
+
+    fetch(`/admin/orders/${orderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(order => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Order Status Updated',
+        text: `Order status changed to ${newStatus}`,
+        confirmButtonText: 'OK'
+      }).then(() => {
+        $(`#order-status-${orderId}`).text(newStatus);
+      });
+      window.location.reload()
+    })
+    .catch(error => {
+      console.error('Error updating order status:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong while updating the order status.'
+      });
+    });
+  }
+});
+
+
+
+        // function updateOrderStatus(orderId, newStatus) {
+        //     const data = { orderStatus: newStatus };
+
+        //     fetch(`/admin/orders/${orderId}`, {
+        //         method: 'PUT',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(data)
+        //     })
+        //     .then(response => response.json())
+        //     .then(order => {
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'Order Status Updated',
+        //             text: `Order status changed to ${newStatus}`,
+        //             confirmButtonText: 'OK'
+        //         }).then(() => {
+        //             fetchOrders();
+        //         });
+        //     })
+        //     .catch(error => {
+        //         console.error('Error updating order status:', error);
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Oops...',
+        //             text: 'Something went wrong while updating the order status.'
+        //         });
+        //     });
+        // }
     </script>
 </body>
 
