@@ -307,6 +307,33 @@ const loadHome = async (req, res) => {
   }
 }
 
+const sortProducts = async (req, res) => {
+  try {
+    const { sortOption } = req.body;
+    let sortQuery = {};
+
+    switch (sortOption) {
+      case 'Price: Low to High':
+        sortQuery = { discountPrice: 1 };
+        break;
+      case 'Price: High to Low':
+        sortQuery = { discountPrice: -1 };
+        break;
+      case 'Release Date':
+        sortQuery = { productAddDate: -1 };
+        break;
+      default:
+        sortQuery = {};
+    }
+
+    const sortedProducts = await Product.find().sort(sortQuery);
+    res.json(sortedProducts);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 
 const loadforgetpassword = async (req, res) => {
   try {
@@ -326,6 +353,104 @@ const loadforgetpasswordotp = async (req, res) => {
     console.log(error.message);
   }
 }
+
+const verifyEmail = async (req, res) => {
+  try {
+    console.log("Test for");
+    const email = req.body.email;
+console.log("e"+email);
+    // Check if the user with the provided email exists
+    const existingUser = await User.findOne({ email });
+console.log("ex"+existingUser);
+    if (!existingUser) {
+      return res.render('forgetpassword', { message: 'User with this email does not exist' });
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+console.log("passwordresetotp" + otp);
+    // Save OTP and OTP expiration time in session
+    req.session.otp = otp;
+    req.session.userEmail = email;
+    req.session.otpExpiration = Date.now() + 60000; // OTP expiration time: 1 minute
+
+    // Send OTP to the user's email
+    const mailOptions = {
+      from: 'wanderbags29@gmail.com',
+      to: email,
+      subject: 'OTP for Password Reset',
+      text: `Your OTP for password reset is: ${otp}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+console.log("all");
+    // Redirect to OTP verification page
+    res.redirect('/forgetpasswordotp');
+
+  } catch (error) {
+    console.error('Error verifying email:', error);
+    res.redirect('/pagenotfound');
+  }
+};
+
+const verifyForgetPasswordOTP = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    // Check if the provided OTP matches the one stored in the session
+    if (req.session.otp !== parseInt(otp)) {
+      return res.render('otpverify', { message: 'Invalid OTP' });
+    }
+
+    // Check if the OTP has expired
+    if (req.session.otpExpiration < Date.now()) {
+      return res.render('otpverify', { message: 'OTP has expired' });
+    }
+
+    // If OTP is valid and not expired, redirect to reset password page
+    res.redirect('/resetpassword');
+
+  } catch (error) {
+    console.error('Error verifying forget password OTP:', error);
+    res.redirect('/pagenotfound');
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { newPassword, confirmPassword } = req.body;
+
+    // Check if newPassword and confirmPassword match
+    if (newPassword !== confirmPassword) {
+      return res.render('resetpassword', { message: 'Passwords do not match' });
+    }
+
+    // Check if newPassword meets any specific criteria (e.g., minimum length, complexity)
+    // You can add your password validation logic here if needed
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    const user = await User.findOneAndUpdate(
+      { email: req.session.userEmail },
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    // Check if the user exists
+    if (!user) {
+      return res.render('resetpassword', { message: 'User not found' });
+    }
+
+    // Redirect the user to the login page with a success message
+    res.render('login', { message: 'Password reset successfully. Please login with your new password.' });
+
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.redirect('/pagenotfound');
+  }
+};
 
 
 const loadresetpassword = async (req, res) => {
@@ -513,7 +638,11 @@ module.exports = {
   updateName,
   addAddress,
   updateAddress,
-  deleteAddress
+  deleteAddress,
+  sortProducts,
+  verifyEmail,
+  verifyForgetPasswordOTP,
+  resetPassword
 
   
 }

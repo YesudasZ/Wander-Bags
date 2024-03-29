@@ -235,55 +235,61 @@
     </div>
 </header>
 
-  <main class="main">
-
-
-
-
-
-
-
-
-
-
-    <div class="container">
-      <div class="row m-5 ">
-        <h2 class="text-dark fw-bold"></h2>
-        <div class="col-12 product-category">
-          <div class="row justify-content-center m-4">
-            <% products.filter(product=> product.status !== 'delete').forEach(product => { %>
-              <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-                <div class="product-item shadow rounded border">
-                  <a href="/productdetails/<%= product.id %>" class="product-link">
-                    <div class="product-thumb position-relative">
-                      <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>"
-                        class="img-fluid rounded">
-                      <div class="product-overlay"></div>
-                    </div>
-                  </a>
-                  <div class="product-content py-3">
-                    <h4 class="product-title text-black fw-bold mb-1">
-                      <%= product.name %>
-                    </h4>
-                    <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
-                    <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %>
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-              <% }); %>
+<main class="main">
+  <div class="container">
+    <div class="shop-product-fillter">
+      <div class="sort-by-product-area bg-white mb-4 p-3 rounded">
+        <div class="sort-by-product-wrap">
+          <div class="sort-by">
+            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
           </div>
+          <div class="sort-by-dropdown-wrap">
+            <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+          </div>
+        </div>
+        <div class="sort-by-dropdown">
+          <ul>
+            <li><a class="active" href="#">Featured</a></li>
+            <li><a href="#">Price: Low to High</a></li>
+            <li><a href="#">Price: High to Low</a></li>
+            <li><a href="#">Release Date</a></li>
+            <li><a href="#">Avg. Rating</a></li>
+          </ul>
         </div>
       </div>
     </div>
 
+    <div class="row m-5">
+      <h2 class="text-dark fw-bold"></h2>
+      <div class="col-12 product-category">
+        <div class="row justify-content-center m-4">
+          <% products.filter(product=> product.status !== 'delete').forEach(product => { %>
+          <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+            <div class="product-item shadow rounded border">
+              <a href="/productdetails/<%= product.id %>" class="product-link">
+                <div class="product-thumb position-relative">
+                  <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>"
+                    class="img-fluid rounded">
+                  <div class="product-overlay"></div>
+                </div>
+              </a>
+              <div class="product-content py-3">
+                <h4 class="product-title text-black fw-bold mb-1">
+                  <%= product.name %>
+                </h4>
+                <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %>
+                </p>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
-
-
-
-
-  </main>
   <footer class="main bg-secondary text-light">
 
     <section class="section-padding footer-mid">
@@ -412,7 +418,60 @@
   <!-- Template  JS -->
   <script src="./user-assets/js/main.js?v=3.4"></script>
   <script src="./user-assets/js/shop.js?v=3.4"></script>
+ 
 
+  <script>
+    const sortByDropdown = document.querySelector('.sort-by-dropdown ul');
+    const productContainer = document.querySelector('.product-category .row');
+  
+    sortByDropdown.addEventListener('click', async (e) => {
+      const sortOption = e.target.textContent.trim();
+      if (sortOption) {
+        try {
+          const response = await fetch('/sort-products', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sortOption }),
+          });
+  
+          if (response.ok) {
+            const sortedProducts = await response.json();
+            renderProducts(sortedProducts);
+          } else {
+            console.error('Error sorting products:', response.status);
+          }
+        } catch (error) {
+          console.error('Error sorting products:', error);
+        }
+      }
+    });
+  
+    function renderProducts(products) {
+      productContainer.innerHTML = '';
+      products.forEach((product) => {
+        const productElement = `
+          <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+            <div class="product-item shadow rounded border">
+              <a href="/productdetails/${product.id}" class="product-link">
+                <div class="product-thumb position-relative">
+                  <img src="/productimages/${product.images[0]}" alt="${product.name}" class="img-fluid rounded">
+                  <div class="product-overlay"></div>
+                </div>
+              </a>
+              <div class="product-content py-3">
+                <h4 class="product-title text-black fw-bold mb-1">${product.name}</h4>
+                <p class="product-price text-muted mb-1"><del>INR ${product.price}</del></p>
+                <p class="product-discount-price text-danger fw-bold mb-0">INR ${product.discountPrice}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        productContainer.insertAdjacentHTML('beforeend', productElement);
+      });
+    }
+  </script>
 
 </body>
 
