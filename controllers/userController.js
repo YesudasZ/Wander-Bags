@@ -470,6 +470,24 @@ const updateAddress = async (req, res) => {
 };
 
 
+const deleteAddress =async (req, res) => {
+  try {
+    const {  addressId } = req.params;
+    const userId   =req.session.user_id
+    // Find the user by ID and update the address array to remove the specified address ID
+    const user = await User.findByIdAndUpdate({_id:userId}, { $pull: { address: { _id: addressId } } }, { new: true });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    return res.status(200).json({ success: true, message: 'Address deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting address:', error);
+    return res.status(500).json({ success: false, message: 'An error occurred while deleting the address' });
+  }
+};
+
+
+
 
 module.exports = {
   loginLoad,
@@ -494,7 +512,8 @@ module.exports = {
   changePassword,
   updateName,
   addAddress,
-  updateAddress
+  updateAddress,
+  deleteAddress
 
   
 }

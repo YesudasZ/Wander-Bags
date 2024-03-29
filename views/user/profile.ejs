@@ -21,7 +21,8 @@
     integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+Z3+Xf1QojCaB40CKvL+2K4Y5p4ef5uyyJ5fksU" crossorigin="anonymous">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="SHA-384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="SHA-384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
@@ -195,13 +196,13 @@
                 <div class="header-action-icon-2">
                   <a href="shop-wishlist.html">
                     <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
-            
+
                   </a>
                 </div>
                 <div class="header-action-icon-2">
                   <a class="mini-cart-icon" href="/cart">
                     <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
-                
+
                   </a>
                 </div>
               </div>
@@ -285,7 +286,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="page-login-register.html">
+                  <a class="nav-link" href="/logout">
                     <i class="fi-rs-sign-out mr-10"></i>Logout
                   </a>
                 </li>
@@ -340,120 +341,74 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% orders.forEach(order => { %>
-                        <% order.items.forEach((item, index) => { %>
+                      <% orders.forEach(order=> { %>
+                        <% order.items.forEach((item, index)=> { %>
                           <tr class="order-row" data-order-id="<%= order._id %>">
                             <td>
                               <div class="d-flex align-items-center">
-                                <img src="/productimages/<%= item.image[0] %>" alt="<%= item.title %>" class="mr-3" style="width: 100px; height: 100px;">
-                                <span><%= item.title %></span>
+                                <img src="/productimages/<%= item.image[0] %>" alt="<%= item.title %>" class="mr-3"
+                                  style="width: 100px; height: 100px;">
+                                <span>
+                                  <%= item.title %>
+                                </span>
                               </div>
                             </td>
-                            <td><%= item.quantity %></td>
-                            <td><span class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>"><%= order.orderStatus %></span></td>
                             <td>
-                              <% if (order.orderStatus.toLowerCase() === 'pending' || order.orderStatus.toLowerCase() === 'confirmed') { %>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
-                              <% } else { %>
-                                <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
-                              <% } %>
+                              <%= item.quantity %>
+                            </td>
+                            <td><span
+                                class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
+                                <%= order.orderStatus %>
+                              </span></td>
+                            <td>
+                              <% if (order.orderStatus.toLowerCase()==='pending' ||
+                                order.orderStatus.toLowerCase()==='confirmed' ) { %>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                  data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                <% } else { %>
+                                  <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
+                                  <% } %>
                             </td>
                           </tr>
-                        <% }) %>
-                      <% }) %>
+                          <% }) %>
+                            <% }) %>
                     </tbody>
                   </table>
-              
-
-                  <!-- <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Are you sure you want to cancel this order?</p>
-                          <form id="cancelOrderForm">
-                            <div class="form-group">
-                              <label for="cancellationReason">Reason for Cancellation</label>
-                              <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
-                            </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-danger" id="confirmCancelOrder">Cancel Order</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-
-            
                 </div>
               </div>
 
 
               <!-- Cancel Order Modal -->
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="cancelOrderForm">
-          <div class="form-group">
-            <label for="cancellationReason">Reason for Cancellation</label>
-            <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id="confirmCancelOrder">Confirm Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+              <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog"
+                aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="cancelOrderForm">
+                        <div class="form-group">
+                          <label for="cancellationReason">Reason for Cancellation</label>
+                          <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-danger" id="confirmCancelOrder">Confirm Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
 
-<!-- Cancel Order Modal -->
-<!-- HTML Modal -->
-<!-- <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="cancelOrderForm">
-          <div class="form-group">
-            <label for="cancellationReason">Cancellation Reason</label>
-            <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id="confirmCancellation">Confirm Cancellation</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 
-
-              
               <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
                 <div class="card">
                   <div class="card-header">
@@ -502,110 +457,134 @@
                   </div>
                 </div>
               </div>
-<!-- Profile Address Management Section -->
-<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-  <div class="row">
-    <% user.address.forEach((address, index)=> { %>
-      <div class="col-lg-6 mb-4" id="addressSection_<%= address._id %>">
-        <div class="card mb-3 mb-lg-0">
-          <div class="card-header">
-            <h5 class="mb-0">
-              <%= address.type.charAt(0).toUpperCase() + address.type.slice(1) %> Address
-            </h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-unstyled">
-              <li><strong>House Name / Flat No.:</strong> <span class="house-name"><%= address.houseName %></span></li>
-              <li><strong>Street:</strong> <span class="street"><%= address.street %></span></li>
-              <li><strong>City:</strong> <span class="city"><%= address.city %></span></li>
-              <li><strong>State:</strong> <span class="state"><%= address.state %></span></li>
-              <li><strong>Country:</strong> <span class="country"><%= address.country %></span></li>
-              <li><strong>Postal Code:</strong> <span class="postal-code"><%= address.postalCode %></span></li>
-            </ul>
-            <!-- Edit and Delete buttons -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal<%= index %>">Edit</button>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAddressModal<%= index %>">Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% }) %>
-  </div>
-</div>
+              <!-- Profile Address Management Section -->
+              <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                <div class="row">
+                  <% user.address.forEach((address, index)=> { %>
+                    <div class="col-lg-6 mb-4" id="addressSection_<%= address._id %>">
+                      <div class="card mb-3 mb-lg-0">
+                        <div class="card-header">
+                          <h5 class="mb-0">
+                            <%= address.type.charAt(0).toUpperCase() + address.type.slice(1) %> Address
+                          </h5>
+                        </div>
+                        <div class="card-body">
+                          <ul class="list-unstyled">
+                            <li><strong>House Name / Flat No.:</strong> <span class="house-name">
+                                <%= address.houseName %>
+                              </span></li>
+                            <li><strong>Street:</strong> <span class="street">
+                                <%= address.street %>
+                              </span></li>
+                            <li><strong>City:</strong> <span class="city">
+                                <%= address.city %>
+                              </span></li>
+                            <li><strong>State:</strong> <span class="state">
+                                <%= address.state %>
+                              </span></li>
+                            <li><strong>Country:</strong> <span class="country">
+                                <%= address.country %>
+                              </span></li>
+                            <li><strong>Postal Code:</strong> <span class="postal-code">
+                                <%= address.postalCode %>
+                              </span></li>
+                          </ul>
+                          <!-- Edit and Delete buttons -->
+                          <div class="d-flex justify-content-between align-items-center mt-3">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                              data-target="#editAddressModal<%= index %>">Edit</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                              data-target="#deleteAddressModal<%= index %>">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <% }) %>
+                </div>
+              </div>
 
-<!-- Edit Address Modal -->
-<% user.address.forEach((address, index)=> { %>
-  <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- Form for editing address -->
-          <form id="editAddressForm<%= index %>" class="edit-address-form" data-address-id="<%= address._id %>">
-            <div class="form-group">
-              <label for="houseName<%= index %>">House Name / Flat No.</label>
-              <input type="text" class="form-control" id="houseName<%= index %>" name="houseName" value="<%= address.houseName %>" required>
-            </div>
-            <div class="form-group">
-              <label for="street<%= index %>">Street</label>
-              <input type="text" class="form-control" id="street<%= index %>" name="street" value="<%= address.street %>" required>
-            </div>
-            <div class="form-group">
-              <label for="city<%= index %>">City</label>
-              <input type="text" class="form-control" id="city<%= index %>" name="city" value="<%= address.city %>" required>
-            </div>
-            <div class="form-group">
-              <label for="state<%= index %>">State</label>
-              <input type="text" class="form-control" id="state<%= index %>" name="state" value="<%= address.state %>" required>
-            </div>
-            <div class="form-group">
-              <label for="country<%= index %>">Country</label>
-              <input type="text" class="form-control" id="country<%= index %>" name="country" value="<%= address.country %>" required>
-            </div>
-            <div class="form-group">
-              <label for="postalCode<%= index %>">Postal Code</label>
-              <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode" value="<%= address.postalCode %>" required>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Update</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-<% }) %>
+              <!-- Edit Address Modal -->
+              <% user.address.forEach((address, index)=> { %>
+                <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog"
+                  aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <!-- Form for editing address -->
+                        <form id="editAddressForm<%= index %>" class="edit-address-form"
+                          data-address-id="<%= address._id %>">
+                          <div class="form-group">
+                            <label for="houseName<%= index %>">House Name / Flat No.</label>
+                            <input type="text" class="form-control" id="houseName<%= index %>" name="houseName"
+                              value="<%= address.houseName %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="street<%= index %>">Street</label>
+                            <input type="text" class="form-control" id="street<%= index %>" name="street"
+                              value="<%= address.street %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="city<%= index %>">City</label>
+                            <input type="text" class="form-control" id="city<%= index %>" name="city"
+                              value="<%= address.city %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="state<%= index %>">State</label>
+                            <input type="text" class="form-control" id="state<%= index %>" name="state"
+                              value="<%= address.state %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="country<%= index %>">Country</label>
+                            <input type="text" class="form-control" id="country<%= index %>" name="country"
+                              value="<%= address.country %>" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="postalCode<%= index %>">Postal Code</label>
+                            <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode"
+                              value="<%= address.postalCode %>" required>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
 
 
-<!-- Delete Address Modal -->
-<% user.address.forEach((address, index)=> { %>
-  <div class="modal fade" id="deleteAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="deleteAddressModalLabel<%= index %>" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteAddressModalLabel<%= index %>">Delete Address</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this address?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" onclick="confirmDeleteAddress('<%= index %>')">Confirm</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<% }) %>
+                  <!-- Delete Address Modal -->
+                  <% user.address.forEach((address, index)=> { %>
+                    <div class="modal fade" id="deleteAddressModal<%= index %>" tabindex="-1" role="dialog"
+                      aria-labelledby="deleteAddressModalLabel<%= index %>" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteAddressModalLabel<%= index %>">Delete Address</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to delete this address?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger"
+                              onclick="confirmDeleteAddress('<%= address._id %>')">Confirm</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <% }) %>
 
 
             </div>
@@ -614,15 +593,6 @@
       </div>
     </section>
   </main>
-
-
-
-
-
-
-
-
-
 
   <!-- Edit Name Modal -->
   <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
@@ -684,8 +654,6 @@
     </div>
   </div>
 
-
-
   <!-- Toast notification HTML for password mismatch -->
   <div class="toast" id="passwordMismatchToast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
@@ -718,15 +686,6 @@
       Failed to change password. Please check your current password.
     </div>
   </div>
-
-
-
-
-
-
-
-
-
 
   <footer class="main bg-secondary text-light">
     <section class="section-padding footer-mid">
@@ -860,158 +819,153 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-0VtUxEz1c4t3ZT5Yel5zPFJfnz9ao0MWr+Q4+agBkoBB1jE2xkkjzr8NT/dWclgl"
     crossorigin="anonymous"></script>
-
-
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="SHA-384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="SHA-384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
- <script>
 
-  // Function to handle editing the name
-  document.getElementById('saveNameBtn').addEventListener('click', async () => {
-        const newName = document.getElementById('newName').value.trim();
-        try {
-            const response = await fetch('/profile/updateName', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ newName })
-            });
-            if (response.ok) {
-                // Update the name in the profile section without refreshing
-                document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
-                $('#editNameModal').modal('hide');
-                window.location.reload();
-            } else {
-                // Handle error if any
-                console.error('Error updating name');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+  <script>
+
+    // Function to handle editing the name
+    document.getElementById('saveNameBtn').addEventListener('click', async () => {
+      const newName = document.getElementById('newName').value.trim();
+      try {
+        const response = await fetch('/profile/updateName', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ newName })
+        });
+        if (response.ok) {
+          // Update the name in the profile section without refreshing
+          document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+          $('#editNameModal').modal('hide');
+          window.location.reload();
+        } else {
+          // Handle error if any
+          console.error('Error updating name');
         }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     });
     // Function to handle changing the password
     document.getElementById('changePasswordBtn').addEventListener('click', async () => {
-        const currentPassword = document.getElementById('currentPassword').value.trim();
-        const newPassword = document.getElementById('newPassword').value.trim();
-        const confirmPassword = document.getElementById('confirmPassword').value.trim();
-        if (newPassword !== confirmPassword) {
-            // Show error message if passwords don't match
-            alert('New password and confirm password must match.');
-            return;
+      const currentPassword = document.getElementById('currentPassword').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+      if (newPassword !== confirmPassword) {
+        // Show error message if passwords don't match
+        alert('New password and confirm password must match.');
+        return;
+      }
+      try {
+        const response = await fetch('/profile/changePassword', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        if (response.ok) {
+          // Password changed successfully
+          $('#changePasswordModal').modal('hide');
+          window.location.reload();
+        } else {
+          // Handle error if any
+          alert('Failed to change password. Please check your current password.');
         }
-        try {
-            const response = await fetch('/profile/changePassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ currentPassword, newPassword })
-            });
-            if (response.ok) {
-                // Password changed successfully
-                $('#changePasswordModal').modal('hide');
-                window.location.reload();
-            } else {
-                // Handle error if any
-                alert('Failed to change password. Please check your current password.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     });
-    document.getElementById("addAddressForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    // Retrieve form data
-    var houseName = document.getElementById("houseName").value;
-    var street = document.getElementById("street").value;
-    var city = document.getElementById("city").value;
-    var state = document.getElementById("state").value;
-    var country = document.getElementById("country").value;
-    var postalCode = document.getElementById("postalCode").value;
-    var addressType = document.getElementById("addressType").value;
-    // Validation logic
-    if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
+    document.getElementById("addAddressForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      // Retrieve form data
+      var houseName = document.getElementById("houseName").value;
+      var street = document.getElementById("street").value;
+      var city = document.getElementById("city").value;
+      var state = document.getElementById("state").value;
+      var country = document.getElementById("country").value;
+      var postalCode = document.getElementById("postalCode").value;
+      var addressType = document.getElementById("addressType").value;
+      // Validation logic
+      if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
         Toastify({
-            text: "Please fill in all fields",
-            duration: 3000,
-            gravity: "top", // toast will be shown at top of the page
-            position: 'right', // toast position
-            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+          text: "Please fill in all fields",
+          duration: 3000,
+          gravity: "top", // toast will be shown at top of the page
+          position: 'right', // toast position
+          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
         }).showToast();
         return false;
-    }
-    try {
+      }
+      try {
         const response = await fetch('/profile/addAddress', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // Specify content type as JSON
-            },
-            body: JSON.stringify({ // Convert form data to JSON
-                houseName,
-                street,
-                city,
-                state,
-                country,
-                postalCode,
-                addressType
-            })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // Specify content type as JSON
+          },
+          body: JSON.stringify({ // Convert form data to JSON
+            houseName,
+            street,
+            city,
+            state,
+            country,
+            postalCode,
+            addressType
+          })
         });
         if (response.ok) {
           document.getElementById("addAddressForm").reset();
-            Toastify({
-                text: "Address added successfully",
-                duration: 3000,
-                gravity: "top",
-                position: 'right',
-                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-            }).showToast();
-            // window.location.reload();
-            // Optionally, you can redirect the user or perform any other action here
+          Toastify({
+            text: "Address added successfully",
+            duration: 3000,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+          }).showToast();
+          // window.location.reload();
+          // Optionally, you can redirect the user or perform any other action here
         } else {
-            Toastify({
-                text: "Failed to add address",
-                duration: 3000,
-                gravity: "top",
-                position: 'right',
-                backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-            }).showToast();
-        }
-    } catch (error) {
-        console.error(error);
-        Toastify({
-            text: "An error occurred",
+          Toastify({
+            text: "Failed to add address",
             duration: 3000,
             gravity: "top",
             position: 'right',
             backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+          }).showToast();
+        }
+      } catch (error) {
+        console.error(error);
+        Toastify({
+          text: "An error occurred",
+          duration: 3000,
+          gravity: "top",
+          position: 'right',
+          backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
         }).showToast();
-    }
-});
+      }
+    });
 
     // Function to handle editing the name
     document.getElementById('saveNameBtn').addEventListener('click', async () => {
@@ -1083,121 +1037,121 @@
 
 
     document.addEventListener('DOMContentLoaded', () => {
-  const editAddressForms = document.querySelectorAll('.edit-address-form');
+      const editAddressForms = document.querySelectorAll('.edit-address-form');
 
-  editAddressForms.forEach((form, index) => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      editAddressForms.forEach((form, index) => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
 
-      const addressId = form.dataset.addressId;
-      const formData = new FormData(form);
-      const addressData = {};
+          const addressId = form.dataset.addressId;
+          const formData = new FormData(form);
+          const addressData = {};
 
-      for (const [key, value] of formData.entries()) {
-        addressData[key] = value;
-      }
+          for (const [key, value] of formData.entries()) {
+            addressData[key] = value;
+          }
 
-      try {
-        const response = await fetch(`/profile/update-address/${addressId}`, {
+          try {
+            const response = await fetch(`/profile/update-address/${addressId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(addressData),
+            });
+
+            if (!response.ok) {
+              throw new Error('Error updating address');
+            }
+
+            // Close the modal
+            const modal = document.querySelector(`#editAddressModal${index}`);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+
+            if (modalBackdrop) {
+              modalBackdrop.remove();
+            }
+
+            // Reload the page
+            window.location.reload();
+          } catch (err) {
+            console.error(err);
+            alert(err.message);
+          }
+        });
+      });
+    });
+
+
+    $(document).ready(function () {
+      let selectedOrderId;
+
+      // Listen for the 'show.bs.modal' event on the cancelOrderModal
+      $('#cancelOrderModal').on('show.bs.modal', function (event) {
+        // Get the button that triggered the modal
+        const button = $(event.relatedTarget);
+
+        // Get the order ID from the button's data attribute
+        selectedOrderId = button.data('order-id');
+        console.log('Modal is being shown for orderId:', selectedOrderId);
+      });
+
+      $('#confirmCancelOrder').click(function () {
+        const cancellationReason = $('#cancellationReason').val();
+        console.log('Cancelling order with orderId:', selectedOrderId);
+        cancelOrder(selectedOrderId, cancellationReason);
+      });
+
+      function cancelOrder(orderId, cancellationReason) {
+        console.log('Cancelling order with orderId:', orderId);
+        fetch(`/orders/${orderId}/cancel`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(addressData),
-        });
+          body: JSON.stringify({ cancellationReason })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
 
-        if (!response.ok) {
-          throw new Error('Error updating address');
-        }
-
-        // Close the modal
-        const modal = document.querySelector(`#editAddressModal${index}`);
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-
-        if (modalBackdrop) {
-          modalBackdrop.remove();
-        }
-
-        // Reload the page
-        window.location.reload();
-      } catch (err) {
-        console.error(err);
-        alert(err.message);
-      }
-    });
-  });
-});
-
-
-$(document).ready(function() {
-let selectedOrderId;
-
-// Listen for the 'show.bs.modal' event on the cancelOrderModal
-$('#cancelOrderModal').on('show.bs.modal', function (event) {
-  // Get the button that triggered the modal
-  const button = $(event.relatedTarget);
-
-  // Get the order ID from the button's data attribute
-  selectedOrderId = button.data('order-id');
-  console.log('Modal is being shown for orderId:', selectedOrderId);
-});
-
-$('#confirmCancelOrder').click(function () {
-  const cancellationReason = $('#cancellationReason').val();
-  console.log('Cancelling order with orderId:', selectedOrderId);
-  cancelOrder(selectedOrderId, cancellationReason);
-});
-
-function cancelOrder(orderId, cancellationReason) {
-  console.log('Cancelling order with orderId:', orderId);
-  fetch(`/orders/${orderId}/cancel`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ cancellationReason })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      
-      $('#cancelOrderModal').modal('hide');
-      showToast('Order cancelled successfully', 'success');
-      updateOrderStatus(orderId, 'Cancelled');
-    
-      Swal.fire({
-            icon: 'success',
-            title: 'Order Cancelled',
-            text: 'Order cancelled successfully',
-            timer: 3000,
-            onClose: () => {
+              $('#cancelOrderModal').modal('hide');
+              showToast('Order cancelled successfully', 'success');
               updateOrderStatus(orderId, 'Cancelled');
-             
-            }
-          });
-    } else {
-      showToast('Failed to cancel order', 'error');
-    }
-  })
-  .catch(error => {
-    console.error('Error cancelling order:', error);
-    showToast('An error occurred while cancelling the order', 'error');
-  });
-}
-})
-function updateOrderStatus(orderId, status) {
-  const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
-  const statusBadge = orderRow.find('.order-status');
-  statusBadge.text(status);
-  statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
-  statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
-}
 
-function showToast(message, type) {
-  const toast = $(`
+              Swal.fire({
+                icon: 'success',
+                title: 'Order Cancelled',
+                text: 'Order cancelled successfully',
+                timer: 3000,
+                onClose: () => {
+                  updateOrderStatus(orderId, 'Cancelled');
+
+                }
+              });
+            } else {
+              showToast('Failed to cancel order', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('Error cancelling order:', error);
+            showToast('An error occurred while cancelling the order', 'error');
+          });
+      }
+    })
+    function updateOrderStatus(orderId, status) {
+      const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
+      const statusBadge = orderRow.find('.order-status');
+      statusBadge.text(status);
+      statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
+      statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
+    }
+
+    function showToast(message, type) {
+      const toast = $(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
       <div class="toast-header bg-${type} text-white">
         <strong class="mr-auto">Order Status</strong>
@@ -1211,88 +1165,48 @@ function showToast(message, type) {
     </div>
   `);
 
-  $('.toast-container').append(toast);
-  toast.toast('show');
-}
+      $('.toast-container').append(toast);
+      toast.toast('show');
+    }
 
 
+    
+    function confirmDeleteAddress(addressId) {
+console.log(addressId);
 
+    fetch(`/profile/address/${addressId}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (response.ok) {
+        $('#deleteAddressModal' + addressId).modal('hide');; // Hide the modal
+        $('#addressSection_' + addressId).remove(); // Remove the address section from UI
+        Swal.fire({
+          icon: 'success',
+          title: 'Address Deleted',
+          text: 'Address successfully deleted'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to delete address'
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting address:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while deleting the address'
+      });
+    });
+  }
 
-// $(document).ready(function() {
-//     let selectedOrderId;
-
-//     // Listen for the 'show.bs.modal' event on the cancelOrderModal
-//     $('#cancelOrderModal').on('show.bs.modal', function (event) {
-//       // Get the button that triggered the modal
-//       const button = $(event.relatedTarget);
-
-//       // Get the order ID from the button's data attribute
-//       selectedOrderId = button.data('order-id');
-//       console.log('Modal is being shown for orderId:', selectedOrderId);
-//     });
-
-//     $('#confirmCancelOrder').click(function () {
-//       const cancellationReason = $('#cancellationReason').val();
-//       console.log('Cancelling order with orderId:', selectedOrderId);
-//       cancelOrder(selectedOrderId, cancellationReason);
-//     });
-
-//     function cancelOrder(orderId, cancellationReason) {
-//       console.log('Cancelling order with orderId:', orderId);
-//       fetch(`/orders/${orderId}/cancel`, {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ cancellationReason })
-//       })
-//       .then(response => response.json())
-//       .then(data => {
-//         if (data.success) {
-//           updateOrderStatus(orderId, 'Cancelled');
-//           $('#cancelOrderModal').modal('hide');
-//           Swal.fire({
-//             icon: 'success',
-//             title: 'Order Cancelled',
-//             text: 'Order cancelled successfully',
-//             timer: 3000,
-//             onClose: () => {
-//               updateOrderStatus(orderId, 'Cancelled');
-//               window.location.reload();
-//             }
-//           });
-//         } else {
-//           Swal.fire({
-//             icon: 'error',
-//             title: 'Failed to Cancel Order',
-//             text: 'Failed to cancel order'
-//           });
-//         }
-//       })
-//       .catch(error => {
-//         console.error('Error cancelling order:', error);
-//         Swal.fire({
-//           icon: 'error',
-//           title: 'Error',
-//           text: 'An error occurred while cancelling the order'
-//         });
-//       });
-//     }
-
-//     function updateOrderStatus(orderId, status) {
-//       const orderRow = $(`.order-row[data-order-id="${orderId}"]`);
-//       const statusBadge = orderRow.find('.order-status');
-//       statusBadge.text(status);
-//       statusBadge.removeClass('badge-warning badge-info badge-primary badge-success badge-danger');
-//       statusBadge.addClass(`badge-${status.toLowerCase() === 'pending' ? 'warning' : status.toLowerCase() === 'confirmed' ? 'info' : status.toLowerCase() === 'shipped' ? 'primary' : status.toLowerCase() === 'delivered' ? 'success' : 'danger'}`);
-//     }
-//   });
 
 
   </script>
-
-
-
 </body>
 
 </html>

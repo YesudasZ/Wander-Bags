@@ -76,33 +76,29 @@ user_route.post('/profile/addAddress', auth.isLogin, userController.addAddress);
 
 user_route.put('/profile/update-address/:addressId', auth.isLogin, userController.updateAddress);
 
+user_route.delete('/profile/address/:addressId',auth.isLogin, userController.deleteAddress)
+
 user_route.get('/cart',auth.isLogin,cartController.loadCart)
 
-user_route.post('/cart/add', cartController.addToCart)
+user_route.post('/cart/add',auth.isLogin, cartController.addToCart)
 
+user_route.put('/cart/update/:productId',auth.isLogin, cartController.updateCartItemQuantity);
 
+user_route.delete('/cart/remove/:productId', auth.isLogin,cartController.removeCartItem);
 
-user_route.put('/cart/update/:productId', cartController.updateCartItemQuantity);
+user_route.put('/cart/update', auth.isLogin,cartController.updateCart);
 
+user_route.delete('/cart/clear', auth.isLogin,cartController.clearCart);
 
-user_route.delete('/cart/remove/:productId', cartController.removeCartItem);
+user_route.get('/cart/totals',auth.isLogin, cartController.getCartTotals);
 
+user_route.get('/checkout',auth.isLogin,orderController.loadCheckout)
 
-user_route.put('/cart/update', cartController.updateCart);
+user_route.post('/checkout',auth.isLogin,orderController.placeOrder)
 
+user_route.get('/orderPlaced',auth.isLogin,orderController.loadOderplaced)
 
-user_route.delete('/cart/clear', cartController.clearCart);
-
-
-user_route.get('/cart/totals', cartController.getCartTotals);
-
-user_route.get('/checkout',orderController.loadCheckout)
-
-user_route.post('/checkout',orderController.placeOrder)
-
-user_route.get('/orderPlaced',orderController.loadOderplaced)
-
-user_route.put('/orders/:id/cancel', orderController.cancelOrder);
+user_route.put('/orders/:id/cancel',auth.isLogin, orderController.cancelOrder);
 
 
 module.exports = user_route;
