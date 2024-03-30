@@ -29,7 +29,7 @@ user_route.get('/login',auth.isLogout,userController.loginLoad)
 
 user_route.post('/login',userController.verifylogin)
 
-user_route.get('/signup',userController.loadRegister)
+user_route.get('/signup',auth.isLogout,userController.loadRegister)
 
 user_route.post('/signup',userController.insertuser)
 
@@ -46,7 +46,7 @@ user_route.get('/success',userController.successGoogleLogin);
 
 user_route.get('/failure',userController.failureGoogleLogin)
 
-user_route.get('/otpverify',userController.loadotpverify)
+user_route.get('/otpverify',auth.isLogout,userController.loadotpverify)
 
 user_route.post('/otpverify',userController.otpverify)
 

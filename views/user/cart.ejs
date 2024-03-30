@@ -198,7 +198,9 @@
                             <% if (cart && cart.items.length > 0) { %>
                             <% cart.items.forEach((item, index) => { %>
                             <tr id="item-<%= index + 1 %>">
+                               
                                 <td class="image product-thumbnail"><img src="/productImages/<%= item.image[0] %>" alt="#" style="max-width: 100px;"></td>
+                               
                                 <td class="product-des product-name">
                                     <h5><a href="#" class="text-dark"><%= item.title %></a></h5>
                                     <% if (item.productStatus === 'Limit-Exceeded') { %>

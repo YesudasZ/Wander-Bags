@@ -19,7 +19,7 @@ const addCategory = async (req, res) => {
         return res.status(400).json({ message: 'Category name is required' });
     }
 
-    // Check if category already exists
+    
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
         return res.status(400).json({ message: 'Category already exists' });
@@ -63,10 +63,10 @@ const deleteCategory = async (req, res) => {
       if (!category) {
           return res.status(404).send('Category not found');
       }
-      // Soft delete: Update category status to 'deleted'
+      
       category.status = 'delete';
       await category.save();
-     // req.flash('successMessage', 'Category deleted successfully');
+   
       res.redirect('/admin/categories');
   } catch (error) {
       console.error('Error deleting category:', error);
@@ -107,7 +107,7 @@ const restoreCategory = async (req, res) => {
       if (!category) {
           return res.status(404).send('Category not found');
       }
-      // Restore the category by changing its status to 'active'
+     
       category.status = 'active';
       await category.save();
       res.redirect('/admin/categories');

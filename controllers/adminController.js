@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const Order =  require("../models/orderModel");
+const Order = require("../models/orderModel");
 const bcrypt = require('bcrypt')
 
 
@@ -149,44 +149,44 @@ const loadOrders = async (req, res) => {
 const getOrderDetails = async (req, res) => {
   try {
 
-      const orderId = req.params.id;
-      const order = await Order.findById(orderId)
-          .populate('user', 'name')
-          .populate({
-              path: 'items.productId',
-              select: 'title image productPrice'
-          });
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId)
+      .populate('user', 'name')
+      .populate({
+        path: 'items.productId',
+        select: 'title image productPrice'
+      });
 
-      if (!order) {
-          return res.status(404).json({ error: 'Order not found' });
-      }
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
 
-      res.json(order);
+    res.json(order);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const updateOrderStatus = async (req, res) => {
   try {
-      const orderId = req.params.id;
-      const { orderStatus } = req.body;
+    const orderId = req.params.id;
+    const { orderStatus } = req.body;
 
-      const order = await Order.findByIdAndUpdate(
-          orderId,
-          { orderStatus },
-          { new: true }
-      );
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { orderStatus },
+      { new: true }
+    );
 
-      if (!order) {
-          return res.status(404).json({ error: 'Order not found' });
-      }
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
 
-      res.json(order);
+    res.json(order);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 

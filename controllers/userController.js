@@ -201,14 +201,14 @@ const loadotpverify = async (req, res) => {
 const otpverify = async (req, res) => {
   try {
     const otpcheck = await parseInt(req.body.otp);
-    console.log(otpcheck);
-    console.log(req.session.details.otp);
-    const dbotp = req.session.details.otp
-    console.log(dbotp);
+
+    const dbotp = req.session.details.otp;
+
     if (dbotp == otpcheck) {
       if (req.session.details.otpExpiration < Date.now()) {
-        return res.render('otpverify', { message: 'OTP has expired' });
+        return res.json({ success: false, message: 'OTP has expired' });
       }
+
       const spassword = await securePassword(req.session.details.password);
       const user = new User({
         name: req.session.details.name,
@@ -218,20 +218,20 @@ const otpverify = async (req, res) => {
         is_admin: 0,
         is_verified: 1
       });
+
       const userData = await user.save();
       req.session.user_id = userData._id;
       req.session.user = true;
-      res.redirect('/home');
-    }
-    else {
-      return res.render('otpverify', { message: 'Invalid OTP' });
+     
+      res.json({ success: true });
+    } else {
+      res.json({ success: false, message: 'Invalid OTP' });
     }
   } catch (error) {
     console.log(error.message);
-    res.redirect('/pagenotfound')
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
-}
-
+};
 
 const loadshop = async (req, res) => {
   try {

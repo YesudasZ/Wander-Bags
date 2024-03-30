@@ -29,6 +29,11 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
+
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+}
     /* Dashboard Menu Styles */
     .dashboard-menu {
       background-color: #f8f9fa;
@@ -409,54 +414,61 @@
 
 
 
-              <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
-                <div class="card">
-                  <div class="card-header">
-                    <h5>Add Address</h5>
-                  </div>
-                  <div class="card-body">
-                    <form id="addAddressForm" method="post" name="enq">
-                      <div class="row">
-                        <div class="form-group col-md-6">
-                          <label>House Name / Flat No.<span class="required">*</span></label>
-                          <input required="" class="form-control square" name="houseName" id="houseName" type="text">
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label>Street<span class="required">*</span></label>
-                          <input required="" class="form-control square" name="street" id="street" type="text">
-                        </div>
-                        <div class="form-group col-md-12">
-                          <label>City <span class="required">*</span></label>
-                          <input required="" class="form-control square" name="city" id="city" type="text">
-                        </div>
-                        <div class="form-group col-md-12">
-                          <label>State <span class="required">*</span></label>
-                          <input required="" class="form-control square" name="state" id="state" type="text">
-                        </div>
-                        <div class="form-group col-md-12">
-                          <label>Country <span class="required">*</span></label>
-                          <input required="" class="form-control square" name="country" id="country" type="text">
-                        </div>
-                        <div class="form-group col-md-12">
-                          <label>Postalcode <span class="required">*</span></label>
-                          <input required="" class="form-control square" name="postalCode" id="postalCode" type="text">
-                        </div>
-                        <div class="form-group col-md-12">
-                          <label>Type <span class="required">*</span></label>
-                          <select class="form-control" id="addressType" name="addressType">
-                            <option value="home">Home</option>
-                            <option value="office">Office</option>
-                          </select>
-                        </div>
-                        <div class="col-md-12">
-                          <button type="submit" class="btn btn-fill-out submit" name="submit"
-                            value="Submit">Save</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
+<div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
+  <div class="card">
+    <div class="card-header">
+      <h5>Add Address</h5>
+    </div>
+    <div class="card-body">
+      <form id="addAddressForm" method="post" name="enq" onsubmit="return validateForm()">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label>House Name / Flat No.<span class="required">*</span></label>
+            <input  class="form-control square" name="houseName" id="houseName" type="text">
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Street<span class="required">*</span></label>
+            <input  class="form-control square" name="street" id="street" type="text">
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="form-group col-md-12">
+            <label>City <span class="required">*</span></label>
+            <input  class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$">
+            <small class="text-danger invalid-feedback">gjagjkgajkhgf</small>
+          </div>
+          <div class="form-group col-md-12">
+            <label>State <span class="required">*</span></label>
+            <input  class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$">
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="form-group col-md-12">
+            <label>Country <span class="required">*</span></label>
+            <input class="form-control square" name="country" id="country" type="text" pattern="^[a-zA-Z\s]+$">
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="form-group col-md-12">
+            <label>Postalcode <span class="required">*</span></label>
+            <input class="form-control square" name="postalCode" id="postalCode" type="text" pattern="^[0-9]+$">
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="form-group col-md-12">
+            <label>Type <span class="required">*</span></label>
+            <select class="form-control" id="addressType" name="addressType">
+              <option value="home">Home</option>
+              <option value="office">Office</option>
+            </select>
+            <small class="text-danger invalid-feedback"></small>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+              
               <!-- Profile Address Management Section -->
               <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                 <div class="row">
@@ -843,6 +855,46 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+
+
+function validateForm() {
+  const houseName = document.getElementById("houseName").value;
+  const street = document.getElementById("street").value;
+  const city = document.getElementById("city").value;
+  const state = document.getElementById("state").value;
+  const country = document.getElementById("country").value;
+  const postalCode = document.getElementById("postalCode").value;
+
+  if (!houseName || !street || !city || !state || !country || !postalCode) {
+    
+    return false;
+  }
+
+  if (!/^[A-Za-z]+$/.test(city)) {
+    document.getElementById("cityError").innerText = "City must contain only letters.";
+    return false;
+  }
+
+  if (!/^[A-Za-z]+$/.test(state)) {
+    document.getElementById("stateError").innerText = "State must contain only letters.";
+    return false;
+  }
+
+  if (!/^[A-Za-z]+$/.test(country)) {
+    document.getElementById("countryError").innerText = "Country must contain only letters.";
+    return false;
+  }
+
+  if (!/^[0-9]+$/.test(postalCode)) {
+    document.getElementById("postalCodeError").innerText = "Postal code must contain only numbers.";
+    return false;
+  }
+
+  return true;
+}
+
+
+
 
     // Function to handle editing the name
     document.getElementById('saveNameBtn').addEventListener('click', async () => {

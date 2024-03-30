@@ -2,17 +2,17 @@ const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 const { v4: uuidv4 } = require('uuid');
-const Order =  require("../models/orderModel");
+const Order = require("../models/orderModel");
 
 
 
 
-const loadCheckout = async(req,res)=>{
+const loadCheckout = async (req, res) => {
   try {
     const user_id = req.session.user_id
-    const userData = await User.findById({_id:user_id})
-    const cart = await Cart.findOne({owner:req.session.user_id})
-    res.render('checkOut', { cart:cart,user:userData });
+    const userData = await User.findById({ _id: user_id })
+    const cart = await Cart.findOne({ owner: req.session.user_id })
+    res.render('checkOut', { cart: cart, user: userData });
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }
@@ -21,13 +21,13 @@ const loadCheckout = async(req,res)=>{
 
 const placeOrder = async (req, res) => {
   try {
-console.log("WOrking order");
+
 
     const { addressId, paymentMethod, orderNotes } = req.body;
-    const user_id = req.session.user_id
-    const user= await User.findById({_id:user_id})
-   
-    const cart = await Cart.findOne({ owner:user_id }).populate('items.productId');
+    const user_id = req.session.user_id;
+    const user = await User.findById({ _id: user_id });
+
+    const cart = await Cart.findOne({ owner: user_id }).populate('items.productId');
 
     if (!cart) {
       return res.status(400).json({ success: false, message: 'Cart Not Found' });
@@ -43,10 +43,18 @@ console.log("WOrking order");
       cart.items.map(async (item) => {
         const product = item.productId;
         let productStatus = 'active';
-        if (product.countInStock - item.quantity === 0) {
+        const updatedCountInStock = product.countInStock - item.quantity;
+
+        if (updatedCountInStock === 0) {
           productStatus = 'out-of-stock';
         }
-        await Product.findByIdAndUpdate(product._id, { status: productStatus });
+
+
+        await Product.findByIdAndUpdate(product._id, {
+          countInStock: updatedCountInStock,
+          status: productStatus,
+        });
+
         return {
           productId: product._id,
           title: product.name,
@@ -58,8 +66,9 @@ console.log("WOrking order");
         };
       })
     );
-console.log("test -2");
-    const oId = uuidv4(); // Generate a unique order ID
+
+
+    const oId = uuidv4();
 
     const orderData = {
       user: user._id,
@@ -87,24 +96,25 @@ console.log("test -2");
   }
 };
 
-const loadOderplaced = async(req,res)=>{
+
+const loadOderplaced = async (req, res) => {
   try {
     const user_id = req.session.user_id
-    const userData = await User.findById({_id:user_id})
-    const order= await Order.findOne({user:user_id})
-   res.render('orderPlaced',{user:userData,orders:order});
+    const userData = await User.findById({ _id: user_id })
+    const order = await Order.findOne({ user: user_id })
+    res.render('orderPlaced', { user: userData, orders: order });
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }
 }
 
 
-const loadOrders = async(req,res)=>{
+const loadOrders = async (req, res) => {
   try {
     const user_id = req.session.user_id
-    const userData = await User.findById({_id:user_id})
-    const order= await Order.findOne({user:user_id})
-   res.render('oders',{user:userData,orders:order});
+    const userData = await User.findById({ _id: user_id })
+    const order = await Order.findOne({ user: user_id })
+    res.render('oders', { user: userData, orders: order });
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }

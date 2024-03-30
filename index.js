@@ -1,4 +1,5 @@
 const express = require("express");
+const formData = require('express-form-data');
 const app = express();
 const session = require("express-session");
 const nocache = require("nocache");
@@ -11,7 +12,7 @@ dbConnection()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(formData.parse());
 
 app.use(
   session({

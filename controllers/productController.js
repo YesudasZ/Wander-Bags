@@ -66,14 +66,14 @@ const addProduct = async (req, res) => {
       }
       const images = [];
 
-      // Process each uploaded image
+
       for (const file of req.files) {
-        // Resize image to default size using sharp
+
         const resizedImageBuffer = await sharp(file.path)
-          .resize({ width: 1500, height: 1500 }) // Adjust width and height as needed
+          .resize({ width: 1500, height: 1500 })
           .toBuffer();
 
-        // Save resized image with a unique filename
+
         const resizedFilename = Date.now() + '-' + file.originalname;
         const imagePath = path.join(__dirname, '../public/productimages', resizedFilename);
         fs.writeFileSync(imagePath, resizedImageBuffer);
@@ -81,7 +81,7 @@ const addProduct = async (req, res) => {
         images.push(resizedFilename);
       }
 
-      // Create new product object
+
       const product = new Product({
         name: req.body.name,
         description: req.body.description,
@@ -94,7 +94,7 @@ const addProduct = async (req, res) => {
         discountPrice: req.body.discountPrice
       });
 
-      // Save the product to the database
+
       await product.save();
       res.redirect('/admin/products')
     });
@@ -106,15 +106,14 @@ const addProduct = async (req, res) => {
 
 
 const editProductPage = async (req, res) => {
-  const productId = req.params.productId; // Assuming you have a route parameter for the product ID
+  const productId = req.params.productId;
   try {
 
     const categories = await Category.find({});
 
 
-    // Fetch the product from the database
     const product = await Product.findById(productId);
-    // Render the edit product page with the product data
+
 
     res.render('editproducts', { product, categories });
   } catch (err) {
@@ -136,7 +135,7 @@ const editProduct = async (req, res) => {
         console.error(err);
         return res.status(400).send('File upload error.');
       }
-      // Logic to update the product with the provided data
+
       const updatedProduct = await Product.findByIdAndUpdate(productId, {
         name: req.body.name,
         description: req.body.description,
@@ -148,17 +147,14 @@ const editProduct = async (req, res) => {
         discountPrice: req.body.discountPrice
       }, { new: true });
 
-      // Logic to delete selected images
+
       if (req.body.deleteImages && req.body.deleteImages.length > 0) {
         for (const image of req.body.deleteImages) {
-          // Delete image file from the server or mark it for deletion depending on your logic
-          // Example: fs.unlinkSync(path.join(__dirname, '../public/productimages', image));
+
         }
-        // Remove deleted images from the product
+
         updatedProduct.images = updatedProduct.images.filter(image => !req.body.deleteImages.includes(image));
       }
-
-      // Logic to add new images
       if (req.files && req.files.length > 0) {
         const newImages = req.files.map(file => file.filename);
         updatedProduct.images = updatedProduct.images.concat(newImages);
@@ -176,22 +172,22 @@ const editProduct = async (req, res) => {
 
 
 const deleteProduct = async (req, res) => {
-  const productId = req.params.productId; // Assuming the product ID is passed in the URL params
+  const productId = req.params.productId;
   try {
-    // Check if the product ID is a valid ObjectId
+
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).send('Invalid product ID');
     }
 
-    // Find the product by ID and set its status to 'delete'
+
     const product = await Product.findByIdAndUpdate(productId, { status: 'delete' });
 
-    // Check if the product exists
+
     if (!product) {
       return res.status(404).send('Product not found');
     }
 
-    // Send a success response
+
     res.redirect('/admin/products');
   } catch (err) {
     console.error(err);
@@ -203,7 +199,7 @@ const restoreProduct = async (req, res) => {
   const productId = req.params.productId;
 
   try {
-    // Find the product by ID and update its status to 'active'
+
     const restoredProduct = await Product.findByIdAndUpdate(productId, { status: 'active' }, { new: true });
 
     if (!restoredProduct) {
