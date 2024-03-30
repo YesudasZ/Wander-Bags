@@ -303,6 +303,8 @@
     </table>
   </div>
 
+
+
  <!-- Status Modal -->
  <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -339,15 +341,26 @@
 </div>
 
 
+<div class="pagination-area ml-100 pb-30 mt-30 mb-50">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-start">
+      <li class="page-item active"><a class="page-link" href="/admin/orders?page=1">01</a></li>
+      <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= page > 1 ? page - 1 : 1 %>">«</a></li>
+      <% for (let i = 1; i <= totalOrders; i++) { %>
+        <% if (page === i) { %>
+          <li class="page-item active"><a class="page-link" href="#"><%= i %></a></li>
+        <% } else { %>
+          <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %></a></li>
+        <% } %>
+      <% } %>
+      <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= page < totalOrders ? page + 1 : totalOrders %>">»</a></li>
+    </ul>
+  </nav>
+</div>
 
-
-
-
-
-</main>
 </section>
         <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
+            <div class="row pb-30 pt-15 mt-5">
                 <div class="col-sm-6">
                     <script>
                     document.write(new Date().getFullYear())
@@ -360,7 +373,7 @@
                 </div>
             </div>
         </footer>
-  
+      </main>
     <script src="/admin-asset/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/admin-asset/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/admin-asset/js/vendors/select2.min.js"></script>

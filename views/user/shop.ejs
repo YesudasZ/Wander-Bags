@@ -156,14 +156,14 @@
                     <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
                 </div>
                 <div class="header-right d-flex align-items-center">
-                    <div class="search-style-2">
-                        <form action="#">
-                            <select class="select-active">
-                                <option>All Categories</option>
-                            </select>
-                            <input type="text" placeholder="Search for items...">
-                        </form>
-                    </div>
+                  <div class="search-style-2">
+                    <form action="/shop" method="GET">
+                      <select class="select-active">
+                        <option>All Categories</option>
+                      </select>
+                      <input type="text" name="searchQuery" placeholder="Search for items...">
+                    </form>
+                  </div>
                     <div class="header-action-right d-flex align-items-center">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
@@ -253,6 +253,8 @@
             <li><a href="#">Price: Low to High</a></li>
             <li><a href="#">Price: High to Low</a></li>
             <li><a href="#">Release Date</a></li>
+            <li><a href="#">aA-zZ</a></li>
+            <li><a href="#">zZ-aA</a></li>
             <li><a href="#">Avg. Rating</a></li>
           </ul>
         </div>
@@ -454,7 +456,7 @@
         const productElement = `
           <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
             <div class="product-item shadow rounded border">
-              <a href="/productdetails/${product.id}" class="product-link">
+              <a href="/productdetails/${product._id}" class="product-link">
                 <div class="product-thumb position-relative">
                   <img src="/productimages/${product.images[0]}" alt="${product.name}" class="img-fluid rounded">
                   <div class="product-overlay"></div>

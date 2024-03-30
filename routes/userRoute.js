@@ -60,15 +60,15 @@ user_route.post('/sort-products',auth.isLogin, userController.sortProducts);
 
 user_route.get('/productdetails/:productId',auth.isLogin,userController.getProductDetails);
 
-user_route.get('/forgetpassword',userController.loadforgetpassword)
+user_route.get('/forgetpassword',auth.isLogout,userController.loadforgetpassword)
 
 user_route.post('/forgetpassword',userController.verifyEmail)
 
-user_route.get('/forgetpasswordotp',userController.loadforgetpasswordotp)
+user_route.get('/forgetpasswordotp',auth.isLogout,userController.loadforgetpasswordotp)
 
 user_route.post('/forgetpasswordotp',userController.verifyForgetPasswordOTP)
 
-user_route.get('/resetpassword',userController.loadresetpassword)
+user_route.get('/resetpassword',auth.isLogout,userController.loadresetpassword)
 
 user_route.post('/resetpassword',userController.resetPassword)
 

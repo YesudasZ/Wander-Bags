@@ -1,13 +1,7 @@
 const User = require('../models/userModel');
-const Category = require('../models/categoryModel');
-const Product = require('../models/productModel');
 const Order =  require("../models/orderModel");
 const bcrypt = require('bcrypt')
-const multer = require('multer');
-const path = require('path');
-const mongoose = require('mongoose');
-const sharp = require('sharp');
-const fs = require('fs')
+
 
 
 
@@ -131,6 +125,10 @@ const logout = async (req, res) => {
 
 const loadOrders = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const startIndex = (page - 1) * limit;
+
     const orders = await Order.find({})
       .populate('user', 'name')
       .populate('cart')
@@ -138,17 +136,19 @@ const loadOrders = async (req, res) => {
         path: 'items.productId',
         model: 'Product',
         select: 'title image productPrice'
-      });
+      })
+      .skip(startIndex)
+      .limit(limit);
 
-    res.render('orders', { orders });
+    res.render('orders', { orders, page, limit, totalOrders: orders.length });
   } catch (error) {
     console.error(error);
-    res.redirect('/pagenotfound');
+    res.redirect('/admin/errorpage');
   }
 };
 const getOrderDetails = async (req, res) => {
   try {
-    console.log("Working");
+
       const orderId = req.params.id;
       const order = await Order.findById(orderId)
           .populate('user', 'name')
