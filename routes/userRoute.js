@@ -58,6 +58,8 @@ user_route.get('/shop',auth.isLogin,userController.loadshop)
 
 user_route.post('/sort-products',auth.isLogin, userController.sortProducts);
 
+
+
 user_route.get('/productdetails/:productId',auth.isLogin,userController.getProductDetails);
 
 user_route.get('/forgetpassword',auth.isLogout,userController.loadforgetpassword)

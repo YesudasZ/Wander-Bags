@@ -259,6 +259,7 @@
       <h1 class="text-center mb-4"></h1>
       <div class="row">
         <div class="col-md-4">
+
           <div class="address-section">
             <h3>Delivery Address</h3>
             <div class="existing-address">
@@ -289,7 +290,11 @@
               </div>
             </div>
           </div>
+          <button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#addAddressModal" >
+            Add Address
+          </button>
         </div>
+   
         <div class="col-md-8">
           <div class="cart-section p-5">
             <div class="mb-20">
@@ -433,6 +438,74 @@
 
 
 
+    <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+   
+            <form id="addAddressForm" method="post" onsubmit="return validateForm(event)">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label>House Name / Flat No.<span class="required">*</span></label>
+                  <input  class="form-control square" name="houseName" id="houseName" type="text">
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Street<span class="required">*</span></label>
+                  <input  class="form-control square" name="street" id="street" type="text">
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <div class="form-group col-md-12">
+                  <label>City <span class="required">*</span></label>
+                  <input  class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$">
+                  <small class="text-danger invalid-feedback">gjagjkgajkhgf</small>
+                </div>
+                <div class="form-group col-md-12">
+                  <label>State <span class="required">*</span></label>
+                  <input  class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$">
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <div class="form-group col-md-12">
+                  <label>Country <span class="required">*</span></label>
+                  <input class="form-control square" name="country" id="country" type="text" pattern="^[a-zA-Z\s]+$">
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <div class="form-group col-md-12">
+                  <label>Postalcode <span class="required">*</span></label>
+                  <input class="form-control square" name="postalCode" id="postalCode" type="text" pattern="^[0-9]+$">
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <div class="form-group col-md-12">
+                  <label>Type <span class="required">*</span></label>
+                  <select class="form-control" id="addressType" name="addressType">
+                    <option value="home">Home</option>
+                    <option value="office">Office</option>
+                  </select>
+                  <small class="text-danger invalid-feedback"></small>
+                </div>
+                <!-- <div class="col-md-12">
+                  <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                </div> -->
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" form="addAddressForm" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
       <footer class="main bg-secondary text-light">
         <section class="section-padding footer-mid">
           <div class="container pt-15 pb-20">
@@ -570,7 +643,7 @@
 
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
       <script>
 
@@ -748,6 +821,133 @@ placeOrderBtn.addEventListener('click', () => {
       // Handle network error
     });
 });
+
+
+// Form Validation
+function validateForm(event) {
+  event.preventDefault(); // Prevent form submission
+
+  // Get form fields
+  const houseNameField = document.getElementById('houseName');
+  const streetField = document.getElementById('street');
+  const cityField = document.getElementById('city');
+  const stateField = document.getElementById('state');
+  const countryField = document.getElementById('country');
+  const postalCodeField = document.getElementById('postalCode');
+  const addressTypeField = document.getElementById('addressType');
+
+  // Reset error messages
+  const invalidFeedbacks = document.querySelectorAll('.invalid-feedback');
+  invalidFeedbacks.forEach(feedback => feedback.textContent = '');
+
+  let isValid = true;
+
+  // Validate form fields
+  if (houseNameField.value.trim() === '') {
+    houseNameField.nextElementSibling.textContent = 'Please enter a house name/flat no.';
+    isValid = false;
+  }
+
+  if (streetField.value.trim() === '') {
+    streetField.nextElementSibling.textContent = 'Please enter a street.';
+    isValid = false;
+  }
+
+  // Add validation for other fields as needed
+
+  if (isValid) {
+    // If form is valid, submit the form
+    addAddress();
+  }
+}
+
+function addAddress() {
+  const formData = new FormData(document.getElementById('addAddressForm'));
+
+  fetch('/profile/addAddress', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(Object.fromEntries(formData))
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.text();
+    } else {
+      throw new Error('Failed to add address');
+    }
+  })
+  .then(data => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Address Added',
+      text: data
+    });
+
+    // Close the modal manually
+    const modal = document.getElementById('addAddressModal');
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.style.display = 'none';
+    if (modalBackdrop) {
+      modalBackdrop.remove();
+    }
+
+    // Reset the form
+    document.getElementById('addAddressForm').reset();
+    
+    // Fetch and display the new address
+    fetchAndDisplayAddress();
+
+  
+  })
+  .catch(error => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: error.message
+    });
+  });
+}
+// Fetch and Display Address
+function fetchAndDisplayAddress() {
+  fetch('/admin/checkout')
+    .then(response => response.json())
+    .then(addresses => {
+      const addressList = document.querySelector('.address-list');
+      addressList.innerHTML = ''; // Clear existing addresses
+
+      addresses.forEach(address => {
+        const addressCard = document.createElement('div');
+        addressCard.classList.add('address-card', 'mb-3');
+        addressCard.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <div class="form-check">
+                <input type="radio" name="address" id="${address._id}" value="${address._id}" class="form-check-input" required>
+                <label for="${address._id}" class="form-check-label">
+                  ${address.houseName}<br>
+                  ${address.street}<br>
+                  ${address.city}<br>
+                  ${address.state}<br>
+                  ${address.country}<br>
+                  ${address.postalCode}
+                </label>
+              </div>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">Edit</button>
+            </div>
+          </div>
+        `;
+
+        addressList.appendChild(addressCard);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching addresses:', error);
+    });
+}
 
       </script>
 

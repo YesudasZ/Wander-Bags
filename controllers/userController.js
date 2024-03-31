@@ -263,37 +263,44 @@ const loadHome = async (req, res) => {
 }
 
 
+
 const sortProducts = async (req, res) => {
   try {
-    const { sortOption } = req.body;
+    const { sortOption, searchQuery } = req.body;
     let sortQuery = {};
+    let searchRegex = {};
+
+    if (searchQuery) {
+      searchRegex = { name: { $regex: new RegExp(searchQuery, 'i') } };
+    }
+
     switch (sortOption) {
-      case 'Price: Low to High':
+      case 'priceLowToHigh':
         sortQuery = { discountPrice: 1 };
         break;
-      case 'Price: High to Low':
+      case 'priceHighToLow':
         sortQuery = { discountPrice: -1 };
         break;
-      case 'Release Date':
+      case 'releaseDate':
         sortQuery = { productAddDate: -1 };
         break;
-      case 'aA-zZ':
+      case 'aAtoZZ':
         sortQuery = { name: 1 };
         break;
-      case 'zZ-aA':
+      case 'zZtoaA':
         sortQuery = { name: -1 };
         break;
       default:
         sortQuery = {};
     }
-    const sortedProducts = await Product.find().sort(sortQuery);
+
+    const sortedProducts = await Product.find(searchRegex).sort(sortQuery);
     res.json(sortedProducts);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
-
 
 const loadforgetpassword = async (req, res) => {
   try {
@@ -553,6 +560,7 @@ module.exports = {
   verifyEmail,
   verifyForgetPasswordOTP,
   resetPassword
+  
 
 
 }
