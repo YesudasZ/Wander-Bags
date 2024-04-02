@@ -110,5 +110,6 @@ user_route.get('/orderPlaced',auth.isLogin,orderController.loadOderplaced)
 
 user_route.put('/orders/:id/cancel',auth.isLogin, orderController.cancelOrder);
 
+user_route.post('/create/razorpayOrder',auth.isLogin,orderController.manageRazorpayOrder)
 
 module.exports = user_route;

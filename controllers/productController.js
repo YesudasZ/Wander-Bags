@@ -135,7 +135,7 @@ const editProduct = async (req, res) => {
         console.error(err);
         return res.status(400).send('File upload error.');
       }
-
+      console.log("categ");
       const updatedProduct = await Product.findByIdAndUpdate(productId, {
         name: req.body.name,
         description: req.body.description,

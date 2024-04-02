@@ -2,7 +2,9 @@ const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 const { v4: uuidv4 } = require('uuid');
+const axios = require('axios')
 const Order = require("../models/orderModel");
+require('dotenv').config();
 
 
 
@@ -149,10 +151,60 @@ const cancelOrder = async (req, res) => {
 
 
 
+const razorpayOrder = async (data)=>{
+  try {
+    console.log(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_SECRET_KEY}`);
+    const respose = await axios.post('https://api.razorpay.com/v1/orders',data,{
+      headers:{
+        'Content-Type':"application/json",
+        "Authorization": `Basic ${Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_SECRET_KEY}`).toString('base64')}`
+      }
+    })
+    const  orderData = respose.data;
+  
+     return orderData   
+  } catch (error) {
+    console.error('Error creating RazorPay order:', error);
+        throw new Error('Failed to create RazorPay order');
+  }
+
+}
+
+const manageRazorpayOrder =  async (req,res)=> {
+  try {
+
+    console.log("TEST razorpay");
+    const user = await User.findById({ _id: req.session.user_id });
+    const cart = await Cart.findOne({ owner: req.session.user_id })
+
+  const cartId = cart._id
+  const  billTotal = cart.billTotal
+const email = user.email
+    if (!cart) {
+    return res.status(400).json({ success: false, message: 'Cart not found' });
+    }    
+    let data={
+      amount : billTotal*100,   //In INR
+      currency:"INR",  
+      receipt:`receipt_${cartId}`,
+      payment_capture:1,
+     
+    }
+    const orderData = await razorpayOrder(data);
+    console.log("test for data",orderData);
+    res.status(200).json(orderData);
+  } catch (error) {
+    console.error('Error creating RazorPay order:', error);
+    res.status(500).json({success:false,message:'Internal Server Error'});
+  }
+}
+
+
 module.exports = {
   loadCheckout,
   placeOrder,
   loadOderplaced,
   loadOrders,
-  cancelOrder
+  cancelOrder,
+  manageRazorpayOrder 
 }

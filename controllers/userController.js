@@ -3,6 +3,14 @@ const Product = require('../models/productModel');
 const Order = require("../models/orderModel");
 const bcrypt = require('bcrypt')
 const nodemailer = require("nodemailer");
+// const Razorpay = require("razorpay")
+require('dotenv').config();
+
+
+// var instance = new Razorpay({
+//   key_id: process.env.rzpkey_id,
+//   key_secret: process.env.rzpkey_secret,
+// });
 
 
 const generateOTP = () => {
@@ -236,19 +244,34 @@ const otpverify = async (req, res) => {
 const loadshop = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.user_id });
+    const currentPage = req.query.page || 1;
+    const perPage = 9; // Number of products per page
+
     let products;
+    let totalProducts;
+
     if (req.query.searchQuery) {
       const searchRegex = new RegExp(req.query.searchQuery, 'i');
-      products = await Product.find({ name: { $regex: searchRegex } });
+      products = await Product.find({ name: { $regex: searchRegex } })
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+      totalProducts = await Product.countDocuments({ name: { $regex: searchRegex } });
     } else {
-      products = await Product.find();
+      products = await Product.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+      totalProducts = await Product.countDocuments();
     }
-    res.render('shop', { products, user: userData });
+
+    const totalPages = Math.ceil(totalProducts / perPage);
+
+    res.render('shop', { products, user: userData, currentPage, totalPages });
   } catch (error) {
     console.log(error.message);
     res.redirect('/pagenotfound');
   }
 };
+
 
 
 const loadHome = async (req, res) => {

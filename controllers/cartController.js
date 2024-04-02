@@ -3,123 +3,116 @@ const Product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 
 
-const loadCart = async (req,res)=>{
-  try {
-    const  userData = await User.findById({_id:req.session.user_id})
-    const cart = await Cart.findOne({ owner: userData._id }).populate('items.productId');
+const loadCart = async (req, res) => {
+    try {
+        const userData = await User.findById({ _id: req.session.user_id })
+        const cart = await Cart.findOne({ owner: userData._id }).populate('items.productId');
 
-    res.render('cart', { cart:cart,user:userData });
-  } catch (error) {
-    console.log(error.message);
-    res.redirect('/pagenotfound')
-  }
+        res.render('cart', { cart: cart, user: userData });
+    } catch (error) {
+        console.log(error.message);
+        res.redirect('/pagenotfound')
+    }
 }
 
 
 const addToCart = async (req, res) => {
-  try {
-      const { productId } = req.body;
-      let userCart = await Cart.findOne({ owner: req.session.user_id });
+    try {
+        const { productId } = req.body;
+        let userCart = await Cart.findOne({ owner: req.session.user_id });
 
-      if (!userCart) {
-        userCart = new Cart({
-          owner:req.session.user_id,
-          items: [],
-          billTotal: 0,
-      });
-      }
+        if (!userCart) {
+            userCart = new Cart({
+                owner: req.session.user_id,
+                items: [],
+                billTotal: 0,
+            });
+        }
 
-      const product = await Product.findById(productId);
+        const product = await Product.findById(productId);
 
-      if (!product || product.countInStock <= 0) {
-          return res.status(400).json({ success: false, message: 'This product is currently unavailable.' });
-      }
+        if (!product || product.countInStock <= 0) {
+            return res.status(400).json({ success: false, message: 'This product is currently unavailable.' });
+        }
 
-      const existingCartItemIndex = userCart.items.findIndex(item => item.productId.toString() === productId);
+        const existingCartItemIndex = userCart.items.findIndex(item => item.productId.toString() === productId);
 
-      if (existingCartItemIndex !== -1) {
-          const cartItem = userCart.items[existingCartItemIndex];
-          if (cartItem.quantity >= 4 || cartItem.quantity >= product.countInStock) {
-              return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
-          }
-          if (cartItem.quantity + 1 > product.countInStock) {
-              return res.status(403).json({ success: false, message: 'Product out of stock.' });
-          }
-          cartItem.quantity += 1;
-          cartItem.price = cartItem.quantity * product.discountPrice;
-          userCart.items[existingCartItemIndex] = cartItem;
-      } else {
-          if (product.countInStock < 1) {
-              return res.status(403).json({ success: false, message: 'Product out of stock.' });
-          }
-          if (product.countInStock <= 2 && product.countInStock >= 1) {
-              const quantityToAdd = product.countInStock <= 4 ? product.countInStock : 4;
-              userCart.items.push({
-                  productId: productId,
-                  title: product.name,
-                  image: product.images,
-                  productPrice: product.discountPrice,
-                  quantity: quantityToAdd,
-                  price: quantityToAdd * product.discountPrice,
-                  productStatus: 'active',
-                  selected: false
-              });
-          } else {
-              userCart.items.push({
-                  productId: productId,
-                  title: product.name,
-                  image: product.images,
-                  productPrice: product.discountPrice,
-                  quantity: 1,
-                  price: product.discountPrice,
-                  productStatus: 'active',
-                  selected: false
-              });
-          }
-      }
+        if (existingCartItemIndex !== -1) {
+            const cartItem = userCart.items[existingCartItemIndex];
+            if (cartItem.quantity >= 4 || cartItem.quantity >= product.countInStock) {
+                return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
+            }
+            if (cartItem.quantity + 1 > product.countInStock) {
+                return res.status(403).json({ success: false, message: 'Product out of stock.' });
+            }
+            cartItem.quantity += 1;
+            cartItem.price = cartItem.quantity * product.discountPrice;
+            userCart.items[existingCartItemIndex] = cartItem;
+        } else {
+            if (product.countInStock < 1) {
+                return res.status(403).json({ success: false, message: 'Product out of stock.' });
+            }
+            if (product.countInStock <= 2 && product.countInStock >= 1) {
+                const quantityToAdd = product.countInStock <= 4 ? product.countInStock : 4;
+                userCart.items.push({
+                    productId: productId,
+                    title: product.name,
+                    image: product.images,
+                    productPrice: product.discountPrice,
+                    quantity: quantityToAdd,
+                    price: quantityToAdd * product.discountPrice,
+                    productStatus: 'active',
+                    selected: false
+                });
+            } else {
+                userCart.items.push({
+                    productId: productId,
+                    title: product.name,
+                    image: product.images,
+                    productPrice: product.discountPrice,
+                    quantity: 1,
+                    price: product.discountPrice,
+                    productStatus: 'active',
+                    selected: false
+                });
+            }
+        }
 
-      userCart.billTotal = userCart.items.reduce((total, item) => total + item.price, 0);
-      await userCart.save();
-      
-      res.status(200).json({ success: true, message: 'Product added to cart successfully' });
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
-  }
+        userCart.billTotal = userCart.items.reduce((total, item) => total + item.price, 0);
+        await userCart.save();
+
+        res.status(200).json({ success: true, message: 'Product added to cart successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
 };
 
 
 
 const updateCartItemQuantity = async (req, res) => {
     try {
-        
         const { productId } = req.params;
         const { quantity } = req.body;
-
-
         let userCart = await Cart.findOne({ owner: req.session.user_id });
-        
         if (!userCart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
         }
-       
         const existingCartItemIndex = userCart.items.findIndex(item => item._id.toString() === productId);
-   
-     
         if (existingCartItemIndex === -1) {
             return res.status(404).json({ success: false, message: 'Product not found in cart' });
         }
-
         const cartItem = userCart.items[existingCartItemIndex];
         const product = await Product.findById(cartItem.productId);
-      
-               if (!product || product.countInStock <= 0) {
+
+        if (!product || product.countInStock <= 0) {
             return res.status(400).json({ success: false, message: 'This product is currently unavailable.' });
         }
 
         if (quantity > product.countInStock) {
-            cartItem.quantity = product.countInStock;
-            cartItem.productStatus = 'Limit-Exceeded';
+            return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
+            // cartItem.quantity = product.countInStock;
+            // cartItem.productStatus = 'Limit-Exceeded';
         } else if (quantity > 4) {
             return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
         } else {
@@ -143,9 +136,9 @@ const updateCartItemQuantity = async (req, res) => {
 
 const removeCartItem = async (req, res) => {
     try {
-        
+
         const { productId } = req.params;
-   
+
         let userCart = await Cart.findOne({ owner: req.session.user_id });
 
         if (!userCart) {
@@ -153,7 +146,7 @@ const removeCartItem = async (req, res) => {
         }
 
         const itemIndex = userCart.items.findIndex(item => item._id.toString() === productId);
-  
+
         if (itemIndex === -1) {
             return res.status(404).json({ success: false, message: 'Product not found in cart' });
         }
@@ -259,11 +252,11 @@ const getCartTotals = async (req, res) => {
 
 
 module.exports = {
-loadCart,
-addToCart,
-updateCartItemQuantity,
-removeCartItem,
-updateCart,
-clearCart,
-getCartTotals
+    loadCart,
+    addToCart,
+    updateCartItemQuantity,
+    removeCartItem,
+    updateCart,
+    clearCart,
+    getCartTotals
 }
