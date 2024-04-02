@@ -3,14 +3,11 @@ const Product = require('../models/productModel');
 const Order = require("../models/orderModel");
 const bcrypt = require('bcrypt')
 const nodemailer = require("nodemailer");
-// const Razorpay = require("razorpay")
+const Cart = require('../models/cartModel')
+const Wishlist = require('../models/wishlistModel')
 require('dotenv').config();
 
 
-// var instance = new Razorpay({
-//   key_id: process.env.rzpkey_id,
-//   key_secret: process.env.rzpkey_secret,
-// });
 
 
 const generateOTP = () => {
@@ -424,9 +421,9 @@ const loadresetpassword = async (req, res) => {
 
 const getProductDetails = async (req, res) => {
   try {
-    console.log(req.params.productId);
+   
     const userData = await User.findById({ _id: req.session.user_id })
-    console.log(req.params.productId);
+   
     const productId = req.params.productId;
     const product = await Product.findById(productId);
     res.render('productdetails', { product, user: userData });
@@ -552,6 +549,72 @@ const deleteAddress = async (req, res) => {
 };
 
 
+const loadWishlist = async(req,res)=>{
+  try {
+    const userData = await User.findById({ _id: req.session.user_id })
+    const wishlist = await Wishlist.findOne({ user: userData._id }).populate('items.productId');
+    res.render('wishList', { user: userData,wishlist: wishlist });
+} catch (error) {
+    console.log(error.message);
+    res.redirect('/pagenotfound')
+}
+}
+ 
+const addToWishlist = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Product Not Found" });
+    }
+
+    let userId = req.session.user_id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "user is not found" });
+    }
+
+    let wishlist = await Wishlist.findOne({ user: userId });
+
+    if (!wishlist) {
+      wishlist = new Wishlist({
+        user: userId, 
+        items: [],
+        status: "added",
+      });
+    }
+
+ 
+    if (
+      wishlist.items.some((item) => item.productId.toString() === productId)
+    ) {
+      return res
+        .status(409)
+        .json({
+          success: false,
+          message: "Item already exists in the wishlist",
+        });
+    }
+
+    if (wishlist) {
+      wishlist.items.push({
+        productId: productId,
+      });
+    }
+    await wishlist.save();
+  
+    return res.status(200).json({success: true ,message: 'Product added to wishlist successfully'});
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
 
 
 module.exports = {
@@ -582,7 +645,9 @@ module.exports = {
   sortProducts,
   verifyEmail,
   verifyForgetPasswordOTP,
-  resetPassword
+  resetPassword,
+  loadWishlist,
+  addToWishlist
   
 
 

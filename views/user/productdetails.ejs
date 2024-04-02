@@ -20,6 +20,15 @@
   <style>
 
 
+.product-extra-links {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Align items vertically center */
+}
+
+/* Optional: Add margin between items */
+.product-extra-links > * {
+    margin-right: 10px;
+}
 
 
 /* Custom CSS for Product Details Section */
@@ -428,17 +437,21 @@
   </div>
   <hr>
   <div class="product-actions mt-3 trendy-actions">
-      <div class="product-extra-links trendy-extra-links">
-          <button type="button" class="btn btn-primary mr-2 trendy-btn" id="addToCartBtn" data-productid="<%= product._id %>">
-              ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
-          </button>
-          <button type="submit" class="btn btn-success trendy-btn">
-              BUY NOW
-          </button>
-          <a aria-label="Add To Wishlist" class="btn btn-light ml-2 trendy-btn" href="shop-wishlist.html"><i class="bi bi-heart trendy-icon"></i></a>
-          <a aria-label="Compare" class="btn btn-light ml-2 trendy-btn" href="shop-compare.html"><i class="bi bi-shuffle trendy-icon"></i></a>
-      </div>
+    <div class="product-extra-links trendy-extra-links">
+      <button type="button" class="btn btn-primary mr-2 trendy-btn" id="addToCartBtn" data-productid="<%= product._id %>">
+          ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
+      </button>
+      <button type="submit" class="btn btn-success trendy-btn">
+          BUY NOW
+      </button>
+      <button type="button" class="btn btn-warning trendy-btn" id="addToWishlistBtn" data-productid="<%= product._id %>">
+        ADD TO WISHLIST <i class="fi-rs-heart trendy-icon"></i>
+    </button>
   </div>
+  
+</div>
+
+
 </div>
                 <!-- End Product Details -->
 
@@ -655,6 +668,48 @@
             });
         });
     });
+
+
+    const addToWishlistBtn = document.getElementById('addToWishlistBtn');
+addToWishlistBtn.addEventListener('click', async () => {
+    const productId = addToWishlistBtn.dataset.productid;
+
+    
+        const response = await fetch('/wishList/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId }),
+        })
+        .then(response => response.json())
+        .then( data=> {
+          if(data.success){
+            // Product added to wishlist successfully
+            Swal.fire({
+                title: 'Success',
+                text: data.message,
+                icon: 'success',
+            });
+        } else {
+            // Error adding product to wishlist
+            Swal.fire({
+                title: 'Oops',
+                text: data.message,
+                icon: 'oops',
+            });
+        }
+    } ).catch (error=> {
+        console.error('Error:', error);
+        // Handle network error
+        Swal.fire({
+            title: 'Error',
+            text: 'Failed to add product to wishlist',
+            icon: 'error',
+        });
+    })
+})
+
 </script>
 
 </body>

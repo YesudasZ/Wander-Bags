@@ -112,4 +112,9 @@ user_route.put('/orders/:id/cancel',auth.isLogin, orderController.cancelOrder);
 
 user_route.post('/create/razorpayOrder',auth.isLogin,orderController.manageRazorpayOrder)
 
+user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
+
+user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)
+
+
 module.exports = user_route;
