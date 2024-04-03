@@ -199,18 +199,23 @@
                         <tbody>
                             <% wishlist.items.forEach(item => { %>
                             <tr>
-                                <td class="image product-thumbnail"><img src="/productimages/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></td>
-                                <td class="product-des product-name">
-                                    <h5 class="product-name"><a href="/product/<%= item.productId._id %>"><%= item.productId.name %></a></h5>
+                                <td class="image product-thumbnail align-middle"><img src="/productimages/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></td>
+                                <td class="product-des product-name align-middle">
+                                    <h5 class="product-name"><a href="/product/<%= item.productId._id %>"  style="color: #000000;"><%= item.productId.name %></a></h5>
                                 </td>
-                                <td class="price" data-title="Price"><span>₹.<%= item.productId.discountPrice %></span></td>
-                                <td class="text-center" data-title="Stock">
-                                    <span class="color3 font-weight-bold"><%= item.productId.countInStock > 0 ? 'In Stock' : 'Out of Stock' %></span>
-                                </td>
-                                <td class="text-right" data-title="Cart">
-                                    <button class="btn btn-sm"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
-                                </td>
-                                <td class="action" data-title="Remove"><a href="/wishlist/remove/<%= item.productId._id %>"><i class="fi-rs-trash"></i></a></td>
+                                <td class="price align-middle" data-title="Price"><span>₹.<%= item.productId.discountPrice %></span></td>
+                                <td class="text-center align-middle" data-title="Stock">
+                                  <span class="font-weight-bold" style="color:<%= item.productId.countInStock > 0 ? 'green' : 'red' %>;"><%= item.productId.countInStock > 0 ? 'In Stock' : 'Out of Stock' %></span>
+                              </td>
+                                <td class="text-right align-middle" data-title="Cart">
+                                  <button class="btn btn-success btn-sm trendy-btn mr-2" id="addToCartBtn" data-productid="<%= item.productId._id %>"><i class="fi-rs-shopping-bag mr-2"></i>Add to Cart</button>
+                              </td>
+                                <td class="action align-middle" data-title="Remove">
+                                  <button class="remove-btn btn-danger" data-productid="<%= item.productId._id %>">
+                                      <i class="fi-rs-trash"></i>
+                                  </button>
+                              </td>
+                              
                             </tr>
                             <% }) %>
                         </tbody>
@@ -220,6 +225,7 @@
         </div>
     </div>
 </section>
+
 
 
 
@@ -371,6 +377,91 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
+  <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const removeButtons = document.querySelectorAll('.remove-btn');
+
+    removeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-productid');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to remove this product from your Wishlist!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/wishList/remove/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Remove the product row from the table
+                            button.closest('tr').remove();
+                            Swal.fire('Removed!', 'Product has been removed from your Wishlist.', 'success');
+                        } else {
+                            Swal.fire('Error!', 'Failed to remove product from Wishlist.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire('Error!', 'Failed to remove product from Wishlist.', 'error');
+                    });
+                }
+            });
+        });
+    });
+});
+
+
+document.getElementById('addToCartBtn').addEventListener('click', function() {
+        var productId = this.getAttribute('data-productid');
+        
+      
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId: productId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: data.message
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!'
+            });
+        });
+    });
+
+
+
+  </script>
 
 </body>
 

@@ -3,7 +3,8 @@ const user_route = express();
 const auth = require('../middleware/userauth');
 const passport = require('passport')
  require('../passport');
-
+ const formData = require('express-form-data');
+ //user_route.use(formData.parse());
 
  user_route.use(passport.initialize());
 
@@ -115,6 +116,8 @@ user_route.post('/create/razorpayOrder',auth.isLogin,orderController.manageRazor
 user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
 
 user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)
+
+user_route.delete('/wishList/remove/:productId', auth.isLogin, userController.removeFromWishlist);
 
 
 module.exports = user_route;

@@ -617,6 +617,35 @@ const addToWishlist = async (req, res) => {
 };
 
 
+
+const removeFromWishlist= async (req, res) => {
+  try {
+      const { productId } = req.params;
+      const userId = req.session.user_id;
+      
+      const wishlist = await Wishlist.findOne({ user: userId });
+
+      if (!wishlist) {
+          return res.status(404).json({ success: false, message: 'Wishlist not found' });
+      }
+
+      const index = wishlist.items.findIndex(item => item.productId.toString() === productId);
+
+      if (index === -1) {
+          return res.status(404).json({ success: false, message: 'Product not found in Wishlist' });
+      }
+
+      wishlist.items.splice(index, 1);
+      await wishlist.save();
+
+      return res.status(200).json({ success: true, message: 'Product removed from Wishlist' });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
 module.exports = {
   loginLoad,
   loadRegister,
@@ -647,7 +676,8 @@ module.exports = {
   verifyForgetPasswordOTP,
   resetPassword,
   loadWishlist,
-  addToWishlist
+  addToWishlist,
+  removeFromWishlist
   
 
 
