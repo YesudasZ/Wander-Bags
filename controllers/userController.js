@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require("nodemailer");
 const Cart = require('../models/cartModel')
 const Wishlist = require('../models/wishlistModel')
+const Wallet = require("../models/walletModel")
 require('dotenv').config();
 
 
@@ -451,7 +452,9 @@ const loadprofile = async (req, res) => {
     const user_id = req.session.user_id
     const orders = await Order.find({ user: user_id })
     const userData = await User.findById({ _id: req.session.user_id })
-    res.render('profile', { user: userData, orders: orders, errorMessage: null, successMessage: null })
+    const wallet = await  Wallet.findOne({ user: user_id})
+    console.log("tewst",wallet);
+    res.render('profile', { user: userData, orders: orders,wallet:wallet, errorMessage: null, successMessage: null })
   } catch (error) {
     console.error(error);
     res.redirect('/pagenotfound')

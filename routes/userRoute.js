@@ -111,6 +111,8 @@ user_route.get('/orderPlaced',auth.isLogin,orderController.loadOderplaced)
 
 user_route.put('/orders/:id/cancel',auth.isLogin, orderController.cancelOrder);
 
+user_route.put('/orders/:id/return',auth.isLogin, orderController.returnOrderAndRefund);
+
 user_route.post('/create/razorpayOrder',auth.isLogin,orderController.manageRazorpayOrder)
 
 user_route.get('/wishList',auth.isLogin,userController.loadWishlist)

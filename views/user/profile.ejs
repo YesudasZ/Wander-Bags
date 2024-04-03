@@ -289,7 +289,9 @@
                     <i class="fi-rs-shopping-bag mr-10"></i>Orders
                   </a>
                 </li>
-
+                <li class="nav-item">
+                  <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#Wallet" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Wallet</a>
+              </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">
                     <i class="fi-rs-sign-out mr-10"></i>Logout
@@ -366,13 +368,15 @@
                                 <%= order.orderStatus %>
                               </span></td>
                             <td>
-                              <% if (order.orderStatus.toLowerCase()==='pending' ||
-                                order.orderStatus.toLowerCase()==='confirmed' ) { %>
+                              <% if (order.orderStatus.toLowerCase() === 'pending' || order.orderStatus.toLowerCase() === 'confirmed') { %>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                  data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                    data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                <% } else if (order.orderStatus.toLowerCase() === 'delivered') { %>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return Order</button>
                                 <% } else { %>
-                                  <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
-                                  <% } %>
+                                <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
+                                <% } %>
                             </td>
                           </tr>
                           <% }) %>
@@ -382,6 +386,75 @@
                 </div>
               </div>
 
+
+              <!-- Return Order Modal -->
+<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="returnOrderForm">
+                <div class="form-group">
+                    <label for="returnReason">Reason for Return</label>
+                    <input type="text" class="form-control" id="returnReason" required>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="confirmReturnOrder">Confirm Return</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
+  <div class="wallet-info">
+      <h1>Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h1>
+  </div>
+  
+  <div class="wallet-history">
+      <div class="card">
+          <div class="card-header">
+              <h5 class="mb-0">Wallet History</h5>
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Order Id</th>
+                              <th>Amount</th>
+                              <th>Order Status</th>
+                              <th>Payment Method</th>
+                              <th>Payment Status</th>
+                              <th>Transaction Date</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <% wallet.forEach(item => { %>
+                          <tr>
+                              <td><%= item.orderId %></td>
+                              <td><%= item.amount.toFixed(2) %></td>
+                              <td><%= item.orderStatus %></td>
+                              <td><%= item.paymentMethod %></td>
+                              <td><%= item.paymentStatus %></td>
+                              <td><%= item.transactionDate %></td>
+                          </tr>
+                          <% }) %>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
               <!-- Cancel Order Modal -->
               <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog"
@@ -1169,21 +1242,26 @@ function validateForm() {
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-
-              $('#cancelOrderModal').modal('hide');
-              showToast('Order cancelled successfully', 'success');
-              updateOrderStatus(orderId, 'Cancelled');
-
               Swal.fire({
+                title: 'Success',
+                text: data.message,
                 icon: 'success',
-                title: 'Order Cancelled',
-                text: 'Order cancelled successfully',
-                timer: 3000,
-                onClose: () => {
-                  updateOrderStatus(orderId, 'Cancelled');
-
-                }
-              });
+            }).then(() => {
+              updateOrderStatus(orderId, 'Cancelled');
+      });
+                   
+                    window.location.reload()
+              // $('#cancelOrderModal').modal('hide');
+              // showToast('Order cancelled successfully', 'success');
+             
+              // window.location.reload();
+              // Swal.fire({
+              //   icon: 'success',
+              //   title: 'Order Cancelled',
+              //   text: 'Order cancelled successfully',
+              //   timer: 3000,
+             
+              // });
             } else {
               showToast('Failed to cancel order', 'error');
             }
@@ -1256,6 +1334,67 @@ console.log(addressId);
     });
   }
 
+
+
+  $(document).ready(function () {
+    let selectedOrderId;
+
+    // Listen for the 'show.bs.modal' event on the returnOrderModal
+    $('#returnOrderModal').on('show.bs.modal', function (event) {
+        // Get the button that triggered the modal
+        const button = $(event.relatedTarget);
+
+        // Get the order ID from the button's data attribute
+        selectedOrderId = button.data('order-id');
+        console.log('Modal is being shown for orderId:', selectedOrderId);
+    });
+
+    // Handle click on the confirmReturnOrder button
+    $('#confirmReturnOrder').click(function () {
+        const returnReason = $('#returnReason').val();
+        console.log('Returning order with orderId:', selectedOrderId);
+        returnOrder(selectedOrderId, returnReason);
+    });
+
+    function returnOrder(orderId, returnReason) {
+        console.log('Returning order with orderId:', orderId);
+        fetch(`/orders/${orderId}/return`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    returnReason
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log("data test",data);
+                if (data.success) {
+                    $('#returnOrderModal').modal('hide');
+                    Swal.fire({
+                title: 'Success',
+                text: data.message,
+                icon: 'success',
+            }).then(() => {
+              updateOrderStatus(orderId, 'Returned');
+      });
+                   
+                    window.location.reload()
+                } else {
+                  Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: 'Failed to return product'
+                            });
+                }
+            })
+            .catch(error => {
+                console.error('Error returning order:', error);
+                showToast('An error occurred while returning the order', 'error');
+            });
+    }
+});
 
 
   </script>

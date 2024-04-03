@@ -4,6 +4,7 @@ const Cart = require('../models/cartModel')
 const { v4: uuidv4 } = require('uuid');
 const axios = require('axios')
 const Order = require("../models/orderModel");
+const Wallet = require("../models/walletModel")
 require('dotenv').config();
 
 
@@ -200,11 +201,59 @@ const email = user.email
 }
 
 
+const returnOrderAndRefund = async (req, res) => {
+
+  const  orderId  = req.params.id;
+  const { returnReason } = req.body;
+
+  try {
+    
+      // Find the order
+      const order = await Order.findById(orderId);
+   
+      if (!order) {
+          return res.status(404).json({ success: false, message: "Order not found" });
+      }
+
+      // Update order status to 'Returned' and save
+      order.orderStatus = 'Returned';
+      order.returnReason = returnReason
+      await order.save();
+
+      // Calculate the refund amount (assuming full refund for simplicity)
+      const refundAmount = order.billTotal;
+
+      // Check if the user has a wallet
+      console.log("TEST-2",req.session.user_id);
+      let wallet = await Wallet.findOne({ user:req.session.user_id});
+
+      // If the user doesn't have a wallet, create a new one
+      if (!wallet) {
+          wallet = new Wallet({
+              user: req.session.user_id,
+              walletBalance: 0
+          });
+      }
+   
+      // Add refund amount to wallet balance
+      wallet.walletBalance += refundAmount;
+      wallet.refundAmount += refundAmount;
+      await wallet.save();
+      console.log("TEST-1");
+      return res.status(200).json({ success: true, message: "Order returned successfully and refund processed to wallet" });
+  } catch (error) {
+      console.error("Error returning order and refunding amount:", error);
+      return res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   loadCheckout,
   placeOrder,
   loadOderplaced,
   loadOrders,
   cancelOrder,
-  manageRazorpayOrder 
+  manageRazorpayOrder,
+  returnOrderAndRefund
 }
