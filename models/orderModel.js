@@ -5,53 +5,53 @@ const objectID = Schema.Types.ObjectId;
 const orderSchema = Schema({
     user: {
         type: ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true
     },
-    
-    cart:{
+
+    cart: {
         type: ObjectId,
-        ref:'Cart'
+        ref: 'Cart'
     },
-    oId:{
-       type:String,
-       required:true
+    oId: {
+        type: String,
+        required: true
     },
-    orderStatus:{
-        type:String,
-        enum:['Pending','Confirmed','Shipped','Delivered','Cancelled','Returned'],
-        default:'Pending',
+    orderStatus: {
+        type: String,
+        enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'],
+        default: 'Pending',
     },
-    items:[{
-        productId:{
-            type:objectID,
-            ref:'Product'
+    items: [{
+        productId: {
+            type: objectID,
+            ref: 'Product'
         },
-        title:{
+        title: {
             type: String,
-            required:true
+            required: true
         },
         image: [{
             type: String,
             required: true
         }],
-        productPrice:{
-            type:Number,
-            required:true
+        productPrice: {
+            type: Number,
+            required: true
         },
-        quantity:{
-            type:Number,
-            required:true,
-            min:[1,'Quantity can not be less than one.'],
-            default:1
+        quantity: {
+            type: Number,
+            required: true,
+            min: [1, 'Quantity can not be less than one.'],
+            default: 1
         },
-        price:{
-            type:Number,
+        price: {
+            type: Number,
         },
     }],
-    billTotal:{
-        type:Number,
-        required:true
+    billTotal: {
+        type: Number,
+        required: true
     },
     shippingAddress: {
         street: String,
@@ -62,30 +62,30 @@ const orderSchema = Schema({
     },
     paymentMethod: {
         type: String,
-        required:true
-      },
-      paymentStatus: {
+        required: true
+    },
+    paymentStatus: {
         type: String,
-        enum: ['Pending', 'Success', 'Failed','Refunded'],
+        enum: ['Pending', 'Success', 'Failed', 'Refunded'],
         default: 'Pending',
-      },
-      orderDate: {
+    },
+    orderDate: {
         type: Date,
         default: Date.now,
-      },
-      orderNotes: {
-        type: String,
-        default:''
     },
-    cancellationReason:{
+    orderNotes: {
         type: String,
         default: ''
     },
-    reasonForReturn:{
-    default:'nil',
-    type:String
-   }
-},{
+    cancellationReason: {
+        type: String,
+        default: ''
+    },
+    reasonForReturn: {
+        default: 'nil',
+        type: String
+    }
+}, {
     timestamps: true,
 });
 

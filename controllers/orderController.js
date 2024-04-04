@@ -126,7 +126,7 @@ const loadOrders = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
-    console.log("working");
+   
     const orderId = req.params.id;
     const { cancellationReason } = req.body;
 
@@ -154,7 +154,7 @@ const cancelOrder = async (req, res) => {
 
 const razorpayOrder = async (data)=>{
   try {
-    console.log(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_SECRET_KEY}`);
+   
     const respose = await axios.post('https://api.razorpay.com/v1/orders',data,{
       headers:{
         'Content-Type':"application/json",
@@ -174,13 +174,13 @@ const razorpayOrder = async (data)=>{
 const manageRazorpayOrder =  async (req,res)=> {
   try {
 
-    console.log("TEST razorpay");
-    const user = await User.findById({ _id: req.session.user_id });
+  
+
     const cart = await Cart.findOne({ owner: req.session.user_id })
 
   const cartId = cart._id
   const  billTotal = cart.billTotal
-const email = user.email
+
     if (!cart) {
     return res.status(400).json({ success: false, message: 'Cart not found' });
     }    
@@ -192,7 +192,7 @@ const email = user.email
      
     }
     const orderData = await razorpayOrder(data);
-    console.log("test for data",orderData);
+   
     res.status(200).json(orderData);
   } catch (error) {
     console.error('Error creating RazorPay order:', error);
@@ -208,38 +208,36 @@ const returnOrderAndRefund = async (req, res) => {
 
   try {
     
-      // Find the order
+      
       const order = await Order.findById(orderId);
    
       if (!order) {
           return res.status(404).json({ success: false, message: "Order not found" });
       }
 
-      // Update order status to 'Returned' and save
+    
       order.orderStatus = 'Returned';
+      order.paymentStatus = 'Refunded';
       order.returnReason = returnReason
       await order.save();
 
-      // Calculate the refund amount (assuming full refund for simplicity)
       const refundAmount = order.billTotal;
 
-      // Check if the user has a wallet
-      console.log("TEST-2",req.session.user_id);
+      
+     
       let wallet = await Wallet.findOne({ user:req.session.user_id});
 
-      // If the user doesn't have a wallet, create a new one
+     
       if (!wallet) {
           wallet = new Wallet({
               user: req.session.user_id,
               walletBalance: 0
           });
       }
-   
-      // Add refund amount to wallet balance
       wallet.walletBalance += refundAmount;
       wallet.refundAmount += refundAmount;
       await wallet.save();
-      console.log("TEST-1");
+   
       return res.status(200).json({ success: true, message: "Order returned successfully and refund processed to wallet" });
   } catch (error) {
       console.error("Error returning order and refunding amount:", error);

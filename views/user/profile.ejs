@@ -30,10 +30,32 @@
 
   <style>
 
-.error-message {
-  color: red;
-  font-size: 0.8rem;
+
+.table-header th {
+  font-weight: bold;
 }
+
+.table-header th,
+.table-header td {
+  text-align: center;
+}
+
+.table .text-warning {
+  color: orange;
+}
+
+.table .text-success {
+  color: green;
+}
+
+
+
+
+    .error-message {
+      color: red;
+      font-size: 0.8rem;
+    }
+
     /* Dashboard Menu Styles */
     .dashboard-menu {
       background-color: #f8f9fa;
@@ -290,8 +312,9 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#Wallet" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Wallet</a>
-              </li>
+                  <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#Wallet" role="tab"
+                    aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Wallet</a>
+                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">
                     <i class="fi-rs-sign-out mr-10"></i>Logout
@@ -368,15 +391,17 @@
                                 <%= order.orderStatus %>
                               </span></td>
                             <td>
-                              <% if (order.orderStatus.toLowerCase() === 'pending' || order.orderStatus.toLowerCase() === 'confirmed') { %>
+                              <% if (order.orderStatus.toLowerCase()==='pending' ||
+                                order.orderStatus.toLowerCase()==='confirmed' ) { %>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
-                                <% } else if (order.orderStatus.toLowerCase() === 'delivered') { %>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return Order</button>
-                                <% } else { %>
-                                <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
-                                <% } %>
+                                  data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                <% } else if (order.orderStatus.toLowerCase()==='delivered' ) { %>
+                                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return
+                                    Order</button>
+                                  <% } else { %>
+                                    <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
+                                    <% } %>
                             </td>
                           </tr>
                           <% }) %>
@@ -388,73 +413,75 @@
 
 
               <!-- Return Order Modal -->
-<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="returnOrderForm">
-                <div class="form-group">
-                    <label for="returnReason">Reason for Return</label>
-                    <input type="text" class="form-control" id="returnReason" required>
+              <div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog"
+                aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="returnOrderForm">
+                        <div class="form-group">
+                          <label for="returnReason">Reason for Return</label>
+                          <input type="text" class="form-control" id="returnReason" required>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="confirmReturnOrder">Confirm Return</button>
+                    </div>
+                  </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="confirmReturnOrder">Confirm Return</button>
-        </div>
-    </div>
-</div>
-</div>
+              </div>
 
-<div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
-  <div class="wallet-info">
-      <h1>Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h1>
-  </div>
-  
-  <div class="wallet-history">
-      <div class="card">
-          <div class="card-header">
-              <h5 class="mb-0">Wallet History</h5>
-          </div>
-          <div class="card-body">
-              <div class="table-responsive">
-                  <table class="table">
+              <div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
+                <div class="wallet-info">
+                  <h6 class="wallet-balance">Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
                       <thead>
-                          <tr>
-                              <th>Order Id</th>
-                              <th>Amount</th>
-                              <th>Order Status</th>
-                              <th>Payment Method</th>
-                              <th>Payment Status</th>
-                              <th>Transaction Date</th>
-                          </tr>
+                        <tr class="table-header">
+                          <th>Order Id</th>
+                          <th>Amount</th>
+                          <th>Order Status</th>
+                          <th>Payment Method</th>
+                          <th>Payment Status</th>
+                          <th>Transaction Date</th>
+                        </tr>
                       </thead>
                       <tbody>
-                          <% wallet.forEach(item => { %>
-                          <tr>
-                              <td><%= item.orderId %></td>
-                              <td><%= item.amount.toFixed(2) %></td>
-                              <td><%= item.orderStatus %></td>
-                              <td><%= item.paymentMethod %></td>
-                              <td><%= item.paymentStatus %></td>
-                              <td><%= item.transactionDate %></td>
-                          </tr>
+                        <% orders.forEach(order=> { %>
+                          <% order.items.forEach(item=> { %>
+                            <% if (order.orderStatus==='Returned' ) { %>
+                              <tr>
+                                <td><%= order.oId %></td>
+                                <td><%= item.price.toFixed(2) %></td>
+                                <td><%= order.orderStatus %></td>
+                                <td><%= order.paymentMethod %></td>
+                                <td class="<%= order.paymentStatus === 'Pending' ? 'text-warning' : order.paymentStatus === 'Refunded' ? 'text-success' : '' %>"><%= order.paymentStatus %></td>
+                                <td><%= order.orderDate.toDateString() %></td>
+                              </tr>
+                            <% } %>
                           <% }) %>
+                        <% }) %>
                       </tbody>
-                  </table>
+                    </table>
+                  </div>
+                </div>
               </div>
-          </div>
-      </div>
-  </div>
-</div>
+              
+
+              
+              
+
+
 
               <!-- Cancel Order Modal -->
               <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog"
@@ -487,61 +514,65 @@ aria-hidden="true">
 
 
 
-<div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
-  <div class="card">
-    <div class="card-header">
-      <h5>Add Address</h5>
-    </div>
-    <div class="card-body">
-      <form id="addAddressForm" method="post" name="enq" onsubmit="return validateForm()">
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label>House Name / Flat No.<span class="required">*</span></label>
-            <input  class="form-control square" name="houseName" id="houseName" type="text">
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="form-group col-md-6">
-            <label>Street<span class="required">*</span></label>
-            <input  class="form-control square" name="street" id="street" type="text">
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="form-group col-md-12">
-            <label>City <span class="required">*</span></label>
-            <input  class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$">
-            <small class="text-danger invalid-feedback">gjagjkgajkhgf</small>
-          </div>
-          <div class="form-group col-md-12">
-            <label>State <span class="required">*</span></label>
-            <input  class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$">
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="form-group col-md-12">
-            <label>Country <span class="required">*</span></label>
-            <input class="form-control square" name="country" id="country" type="text" pattern="^[a-zA-Z\s]+$">
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="form-group col-md-12">
-            <label>Postalcode <span class="required">*</span></label>
-            <input class="form-control square" name="postalCode" id="postalCode" type="text" pattern="^[0-9]+$">
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="form-group col-md-12">
-            <label>Type <span class="required">*</span></label>
-            <select class="form-control" id="addressType" name="addressType">
-              <option value="home">Home</option>
-              <option value="office">Office</option>
-            </select>
-            <small class="text-danger invalid-feedback"></small>
-          </div>
-          <div class="col-md-12">
-            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-              
+              <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Add Address</h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="addAddressForm" method="post" name="enq" onsubmit="return validateForm()">
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label>House Name / Flat No.<span class="required">*</span></label>
+                          <input class="form-control square" name="houseName" id="houseName" type="text">
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label>Street<span class="required">*</span></label>
+                          <input class="form-control square" name="street" id="street" type="text">
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>City <span class="required">*</span></label>
+                          <input class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$">
+                          <small class="text-danger invalid-feedback">gjagjkgajkhgf</small>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>State <span class="required">*</span></label>
+                          <input class="form-control square" name="state" id="state" type="text"
+                            pattern="^[a-zA-Z\s]+$">
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Country <span class="required">*</span></label>
+                          <input class="form-control square" name="country" id="country" type="text"
+                            pattern="^[a-zA-Z\s]+$">
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Postalcode <span class="required">*</span></label>
+                          <input class="form-control square" name="postalCode" id="postalCode" type="text"
+                            pattern="^[0-9]+$">
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Type <span class="required">*</span></label>
+                          <select class="form-control" id="addressType" name="addressType">
+                            <option value="home">Home</option>
+                            <option value="office">Office</option>
+                          </select>
+                          <small class="text-danger invalid-feedback"></small>
+                        </div>
+                        <div class="col-md-12">
+                          <button type="submit" class="btn btn-fill-out submit" name="submit"
+                            value="Submit">Save</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
               <!-- Profile Address Management Section -->
               <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                 <div class="row">
@@ -930,41 +961,41 @@ aria-hidden="true">
   <script>
 
 
-function validateForm() {
-  const houseName = document.getElementById("houseName").value;
-  const street = document.getElementById("street").value;
-  const city = document.getElementById("city").value;
-  const state = document.getElementById("state").value;
-  const country = document.getElementById("country").value;
-  const postalCode = document.getElementById("postalCode").value;
+    function validateForm() {
+      const houseName = document.getElementById("houseName").value;
+      const street = document.getElementById("street").value;
+      const city = document.getElementById("city").value;
+      const state = document.getElementById("state").value;
+      const country = document.getElementById("country").value;
+      const postalCode = document.getElementById("postalCode").value;
 
-  if (!houseName || !street || !city || !state || !country || !postalCode) {
-    
-    return false;
-  }
+      if (!houseName || !street || !city || !state || !country || !postalCode) {
 
-  if (!/^[A-Za-z]+$/.test(city)) {
-    document.getElementById("cityError").innerText = "City must contain only letters.";
-    return false;
-  }
+        return false;
+      }
 
-  if (!/^[A-Za-z]+$/.test(state)) {
-    document.getElementById("stateError").innerText = "State must contain only letters.";
-    return false;
-  }
+      if (!/^[A-Za-z]+$/.test(city)) {
+        document.getElementById("cityError").innerText = "City must contain only letters.";
+        return false;
+      }
 
-  if (!/^[A-Za-z]+$/.test(country)) {
-    document.getElementById("countryError").innerText = "Country must contain only letters.";
-    return false;
-  }
+      if (!/^[A-Za-z]+$/.test(state)) {
+        document.getElementById("stateError").innerText = "State must contain only letters.";
+        return false;
+      }
 
-  if (!/^[0-9]+$/.test(postalCode)) {
-    document.getElementById("postalCodeError").innerText = "Postal code must contain only numbers.";
-    return false;
-  }
+      if (!/^[A-Za-z]+$/.test(country)) {
+        document.getElementById("countryError").innerText = "Country must contain only letters.";
+        return false;
+      }
 
-  return true;
-}
+      if (!/^[0-9]+$/.test(postalCode)) {
+        document.getElementById("postalCodeError").innerText = "Postal code must contain only numbers.";
+        return false;
+      }
+
+      return true;
+    }
 
 
 
@@ -1246,21 +1277,21 @@ function validateForm() {
                 title: 'Success',
                 text: data.message,
                 icon: 'success',
-            }).then(() => {
-              updateOrderStatus(orderId, 'Cancelled');
-      });
-                   
-                    window.location.reload()
+              }).then(() => {
+                updateOrderStatus(orderId, 'Cancelled');
+              });
+
+              window.location.reload()
               // $('#cancelOrderModal').modal('hide');
               // showToast('Order cancelled successfully', 'success');
-             
+
               // window.location.reload();
               // Swal.fire({
               //   icon: 'success',
               //   title: 'Order Cancelled',
               //   text: 'Order cancelled successfully',
               //   timer: 3000,
-             
+
               // });
             } else {
               showToast('Failed to cancel order', 'error');
@@ -1300,101 +1331,101 @@ function validateForm() {
     }
 
 
-    
+
     function confirmDeleteAddress(addressId) {
-console.log(addressId);
+      console.log(addressId);
 
-    fetch(`/profile/address/${addressId}`, {
-      method: 'DELETE',
-    })
-    .then(response => {
-      if (response.ok) {
-        $('#deleteAddressModal' + addressId).modal('hide');; // Hide the modal
-        $('#addressSection_' + addressId).remove(); // Remove the address section from UI
-        Swal.fire({
-          icon: 'success',
-          title: 'Address Deleted',
-          text: 'Address successfully deleted'
+      fetch(`/profile/address/${addressId}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (response.ok) {
+            $('#deleteAddressModal' + addressId).modal('hide');; // Hide the modal
+            $('#addressSection_' + addressId).remove(); // Remove the address section from UI
+            Swal.fire({
+              icon: 'success',
+              title: 'Address Deleted',
+              text: 'Address successfully deleted'
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to delete address'
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting address:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while deleting the address'
+          });
         });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to delete address'
-        });
-      }
-    })
-    .catch(error => {
-      console.error('Error deleting address:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'An error occurred while deleting the address'
-      });
-    });
-  }
+    }
 
 
 
-  $(document).ready(function () {
-    let selectedOrderId;
+    $(document).ready(function () {
+      let selectedOrderId;
 
-    // Listen for the 'show.bs.modal' event on the returnOrderModal
-    $('#returnOrderModal').on('show.bs.modal', function (event) {
+      // Listen for the 'show.bs.modal' event on the returnOrderModal
+      $('#returnOrderModal').on('show.bs.modal', function (event) {
         // Get the button that triggered the modal
         const button = $(event.relatedTarget);
 
         // Get the order ID from the button's data attribute
         selectedOrderId = button.data('order-id');
         console.log('Modal is being shown for orderId:', selectedOrderId);
-    });
+      });
 
-    // Handle click on the confirmReturnOrder button
-    $('#confirmReturnOrder').click(function () {
+      // Handle click on the confirmReturnOrder button
+      $('#confirmReturnOrder').click(function () {
         const returnReason = $('#returnReason').val();
         console.log('Returning order with orderId:', selectedOrderId);
         returnOrder(selectedOrderId, returnReason);
-    });
+      });
 
-    function returnOrder(orderId, returnReason) {
+      function returnOrder(orderId, returnReason) {
         console.log('Returning order with orderId:', orderId);
         fetch(`/orders/${orderId}/return`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    returnReason
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-              console.log("data test",data);
-                if (data.success) {
-                    $('#returnOrderModal').modal('hide');
-                    Swal.fire({
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            returnReason
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log("data test", data);
+            if (data.success) {
+              $('#returnOrderModal').modal('hide');
+              Swal.fire({
                 title: 'Success',
                 text: data.message,
                 icon: 'success',
-            }).then(() => {
-              updateOrderStatus(orderId, 'Returned');
-      });
-                   
-                    window.location.reload()
-                } else {
-                  Swal.fire({
-                              icon: 'error',
-                              title: 'Error',
-                              text: 'Failed to return product'
-                            });
-                }
-            })
-            .catch(error => {
-                console.error('Error returning order:', error);
-                showToast('An error occurred while returning the order', 'error');
-            });
-    }
-});
+              }).then(() => {
+                updateOrderStatus(orderId, 'Returned');
+              });
+
+              window.location.reload()
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to return product'
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error returning order:', error);
+            showToast('An error occurred while returning the order', 'error');
+          });
+      }
+    });
 
 
   </script>

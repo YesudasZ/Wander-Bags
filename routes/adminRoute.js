@@ -14,6 +14,9 @@ const categoryController = require('../controllers/categoryController')
 
 const productController = require('../controllers/productController')
 
+const couponController = require('../controllers/couponController')
+
+
 admin_route.get('/errorpage',adminController.errorload)
 
 admin_route.get('/',auth.isAdminLogout,adminController.loadLogin)
@@ -61,6 +64,12 @@ admin_route.get('/orders', auth.isAdminLogin, adminController.loadOrders);
 admin_route.get('/orders/:id', auth.isAdminLogin, adminController.getOrderDetails);
 
 admin_route.put('/orders/:id', auth.isAdminLogin, adminController.updateOrderStatus);
+
+admin_route.get('/coupons',auth.isAdminLogin,couponController.loadCoupon)
+
+admin_route.post('/addCoupon',auth.isAdminLogin,couponController.addCoupon)
+
+admin_route.patch('/coupons/changeStatus/:couponId', auth.isAdminLogin, couponController.changeCouponStatus);
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 

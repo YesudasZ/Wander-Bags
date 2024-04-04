@@ -453,7 +453,6 @@ const loadprofile = async (req, res) => {
     const orders = await Order.find({ user: user_id })
     const userData = await User.findById({ _id: req.session.user_id })
     const wallet = await  Wallet.findOne({ user: user_id})
-    console.log("tewst",wallet);
     res.render('profile', { user: userData, orders: orders,wallet:wallet, errorMessage: null, successMessage: null })
   } catch (error) {
     console.error(error);
