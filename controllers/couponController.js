@@ -66,62 +66,55 @@ const changeCouponStatus = async (req, res) => {
   }
 };
 
+
+
+
 const applyCoupon = async (req, res) => {
   try {
-    const { couponCode } = req.body;
+    const { couponId } = req.body;
     const userId = req.session.user_id;
-
-    // Find the coupon by the provided code
-    const coupon = await Coupon.findOne({ couponCode, isActive: 1 });
+    const cart = await Cart.findOne({ owner: userId });
+    const coupon = await Coupon.findById(couponId);
 
     if (!coupon) {
-      return res.status(400).json({ success: false, message: 'Invalid coupon code.' });
+      return res.status(400).json({ success: false, message: 'Invalid coupon' });
     }
 
-    // Check if the coupon is active and not expired
-    const currentDate = new Date();
-
-    if (currentDate < coupon.startDate || currentDate > coupon.endDate) {
-      return res.status(400).json({ success: false, message: 'Coupon is not active or has expired.' });
+    const today = new Date();
+    if (today < coupon.startDate || today > coupon.endDate) {
+      return res.status(400).json({ success: false, message: 'Coupon is expired' });
     }
 
-    // Find the user's cart
-    const cart = await Cart.findOne({ owner: userId });
-
-    if (!cart) {
-      return res.status(404).json({ success: false, message: 'Cart not found.' });
-    }
-
-    // Check if the cart total meets the minimum amount requirement for the coupon
     if (cart.billTotal < coupon.minimumAmount) {
-      return res.status(400).json({ success: false, message: 'Minimum order amount not met for this coupon.' });
+      return res.status(400).json({ success: false, message: `Minimum purchase amount for this coupon is ${coupon.minimumAmount}`  });
     }
 
-    // Calculate the coupon discount amount
-    const couponDiscount = (cart.billTotal * coupon.discount) / 100;
-    const newTotalAmount = cart.billTotal - couponDiscount;
+    const couponDiscount1 = cart.billTotal * (coupon.discount / 100);
+    
+let updatedTotalAmount;
 
-    // Apply the coupon to the user's cart
-    cart.couponApplied = {
-      couponCode: coupon.couponCode,
-      discount: couponDiscount,
-    };
-    cart.billTotal = newTotalAmount;
+    if (couponDiscount1 > coupon.maximumAmount) {
+     updatedTotalAmount = cart.billTotal - coupon.maximumAmount;
+     
+    }else{
+     updatedTotalAmount = cart.billTotal - couponDiscount1;
+    }
+const couponDiscount = cart.billTotal- updatedTotalAmount
+  
+    cart.billTotal = updatedTotalAmount;
     await cart.save();
 
-    return res.status(200).json({ success: true, couponDiscount, newTotalAmount });
+    res.status(200).json({ success: true, message: 'Coupon applied successfully', couponDiscount, updatedTotalAmount });
   } catch (error) {
     console.error('Error applying coupon:', error);
-    return res.status(500).json({ success: false, message: 'Internal server error.' });
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
-
-
-
 
 module.exports = {
   loadCoupon,
   addCoupon,
   changeCouponStatus,
-  applyCoupon
+  applyCoupon,
+  
 }

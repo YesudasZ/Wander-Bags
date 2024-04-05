@@ -123,6 +123,8 @@ user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)
 
 user_route.delete('/wishList/remove/:productId', auth.isLogin, userController.removeFromWishlist);
 
+// user_route.post('/get-available-coupons',auth.isLogin,couponController.getAvailableCoupons)
+
 user_route.post('/apply-coupon', auth.isLogin, couponController.applyCoupon);
 
 
