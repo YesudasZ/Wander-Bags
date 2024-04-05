@@ -309,6 +309,7 @@
                   <div class="col-md-3">
                     <img src="/productImages/<%= item.image[0] %>" alt="Product Image" class="img-fluid">
                   </div>
+               
                   <div class="col-md-6">
                     <div class="card-body">
                       <h5 class="card-title"><%= item.title %></h5>
@@ -328,6 +329,11 @@
                 </div>
               </div>
               <% }); %>
+            </div>
+            <div class="text-left">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#applyCouponModal">
+                Apply Coupon
+              </button>
             </div>
             <table class="table">
               <tbody>
@@ -504,7 +510,37 @@
       </div>
     </div>
 
-
+<!-- Apply Coupon Modal -->
+<div class="modal fade" id="applyCouponModal" tabindex="-1" role="dialog" aria-labelledby="applyCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="applyCouponModalLabel">Apply Coupon</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <% if (coupons.length > 0) { %>
+          <div class="form-group">
+            <label for="couponCode">Select Coupon</label>
+            <select class="form-control" id="couponCode">
+              <% coupons.forEach(coupon => { %>
+                <option value="<%= coupon.couponCode %>"><%= coupon.name %> (<%= coupon.discount %>% off)</option>
+              <% }) %>
+            </select>
+          </div>
+        <% } else { %>
+          <p>No coupons available for this order.</p>
+        <% } %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="applyCouponBtn">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
       <footer class="main bg-secondary text-light">
@@ -797,32 +833,32 @@ placeOrderBtn.addEventListener('click', () => {
 
   const orderNotes = document.getElementById('orderNotes').value;
 if(paymentMethod == "Cash On Delivery" ){
-  // Send the order details to the server
+ 
   fetch('/checkout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // Include CSRF token if needed
+     
     },
     body: JSON.stringify({ addressId, paymentMethod, orderNotes }),
   })
     .then(response => {
       if (response.ok) {
-        // Handle successful order placement
+      
         console.log('Order placed successfully');
         window.location.href = '/orderPlaced';
-        // Redirect to order confirmation page or display a success message
+       
       } else {
-        // Handle error
+        
         console.error('Failed to place order');
-        // Display an error message
+        
       }
     })
     .catch(error => {
       console.error('Error:', error);
-      // Handle network error
+      
     });}else if(paymentMethod == "Razorpay" ){
-console.log("TEST - 1");
+
 createRazorpayOrder()
       function  createRazorpayOrder(){
   fetch('/create/razorpayOrder',{
@@ -853,7 +889,7 @@ createRazorpayOrder()
                 color:'#002D75'
             }
         };
-        // console.log('amount',amount);
+       
         const rzp = new Razorpay(options);
         rzp.open();
     })
@@ -868,25 +904,25 @@ function placeOrderAfterPayment(){
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // Include CSRF token if needed
+     
     },
     body: JSON.stringify({ addressId, paymentMethod, orderNotes }),
   })
     .then(response => {
       if (response.ok) {
-        // Handle successful order placement
+       
         console.log('Order placed successfully');
         window.location.href = '/orderPlaced';
-        // Redirect to order confirmation page or display a success message
+       
       } else {
-        // Handle error
+       
         console.error('Failed to place order');
-        // Display an error message
+        
       }
     })
     .catch(error => {
       console.error('Error:', error);
-      // Handle network error
+     
     })
 }
 
@@ -896,11 +932,11 @@ function placeOrderAfterPayment(){
 
 
 
-// Form Validation
-function validateForm(event) {
-  event.preventDefault(); // Prevent form submission
 
-  // Get form fields
+function validateForm(event) {
+  event.preventDefault(); 
+
+  
   const houseNameField = document.getElementById('houseName');
   const streetField = document.getElementById('street');
   const cityField = document.getElementById('city');
@@ -909,13 +945,13 @@ function validateForm(event) {
   const postalCodeField = document.getElementById('postalCode');
   const addressTypeField = document.getElementById('addressType');
 
-  // Reset error messages
+ 
   const invalidFeedbacks = document.querySelectorAll('.invalid-feedback');
   invalidFeedbacks.forEach(feedback => feedback.textContent = '');
 
   let isValid = true;
 
-  // Validate form fields
+ 
   if (houseNameField.value.trim() === '') {
     houseNameField.nextElementSibling.textContent = 'Please enter a house name/flat no.';
     isValid = false;
@@ -926,10 +962,10 @@ function validateForm(event) {
     isValid = false;
   }
 
-  // Add validation for other fields as needed
+  
 
   if (isValid) {
-    // If form is valid, submit the form
+   
     addAddress();
   }
 }
@@ -958,7 +994,7 @@ function addAddress() {
       text: data
     });
 
-    // Close the modal manually
+   
     const modal = document.getElementById('addAddressModal');
     const modalBackdrop = document.querySelector('.modal-backdrop');
     modal.classList.remove('show');
@@ -968,10 +1004,10 @@ function addAddress() {
       modalBackdrop.remove();
     }
 
-    // Reset the form
+    
     document.getElementById('addAddressForm').reset();
     
-    // Fetch and display the new address
+  
     fetchAndDisplayAddress();
 window.location.reload()
   
@@ -984,13 +1020,13 @@ window.location.reload()
     });
   });
 }
-// Fetch and Display Address
+
 function fetchAndDisplayAddress() {
   fetch('/admin/checkout')
     .then(response => response.json())
     .then(addresses => {
       const addressList = document.querySelector('.address-list');
-      addressList.innerHTML = ''; // Clear existing addresses
+      addressList.innerHTML = ''; 
 
       addresses.forEach(address => {
         const addressCard = document.createElement('div');
@@ -1021,6 +1057,54 @@ function fetchAndDisplayAddress() {
       console.error('Error fetching addresses:', error);
     });
 }
+
+
+const applyCouponBtn = document.getElementById('applyCouponBtn');
+const couponCodeSelect = document.getElementById('couponCode');
+
+applyCouponBtn.addEventListener('click', () => {
+  const couponCode = couponCodeSelect.value;
+
+  fetch('/apply-coupon', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ couponCode }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Update the UI with the coupon discount and the new total amount
+        const couponDiscountElement = document.createElement('tr');
+        couponDiscountElement.innerHTML = `
+          <th colspan="3">Coupon Discount</th>
+          <td>-₹${data.couponDiscount}</td>
+        `;
+        const totalAmountElement = document.getElementById('totalAmount');
+        totalAmountElement.textContent = `₹${data.newTotalAmount}`;
+
+        const tableBody = document.querySelector('table tbody');
+        tableBody.insertBefore(couponDiscountElement, totalAmountElement.parentNode.parentNode);
+
+        // Close the modal
+        const modal = document.getElementById('applyCouponModal');
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error applying coupon:', error);
+      alert('An error occurred while applying the coupon.');
+    });
+});
+
 
       </script>
 

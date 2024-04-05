@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const axios = require('axios')
 const Order = require("../models/orderModel");
 const Wallet = require("../models/walletModel")
+const Coupon  = require('../models/CouponModel');
 require('dotenv').config();
 
 
@@ -15,7 +16,8 @@ const loadCheckout = async (req, res) => {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id }).populate('address');
     const cart = await Cart.findOne({ owner: req.session.user_id })
-    res.render('checkOut', { cart: cart, user: userData });
+    const coupons= await Coupon.find({})
+    res.render('checkOut', { cart: cart, user: userData, coupons:coupons });
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }

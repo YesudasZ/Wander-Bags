@@ -362,12 +362,24 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
 });
 
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.change-status').forEach(button => {
-      button.addEventListener('click', async (e) => {
-        const couponId = e.target.dataset.id;
-        const status = e.target.textContent.trim();
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.change-status').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const couponId = e.target.dataset.id;
+      const status = e.target.textContent.trim();
 
+      // Show SweetAlert2 confirmation dialog
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to change the status of this coupon to ${status === 'Active' ? 'Inactive' : 'Active'}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change it!'
+      });
+
+      if (result.isConfirmed) {
         try {
           const response = await fetch(`/admin/coupons/changeStatus/${couponId}`, {
             method: 'PATCH',
@@ -378,10 +390,18 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
           });
 
           const data = await response.json();
+        
+          window.location.reload()
           if (response.ok) {
+           
             e.target.textContent = status === 'Active' ? 'Inactive' : 'Active';
             e.target.classList.toggle('btn-danger');
             e.target.classList.toggle('btn-success');
+            
+            // Update status in the table dynamically
+            const statusCell = e.target.closest('tr').querySelector('.status');
+            statusCell.textContent = status === 'Active' ? 'Inactive' : 'Active';
+           
           } else {
             // Handle error
             console.error(data.error);
@@ -389,11 +409,10 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
         } catch (error) {
           console.error('Error:', error);
         }
-      });
+      }
     });
   });
-
-
+});
 
     </script>
 

@@ -22,6 +22,8 @@ const cartController = require ('../controllers/cartController')
 
 const orderController = require ('../controllers/orderController')
 
+const couponController = require('../controllers/couponController')
+
 user_route.get('/pagenotfound',userController.pagenotfound)
 
 user_route.get('/',auth.isLogout,userController.landingLoad)
@@ -120,6 +122,8 @@ user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
 user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)
 
 user_route.delete('/wishList/remove/:productId', auth.isLogin, userController.removeFromWishlist);
+
+user_route.post('/apply-coupon', auth.isLogin, couponController.applyCoupon);
 
 
 module.exports = user_route;
