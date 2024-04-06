@@ -191,6 +191,59 @@ const updateOrderStatus = async (req, res) => {
 };
 
 
+const SaleReport  = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const startIndex = (page - 1) * limit;
+
+    let filter = req.query.filter;
+    let date = req.query.date;
+console.log("test",filter);
+    let query = {};
+
+    if (filter === 'day') {
+      query.orderDate = {
+        $gte: new Date(new Date().setHours(00, 00, 00)),
+        $lt: new Date(new Date().setHours(23, 59, 59))
+      };
+    } else if (filter === 'week') {
+      query.orderDate = {
+        $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+        $lt: new Date()
+      };
+    } else if (filter === 'month') {
+      query.orderDate = {
+        $gte: new Date(new Date().setMonth(new Date().getMonth())),
+        $lt: new Date()
+      };
+    } else if (filter === 'customDate') {
+      query.orderDate = {
+        $gte: new Date(date),
+        $lt: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+      };
+    }
+console.log("test-2",query);
+    const orders = await Order.find(query)
+     .populate('user', 'name')
+     .populate('cart')
+     .populate({
+        path: 'items.productId',
+        model: 'Product',
+        select: 'title image productPrice'
+      })
+     .skip(startIndex)
+     .limit(limit);
+console.log('test-3',orders );
+    res.render('salesReport', { orders, page, limit, totalOrders: orders.length });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/admin/errorpage');
+  }
+}
+
+
+
 
 module.exports = {
   loadLogin,
@@ -203,5 +256,7 @@ module.exports = {
   errorload,
   loadOrders,
   getOrderDetails,
-  updateOrderStatus
+  updateOrderStatus,
+  SaleReport,
+ 
 }

@@ -71,6 +71,10 @@ admin_route.post('/addCoupon',auth.isAdminLogin,couponController.addCoupon)
 
 admin_route.patch('/coupons/changeStatus/:couponId', auth.isAdminLogin, couponController.changeCouponStatus);
 
+admin_route.get('/salesReport',auth.isAdminLogin,adminController.SaleReport)
+
+
+
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 
 module.exports = admin_route;
