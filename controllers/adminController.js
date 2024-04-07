@@ -191,7 +191,7 @@ const updateOrderStatus = async (req, res) => {
 };
 
 
-const SaleReport  = async (req, res) => {
+const SaleReport = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
@@ -199,8 +199,10 @@ const SaleReport  = async (req, res) => {
 
     let filter = req.query.filter;
     let date = req.query.date;
-console.log("test",filter);
-    let query = {};
+
+    let query = {
+      orderStatus: 'Delivered'
+    };
 
     if (filter === 'day') {
       query.orderDate = {
@@ -213,9 +215,18 @@ console.log("test",filter);
         $lt: new Date()
       };
     } else if (filter === 'month') {
+     const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+     const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+     query.orderDate = {
+       $gte: firstDayOfMonth,
+       $lt: lastDayOfMonth
+     };
+    } else if (filter === 'year') {
+      const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);
+      const lastDayOfYear = new Date(new Date().getFullYear(), 11, 31);
       query.orderDate = {
-        $gte: new Date(new Date().setMonth(new Date().getMonth())),
-        $lt: new Date()
+        $gte: firstDayOfYear,
+        $lt: lastDayOfYear
       };
     } else if (filter === 'customDate') {
       query.orderDate = {
@@ -223,24 +234,25 @@ console.log("test",filter);
         $lt: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
       };
     }
-console.log("test-2",query);
+
     const orders = await Order.find(query)
-     .populate('user', 'name')
-     .populate('cart')
-     .populate({
+      .populate('user', 'name')
+      .populate('cart')
+      .populate({
         path: 'items.productId',
         model: 'Product',
         select: 'title image productPrice'
       })
-     .skip(startIndex)
-     .limit(limit);
-console.log('test-3',orders );
+      .skip(startIndex)
+      .limit(limit);
+
     res.render('salesReport', { orders, page, limit, totalOrders: orders.length });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage');
   }
 }
+
 
 
 
