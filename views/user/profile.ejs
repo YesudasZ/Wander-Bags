@@ -1015,7 +1015,9 @@
           // Update the name in the profile section without refreshing
           document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
           $('#editNameModal').modal('hide');
-          window.location.reload();
+      
+        window.location.reload();
+     
         } else {
           // Handle error if any
           console.error('Error updating name');
@@ -1281,7 +1283,9 @@
                 updateOrderStatus(orderId, 'Cancelled');
               });
 
-              window.location.reload()
+                      setTimeout(() => {
+                window.location.reload();
+              },5000);
               // $('#cancelOrderModal').modal('hide');
               // showToast('Order cancelled successfully', 'success');
 
@@ -1347,6 +1351,9 @@
               title: 'Address Deleted',
               text: 'Address successfully deleted'
             });
+            setTimeout(() => {
+        window.location.reload();
+      },1000);
           } else {
             Swal.fire({
               icon: 'error',
@@ -1411,7 +1418,9 @@
                 updateOrderStatus(orderId, 'Returned');
               });
 
-              window.location.reload()
+                        setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
             } else {
               Swal.fire({
                 icon: 'error',
