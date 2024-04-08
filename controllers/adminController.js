@@ -69,15 +69,23 @@ const loadadminpanel = async (req, res) => {
 
 const loadcustomers = async (req, res) => {
   try {
+    const perPage = 10;
+    const page = req.query.page || 1;
+
     const users = await User.find({ is_admin: 0 })
+     .skip((page - 1) * perPage)
+     .limit(perPage);
+
+    const totalUsers = await User.countDocuments({ is_admin: 0 });
+    const totalPages = Math.ceil(totalUsers / perPage);
+
     const actionType = 'block';
-    res.render('customers', { users, actionType });
+    res.render('customers', { users, actionType, currentPage: page, totalPages });
   } catch (error) {
     console.log(error.message);
     res.redirect('/admin/errorpage')
   }
 }
-
 
 
 

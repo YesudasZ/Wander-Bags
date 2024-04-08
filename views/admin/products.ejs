@@ -26,57 +26,7 @@
 
 
     <style>
-        /* Custom styles */
-        .table-container {
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .table th,
-        .table td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        .btn-edit {
-            background-color: #f8b400;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .btn-add {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 16px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .btn-add:hover,
-        .btn-edit:hover,
-        .btn-delete:hover {
-            opacity: 0.8;
-        }
+     
     </style>
 
 </head>
@@ -234,14 +184,22 @@
                 </ul>
             </div>
         </header>
-        <section class="content-main">
+
+        <div class="row justify-content-center mt-5 pb-100">
+            <div class="col-md-11 table-container">
+              <div class="shadow-lg p-5 bg-white rounded ">
+        <section class="">
             <div class="container mt-5">
+                <h1 class="mb-4 text-info fw-bold text-center">Products</h1>
                 <div class="row">
                     <div class="col-12">
-                        <button onclick="location.href='/admin/products/add'" class="btn btn-add">Add Product</button>
+                        <button onclick="location.href='/admin/products/add'" class="btn btn-add btn-success">Add Product</button>
+                        <button type="button" class="btn btn-secondary text-end" data-bs-toggle="modal" data-bs-target="#removedProductsModal"  >
+                            Removed Products
+                        </button>
                         <div class="table-container mt-3">
-                            <table class="table table-striped">
-                                <thead>
+                            <table class="table table-bordered">
+                                <thead class=" text-center">
                                     <tr>
                                         <th>Name</th>
                                         <th>Image</th>
@@ -251,7 +209,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class=" text-center">
                                     <!-- Loop through products and display them in the table -->
                                     <% products.forEach(product => { %>
                                         <% if (product.status !== 'delete') { %>
@@ -260,10 +218,10 @@
                                         <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
                                         <td><%= product.brand %></td>
                                         <td><%= product.status %></td>
-                                        <td><a href="/admin/products/edit/<%= product._id %>" class="btn btn-edit">Edit</a></td>
+                                        <td><a href="/admin/products/edit/<%= product._id %>" class="btn btn-edit btn-outline-secondary">Edit</a></td>
                                         <td>
                                             <form id="deleteForm_<%= product._id %>" action="/admin/products/delete/<%= product._id %>" method="post">
-                                                <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_<%= product._id %>">
+                                                <button type="button" class="btn btn-delete btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_<%= product._id %>">
                                                     Delete
                                                 </button>
                                             </form>
@@ -297,11 +255,14 @@
             </div>
         
 
+        </section> 
 
 
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#removedProductsModal">
-                Removed Products
-            </button>
+    </div>
+</div>
+</div>
+
+          
             
             <div class="modal fade" id="removedProductsModal" tabindex="-1" aria-labelledby="removedProductsModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -355,7 +316,7 @@
                     </ul>
                 </nav>
             </div>
-        </section> 
+
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">

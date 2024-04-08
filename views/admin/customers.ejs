@@ -259,17 +259,19 @@
         </header>
      
         
-
+        <div class="row justify-content-center mt-5 ">
+            <div class="col-md-10 table-container">
+              <div class="shadow-lg p-5 bg-white rounded ">
         <section class="customerslist-container-1">
             <div class="container">
                 <div class="profile-table-1">
                     <div class="profile-heading-1">
-                        <h1>Customers Details</h1>
+                        <h1 class="mb-4 text-info fw-bold text-center">Customers Details</h1>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
+                    <table class="table table-bordered">
+                        <thead  class=" text-center">
                             <tr>
                                 <th>Username</th>
                                 <th>Email</th>
@@ -278,7 +280,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody  class=" text-center">
                             <% if(users.length > 0) { 
                                 for(let i = 0; i < users.length; i++) { %>
                                     <tr>
@@ -287,13 +289,13 @@
                                         <td><%= users[i].mobile %></td>
                                         <td>
                                             <% if(users[i].is_verified === 1) { %>
-                                                <span class="badge bg-success">Verified</span>
+                                                <span class="badge bg-secondary">Verified</span>
                                             <% } else { %>
                                                 <span class="badge bg-danger">Not Verified</span>
                                             <% } %>
                                         </td>
                                         <td> 
-                                            <button type="button" class="btn <%= users[i].is_verified === 1 ? 'btn-danger' : 'btn-success' %> btn-toggle" data-bs-toggle="modal" data-bs-target="#toggleModal" data-user-id="<%= users[i]._id %>">
+                                            <button type="button" class="btn <%= users[i].is_verified === 1 ? 'btn-outline-danger' : 'btn-outline-info' %> btn-toggle" data-bs-toggle="modal" data-bs-target="#toggleModal" data-user-id="<%= users[i]._id %>">
                                                 <%= users[i].is_verified === 1 ? 'Block' : 'Unblock' %>
                                             </button>
                                             
@@ -310,6 +312,9 @@
                 </div>
             </div>
         </section>
+    </div>
+</div>
+</div>
         <!-- Block Modal -->
         <div class="modal fade" id="toggleModal" tabindex="-1" aria-labelledby="toggleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -345,14 +350,11 @@
             <div class="pagination-area mt-30 pb-30">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                      <% for(let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= i === currentPage? 'active' : '' %>"><a class="page-link" href="/admin/customers?page=<%= i %>"><%= i %></a></li>
+                      <% } %>
                     </ul>
-                </nav>
+                  </nav>
             </div>
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
