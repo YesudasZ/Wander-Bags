@@ -1,8 +1,8 @@
 const User = require('../models/userModel');
 const Order = require("../models/orderModel");
 const bcrypt = require('bcrypt')
-
-
+const Product = require('../models/productModel');
+const Category = require('../models/categoryModel');
 
 
 
@@ -206,7 +206,7 @@ const SaleReport = async (req, res) => {
 
     if (filter === 'day') {
       query.orderDate = {
-        $gte: new Date(new Date().setHours(00, 00, 00)),
+        $gte: new Date(new Date().setHours(0, 0, 0)),
         $lt: new Date(new Date().setHours(23, 59, 59))
       };
     } else if (filter === 'week') {
@@ -254,7 +254,70 @@ const SaleReport = async (req, res) => {
 }
 
 
+const loadOffers = async  (req, res) => {
+  try {
+    const products  = await Product.find({ status: "active" });
+    const categories = await Category.find({ status: "active" });
+    res.render('offers',{products: products ,categories : categories});
+  } catch (error) {
+    console.error(error);
+    res.redirect('/admin/errorpage');
+  }
+}
 
+const createCategoryOffer = async (req, res) => {
+
+  try {
+    const { startDate, endDate, category, discountPercentage } = req.body;
+    const categore = await Category.findById({ _id:category  });
+    categore.offer = discountPercentage;
+    categore.offerStart= startDate;
+    categore.offerEnd=endDate;
+    await categore.save();
+    const products = await Product.find({ category:categore.name });
+  
+    products.forEach((product) => {
+   
+      product.afterDiscount = product.discountPrice;
+      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
+      product.save();
+    });
+   
+    res.status(200).json({ message: 'Category offer created successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating category offer' });
+  }
+};
+
+const createProducOffer = async (req, res) => {
+  try {
+    const { productId, discountPercentage } = req.body;
+    console.log("ok",discountPercentage);
+    const product = await Product.findById({ _id:productId  });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+console.log("test-1",product.discountPrice - (product.discountPrice * (discountPercentage / 100)));
+console.log("test-2",(product.afterDiscount * (discountPercentage / 100)),"test-2.1",product.afterDiscount - product.discountPrice);
+    if( product.discountPrice > product.afterDiscount ){
+      product.afterDiscount = product.discountPrice;
+      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
+      product.save();
+    }else if(product.afterDiscount - product.discountPrice < (product.afterDiscount * (discountPercentage / 100))){
+      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
+      product.save();
+    }else{
+      return res.status(404).json({ message: "The product has a better offer with the category offer." });
+    }
+ 
+    const discountAmount =  product.afterDiscount - product.discountPrice;
+  
+    res.status(200).json({ message: 'Discount applied', discountAmount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error applying discount' });
+  }
+};
 
 
 module.exports = {
@@ -270,5 +333,7 @@ module.exports = {
   getOrderDetails,
   updateOrderStatus,
   SaleReport,
- 
+  loadOffers,
+  createCategoryOffer,
+  createProducOffer
 }

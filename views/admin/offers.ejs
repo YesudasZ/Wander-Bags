@@ -1,0 +1,523 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Wander Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin-asset/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin-asset/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl7/1L_dstPt3HV5HzF6Gvk/e3s4Wz6iJgD/+ub2oU" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+       .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+       .modal-content {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/admin-asset/imgs/theme/logo.svg" class="logo" alt="Wander Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/adminpanel"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/customers"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Customers</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/categories"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="http://localhost:4000/admin/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                
+                <li class="menu-item ">
+                  <a class="menu-link" href="http://localhost:4000/admin/orders"> <i class="icon material-icons md-shopping_cart"></i>
+                      <span class="text">Orders</span>
+                  </a>
+              </li>
+              <li class="menu-item ">
+                <a class="menu-link" href="http://localhost:4000/admin/coupons"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+              <li class="menu-item ">
+                <a class="menu-link" href="http://localhost:4000/admin/salesReport"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Sales Report</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+              <a class="menu-link" href="http://localhost:4000/admin/offers"> <i class="icon material-icons md-shopping_cart"></i>
+                  <span class="text">Offers</span>
+              </a>
+          </li>
+                <!-- <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Transactions</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-transactions-1.html">Transaction 1</a>
+                        <a href="page-transactions-2.html">Transaction 2</a>
+                        <a href="page-transactions-details.html">Transaction Details</a>
+                    </div>
+                </li> -->
+                <!-- <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Account</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-account-login.html">User login</a>
+                        <a href="page-account-register.html">User registration</a>
+                        <a href="page-error-404.html">Error 404</a>
+                    </div>
+                </li> -->
+                <!-- <li class="menu-item">
+                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                 
+                </li> -->
+
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications animation-shake"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin-asset/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+
+
+        <div class="row justify-content-center mt-5 ">
+          <div class="col-md-10 table-container">
+            <div class="shadow-lg p-5 bg-white rounded ">
+              <section>
+                <div class="container mt-5">
+                  <h1 class="mb-4 text-info fw-bold text-center">Category Offers</h1>
+                  <button type="button" class="btn btn-secondary mb-4 text-left" data-bs-toggle="modal" data-bs-target="#createCategoryOfferModal">
+                    Create Category Offer
+                  </button>
+                  <div class="row justify-content-center ">
+                    <div class="col-md-6">
+                      <table class="table  table-hover " id="categoryOffersTable">
+                        <thead>
+                          <tr>
+                            <th>Category Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Discount Percentage</th>
+                         
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% categories.forEach(function(category) { %>
+                            <% if (category.offer > 0) { %>
+                              <tr>
+                                <td><%= category.name %></td>
+                                <td><%= new Date(category.offerStart).toLocaleDateString() %></td>
+                                <td><%= new Date(category.offerEnd).toLocaleDateString() %></td>
+                                <td><%= category.offer %>%</td>
+                               
+                              </tr>
+                            <% } %>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+        
+                <!-- Create Category Offer Modal -->
+                <div class="modal fade" id="createCategoryOfferModal" tabindex="-1" aria-labelledby="createCategoryOfferModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoryOfferModalLabel">Create Category Offer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="createCategoryOfferForm">
+                          <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startDate" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="endDate" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" required>
+                              <% categories.forEach(function(category) { %>
+                                <option value="<%= category._id %>"><%= category.name %></option>
+                              <% }); %>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                            <input type="number" class="form-control" id="discountPercentage" min="1" max="100" required>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Create Offer</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="row justify-content-center mt-5 pb-100">
+          <div class="col-md-10 table-container">
+            <div class="shadow-lg p-5 bg-white rounded ">
+              <section>
+                <div class="container mt-5">
+                  <h1 class="mb-4 text-info fw-bold text-center">Product Offers</h1>
+                  <div class="row justify-content-center ">
+                    <div class="col-md-12" style="max-height: 400px; overflow-y: auto;" >
+                      <table class="table  table-hover "  id="productOffersTable">
+                        <thead class=" text-center">
+                          <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Offer Price</th>
+                            <th>Discount</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody class=" text-center" >
+                          <% products.forEach(function(product) { %>
+                            <tr>
+                              <td><%= product.name %></td>
+                              <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
+                              <td><%= product.price %></td>
+                              <td><%= product.discountPrice %></td>
+                              <td style="max-width: 20px"> <input type="number" class="form-control" id="discountPercentagee" min="1" max="100" required></td>
+                              <td>
+                                <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
+                                  Apply
+                                </button>
+                              </td>
+                            </tr>
+                          <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+
+        <footer class="main-footer  font-xs ">
+            <div class="row pb-30 pt-15 mt-5 ">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Wander - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+      </main>
+    <script src="/admin-asset/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin-asset/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin-asset/js/vendors/select2.min.js"></script>
+    <script src="/admin-asset/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin-asset/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/admin-asset/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/admin-asset/js/main.js" type="text/javascript"></script>
+    <script src="/admin-asset/js/custom-chart.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybB5IXNxFwWQfE7u8Lj+XJHAxKlXiG/8rsrtpb6PEdzD828Ii" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+
+
+    <script>
+
+// Handle form submission
+const handleFormSubmission = (event) => {
+  event.preventDefault();
+  const data = {
+    startDate: event.target.startDate.value,
+    endDate: event.target.endDate.value,
+    category: event.target.category.value,
+    discountPercentage: event.target.discountPercentage.value,
+  };
+  createCategoryOffer(data);
+};
+
+
+
+      // Fetch category offers
+      const fetchCategoryOffers = async () => {
+  try {
+    const response = await fetch('/admin/offers');
+    const data = await response.json();
+    renderCategoryOffers(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Initialize
+document.getElementById('createCategoryOfferForm').addEventListener('submit', handleFormSubmission);
+fetchCategoryOffers();
+
+
+
+
+
+
+
+// Render category offers
+// Render category offers
+const renderCategoryOffers = (offers) => {
+  const tableBody = document.getElementById('categoryOffersTable').querySelector('tbody');
+  tableBody.innerHTML = '';
+  offers.forEach((offer) => {
+    if (offer.offer > 0) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${offer.name}</td>
+        <td>${offer.offerStart}</td>
+        <td>${offer.offerEnd}</td>
+        0</td>
+        <td>${offer.countOfProducts}</td>
+      `;
+      tableBody.appendChild(row);
+    }
+  });
+};
+
+// Create category offer
+// Create category offer
+const createCategoryOffer = async (data) => {
+  try {
+    const response = await fetch('/admin/offers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      Swal.fire('Success', result.message, 'success').then(() => {
+        document.getElementById('createCategoryOfferModal').modal('hide');
+      });
+      fetchCategoryOffers();
+    } else {
+      Swal.fire('Error', result.message, 'error');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+// Apply discount
+const applyDiscount = async (productId, discountPercentage) => {
+  try {
+    const response = await fetch('/admin/productOffers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId, discountPercentage }),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      Swal.fire('Success', result.message, 'success');
+      fetchProductOffers();
+    } else {
+      Swal.fire('Error', result.message, 'error');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+// Handle apply discount button click
+const handleApplyDiscountClick = (event) => {
+  event.preventDefault();
+  const productId = event.target.dataset.productId;
+  const discountPercentage = document.getElementById('discountPercentagee').value;
+  applyDiscount(productId, discountPercentage);
+  console.log("test",discountPercentage);
+};
+
+// Initialize
+document.querySelectorAll('.apply-discount').forEach((button) => {
+  button.addEventListener('click', handleApplyDiscountClick);
+});
+fetchProductOffers();
+
+
+// Fetch product offers
+const fetchProductOffers = async () => {
+  try {
+    const response = await fetch('/admin/offers');
+    const data = await response.json();
+    renderProductOffers(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Render product offers
+const renderProductOffers = (products) => {
+  const tableBody = document.getElementById('productOffersTable').querySelector('tbody');
+  tableBody.innerHTML = '';
+  products.forEach((product) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${product.name}</td>
+      <td><img src="/productimages/${product.images[0]}" alt="${product.name}" style="width: 100px; height: 100px;"></td>
+      <td>${product.price}</td>
+      <td>${product.discountPrice}</td>
+      <td style="max-width: 20px"> <input type="number" class="form-control" id="discountPercentage" min="1" max="100" required></td>
+      <td>
+        <button type="button" class="btn btn-primary apply-discount" data-product-id="${product._id}">
+          Apply
+        </button>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+};
+
+// Initialize
+fetchProductOffers();
+
+
+    </script>
+
+
+</body>
+
+</html>

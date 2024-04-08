@@ -72,7 +72,11 @@
                       <span class="text">Sales Report</span>
                   </a>
               </li>
-
+              <li class="menu-item">
+                <a class="menu-link" href="http://localhost:4000/admin/offers"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Offers</span>
+                </a>
+            </li>
 
 
      
@@ -458,8 +462,8 @@ function downloadPDF() {
   const tableCols = tableRows[0].slice(0, -1);
 
   const docDefinition = {
-    pageSize: 'A4',
-    pageMargins: [ 40, 60, 40, 60 ],
+    // pageSize: 'A4',
+    // pageMargins: [ 40, 60, 40, 60 ],
     content: [
       {
         table: {

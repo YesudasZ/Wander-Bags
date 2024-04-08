@@ -73,7 +73,11 @@ admin_route.patch('/coupons/changeStatus/:couponId', auth.isAdminLogin, couponCo
 
 admin_route.get('/salesReport',auth.isAdminLogin,adminController.SaleReport)
 
+admin_route.get('/offers',auth.isAdminLogin,adminController.loadOffers)
 
+admin_route.post('/offers',auth.isAdminLogin,adminController.createCategoryOffer)
+
+admin_route.post('/productOffers',auth.isAdminLogin,adminController.createProducOffer)
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 

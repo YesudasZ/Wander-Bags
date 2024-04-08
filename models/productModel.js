@@ -42,7 +42,8 @@ const Product = mongoose.Schema({
         default: 0,
      },
     afterDiscount:{
-      type:Number
+      type:Number,
+      default: 0,
     },
     productAddDate:{
       type:Date,
