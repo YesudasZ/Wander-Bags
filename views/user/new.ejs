@@ -1,0 +1,102 @@
+<main class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 primary-sidebar sticky-sidebar">
+        <div class="widget-category mb-30">
+          <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+          <ul class="categories">
+            <li><a href="shop-grid-right.html">Shoes & Bags</a></li>
+            <li><a href="shop-grid-right.html">Blouses & Shirts</a></li>
+            <li><a href="shop-grid-right.html">Dresses</a></li>
+            <li><a href="shop-grid-right.html">Swimwear</a></li>
+            <li><a href="shop-grid-right.html">Beauty</a></li>
+            <li><a href="shop-grid-right.html">Jewelry & Watch</a></li>
+            <li><a href="shop-grid-right.html">Accessories</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-9 product-category">
+        <div class="shop-product-fillter">
+          <div class="sort-by-product-area bg-white mb-4 p-3 rounded">
+            <div class="sort-by-product-wrap">
+              <div class="sort-by">
+                <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+              </div>
+              <div class="sort-by-dropdown-wrap">
+                <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+              </div>
+            </div>
+            <div class="sort-by-dropdown">
+              <ul>
+                <li><a class="active sort-option" href="#" data-sort-option="featured">Featured</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="priceLowToHigh">Price: Low to High</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="priceHighToLow">Price: High to Low</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="releaseDate">Release Date</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="aAtoZZ">aA-zZ</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="zZtoaA">zZ-aA</a></li>
+                <li><a class="sort-option" href="#" data-sort-option="avgRating">Avg. Rating</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <% products.filter(product=> product.status !== 'delete').forEach(product => { %>
+            <div class="col-md-4">
+              <div class="product-item shadow rounded border">
+                <a href="/productdetails/<%= product.id %>" class="product-link">
+                  <div class="product-thumb position-relative">
+                    <img src="/productimages/<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded">
+                    <div class="product-overlay"></div>
+                  </div>
+                </a>
+                <div class="product-content py-3">
+                  <h4 class="product-title text-black fw-bold mb-1"><%= product.name %></h4>
+                  <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                  <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %></p>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+        <!-- Pagination -->
+        <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <% if (currentPage > 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                  </a>
+                </li>
+              <% } %>
+
+              <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+              <% } %>
+
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= totalPages %>" aria-label="Last">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -291,7 +291,7 @@
             <div class="header-action-right">
               <div class="header-action-2">
                 <div class="header-action-icon-2">
-                  <a href="shop-wishlist.html">
+                  <a href="/wishList">
                     <img class="svgInject" alt="Wander" src="../user-assets/imgs/theme/icons/icon-heart.svg">
        
                   </a>
@@ -438,14 +438,14 @@
   <hr>
   <div class="product-actions mt-3 trendy-actions">
     <div class="product-extra-links trendy-extra-links">
-      <button type="button" class="btn btn-primary mr-2 trendy-btn" id="addToCartBtn" data-productid="<%= product._id %>">
+      <button type="button" class="btn btn-info mr-2 trendy-btn" id="addToCartBtn" data-productid="<%= product._id %>">
           ADD TO CART <i class="bi bi-bag-plus ml-1 trendy-icon"></i>
       </button>
-      <button type="submit" class="btn btn-success trendy-btn">
+      <!-- <button type="submit" class="btn btn-success trendy-btn">
           BUY NOW
-      </button>
-      <button type="button" class="btn btn-warning trendy-btn" id="addToWishlistBtn" data-productid="<%= product._id %>">
-        ADD TO WISHLIST <i class="fi-rs-heart trendy-icon"></i>
+      </button> -->
+      <button type="button" class="btn btn-outline-info" id="addToWishlistBtn" data-productid="<%= product._id %>">
+        <i class="fi-rs-heart trendy-icon"></i>
     </button>
   </div>
   

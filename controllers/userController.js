@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 const Cart = require('../models/cartModel')
 const Wishlist = require('../models/wishlistModel')
 const Wallet = require("../models/walletModel")
+const Category = require('../models/categoryModel');
 require('dotenv').config();
 
 
@@ -242,6 +243,7 @@ const otpverify = async (req, res) => {
 const loadshop = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.user_id });
+    const categories = await Category.find({ status: "active" });
     const currentPage = req.query.page || 1;
     const perPage = 9; // Number of products per page
 
@@ -263,7 +265,7 @@ const loadshop = async (req, res) => {
 
     const totalPages = Math.ceil(totalProducts / perPage);
 
-    res.render('shop', { products, user: userData, currentPage, totalPages });
+    res.render('shop', { categories,products, user: userData, currentPage, totalPages });
   } catch (error) {
     console.log(error.message);
     res.redirect('/pagenotfound');
@@ -332,6 +334,53 @@ const loadforgetpassword = async (req, res) => {
   }
 }
 
+
+
+const filterProducts = async (req, res) => {
+  try { 
+    
+    const { sortOption, searchQuery, selectedCategory } = req.body;
+    let sortQuery = {};
+    let searchRegex = {};
+    let categoryFilter = {};
+
+    if (searchQuery) {
+      searchRegex = { name: { $regex: new RegExp(searchQuery, 'i') } };
+    }
+
+    if (selectedCategory) {
+      const categore = await Category.findById({ _id:selectedCategory  });
+      categoryFilter = { category: categore.name };
+    }
+
+    switch (sortOption) {
+      case 'priceLowToHigh':
+        sortQuery = { discountPrice: 1 };
+        break;
+      case 'priceHighToLow':
+        sortQuery = { discountPrice: -1 };
+        break;
+      case 'releaseDate':
+        sortQuery = { productAddDate: -1 };
+        break;
+      case 'aAtoZZ':
+        sortQuery = { name: 1 };
+        break;
+      case 'zZtoaA':
+        sortQuery = { name: -1 };
+        break;
+      default:
+        sortQuery = {};
+    }
+
+    const filteredProducts = await Product.find({ ...searchRegex, ...categoryFilter }).sort(sortQuery);
+ 
+    res.json(filteredProducts);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 
 
 const loadforgetpasswordotp = async (req, res) => {
@@ -679,7 +728,8 @@ module.exports = {
   resetPassword,
   loadWishlist,
   addToWishlist,
-  removeFromWishlist
+  removeFromWishlist,
+  filterProducts
   
 
 

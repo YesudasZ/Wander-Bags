@@ -276,7 +276,7 @@
                 <div class="container mt-5">
                   <h1 class="mb-4 text-info fw-bold text-center">Product Offers</h1>
                   <div class="row justify-content-center ">
-                    <div class="col-md-12" style="max-height: 400px; overflow-y: auto;" >
+                    <div class="col-md-12" style="max-height: 400px; overflow-y: auto;">
                       <table class="table  table-hover "  id="productOffersTable">
                         <thead class=" text-center">
                           <tr>
@@ -295,7 +295,7 @@
                               <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
                               <td><%= product.price %></td>
                               <td><%= product.discountPrice %></td>
-                              <td style="max-width: 20px"> <input type="number" class="form-control" id="discountPercentagee" min="1" max="100" required></td>
+                              <td style="max-width: 20px"> <input type="number" class="form-control discount-percentage" id="discountPercentage" min="1" max="100" required></td>
                               <td>
                                 <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
                                   Apply
@@ -462,13 +462,15 @@ const applyDiscount = async (productId, discountPercentage) => {
 
 
 
+
+
+
 // Handle apply discount button click
 const handleApplyDiscountClick = (event) => {
   event.preventDefault();
   const productId = event.target.dataset.productId;
-  const discountPercentage = document.getElementById('discountPercentagee').value;
+  const discountPercentage = event.target.parentElement.previousElementSibling.firstElementChild.value;
   applyDiscount(productId, discountPercentage);
-  console.log("test",discountPercentage);
 };
 
 // Initialize
@@ -476,6 +478,21 @@ document.querySelectorAll('.apply-discount').forEach((button) => {
   button.addEventListener('click', handleApplyDiscountClick);
 });
 fetchProductOffers();
+
+// Handle apply discount button click
+// const handleApplyDiscountClick = (event) => {
+//   event.preventDefault();
+//   const productId = event.target.dataset.productId;
+//   const discountPercentage = document.getElementById('discountPercentagee').value;
+//   applyDiscount(productId, discountPercentage);
+//   console.log("test",discountPercentage);
+// };
+
+// Initialize
+// document.querySelectorAll('.apply-discount').forEach((button) => {
+//   button.addEventListener('click', handleApplyDiscountClick);
+// });
+// fetchProductOffers();
 
 
 // Fetch product offers
