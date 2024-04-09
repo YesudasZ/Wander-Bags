@@ -133,8 +133,8 @@ const logout = async (req, res) => {
 
 const loadOrders = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+    const limit = 5; // Number of orders per page
+    const page = parseInt(req.query.page) || 1; // Current page number
     const startIndex = (page - 1) * limit;
 
     const orders = await Order.find({})
@@ -148,12 +148,18 @@ const loadOrders = async (req, res) => {
       .skip(startIndex)
       .limit(limit);
 
-    res.render('orders', { orders, page, limit, totalOrders: orders.length });
+    const totalOrders = await Order.countDocuments({});
+
+    res.render('orders', { orders, page, limit, totalOrders });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage');
   }
 };
+
+
+
+
 const getOrderDetails = async (req, res) => {
   try {
 

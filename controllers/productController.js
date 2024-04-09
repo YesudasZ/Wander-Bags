@@ -17,16 +17,23 @@ const loadproducts = async (req, res) => {
     res.redirect('/admin/errorpage')
   }
 }
-
 const getProducts = async (req, res) => {
   try {
-    const removedProducts = await Product.find({ status: 'delete' });
-    const products = await Product.find({});
+    const limit = 5; // Number of products per page
+    const page = parseInt(req.query.page) || 1; // Current page number
 
-    res.render('products', { products, removedProducts });
+    const products = await Product.find({})
+     .sort({ productAddDate: -1 }) // Sort by productAddDate in descending order
+     .skip((page - 1) * limit)
+     .limit(limit);
+
+    const removedProducts = await Product.find({ status: 'delete' });
+    const total = await Product.countDocuments({});
+
+    res.render('products', { products, page, total, limit, removedProducts });
   } catch (err) {
     console.error(err);
-    res.redirect('/admin/errorpage')
+    res.redirect('/admin/errorpage');
   }
 };
 

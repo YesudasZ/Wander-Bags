@@ -357,11 +357,12 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                <div class="card">
-                  <div class="card-header">
-                    <h5 class="mb-0">Your Orders</h5>
-                  </div>
-                  <table class="table table-hover">
+                <div class="card" >
+                  
+                    <h5 class="mb-4 text-black fw-bold text-center pt-2">My Orders</h5>
+                 
+                  <div style="max-height: 500px; overflow-y: auto;" >
+                  <table class="table table-hover" >
                     <thead>
                       <tr>
                         <th>Product</th>
@@ -409,6 +410,7 @@
                     </tbody>
                   </table>
                 </div>
+                </div>
               </div>
 
 
@@ -440,20 +442,21 @@
               </div>
 
               <div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
-                <div class="wallet-info">
-                  <h6 class="wallet-balance">Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h6>
+                <h5 class="mb-4 text-info fw-bold text-center pt-2">My Wallet</h5>
+                <div class="wallet-info " style="width: fit-content;">
+                  <h6 class="wallet-balance fw-bold text-success">Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h6>
                 </div>
-                <div class="card-body">
+                <div class="card-body"  style="max-height: 500px; overflow-y: auto;" >
                   <div class="table-responsive">
                     <table class="table table-hover">
                       <thead>
                         <tr class="table-header">
-                          <th>Order Id</th>
+                          <th>Transaction Date</th>
                           <th>Amount</th>
                           <th>Order Status</th>
                           <th>Payment Method</th>
                           <th>Payment Status</th>
-                          <th>Transaction Date</th>
+                         
                         </tr>
                       </thead>
                       <tbody>
@@ -461,12 +464,12 @@
                           <% order.items.forEach(item=> { %>
                             <% if (order.orderStatus==='Returned' ) { %>
                               <tr>
-                                <td><%= order.oId %></td>
+                                <td><%= order.orderDate.toDateString() %></td>
                                 <td><%= item.price.toFixed(2) %></td>
                                 <td><%= order.orderStatus %></td>
                                 <td><%= order.paymentMethod %></td>
                                 <td class="<%= order.paymentStatus === 'Pending' ? 'text-warning' : order.paymentStatus === 'Refunded' ? 'text-success' : '' %>"><%= order.paymentStatus %></td>
-                                <td><%= order.orderDate.toDateString() %></td>
+                             
                               </tr>
                             <% } %>
                           <% }) %>

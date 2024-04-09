@@ -304,15 +304,30 @@
 
 
       
-            <div class="pagination-area mt-30 mb-50">
+            <div class="pagination-area mt-30 pb-30 ">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    <ul class="pagination justify-content-center p-5">
+                        <% if(page > 1) { %>
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/products?page=<%= page-1 %>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        <% } %>
+            
+                        <% for(let i = 1; i <= Math.ceil(total / limit); i++) { %>
+                            <li class="page-item <%= i === page? 'active' : '' %>"><a class="page-link" href="/admin/products?page=<%= i %>"><%= i %></a></li>
+                        <% } %>
+            
+                        <% if(page < Math.ceil(total / limit)) { %>
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/products?page=<%= page+1 %>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        <% } %>
                     </ul>
                 </nav>
             </div>

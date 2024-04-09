@@ -197,7 +197,7 @@
                     Create Category Offer
                   </button>
                   <div class="row justify-content-center ">
-                    <div class="col-md-6">
+                    <div class="col-md-6"  style="max-height: 400px; overflow-y: auto;">
                       <table class="table  table-hover " id="categoryOffersTable">
                         <thead>
                           <tr>
@@ -238,11 +238,11 @@
                         <form id="createCategoryOfferForm">
                           <div class="mb-3">
                             <label for="startDate" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="startDate" required>
+                            <input type="date" class="form-control" id="startDate" required min="<%= new Date().toISOString().split('T')[0] %>">
                           </div>
                           <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="endDate" required>
+                            <input type="date" class="form-control" id="endDate" required min="<%= new Date().toISOString().split('T')[0] %>">
                           </div>
                           <div class="mb-3">
                             <label for="category" class="form-label">Category</label>

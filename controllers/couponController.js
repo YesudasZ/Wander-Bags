@@ -6,8 +6,17 @@ const Cart = require('../models/cartModel')
 
 const loadCoupon = async(req,res)=>{
   try {
-    const coupons= await Coupon.find({})
-    res.render('coupons',{coupons:coupons});
+    const limit = 5; // Number of coupons per page
+    const page = parseInt(req.query.page) || 1; // Current page number
+    const startIndex = (page - 1) * limit;
+
+    const coupons = await Coupon.find({})
+      .skip(startIndex)
+      .limit(limit);
+
+    const total = await Coupon.countDocuments({});
+
+    res.render('coupons', { coupons, page, limit, total });
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }

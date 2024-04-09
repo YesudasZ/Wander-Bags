@@ -175,10 +175,19 @@
         </header>
 <section>
 
+
+
+
+  
+  <div class="row justify-content-center mt-5 ">
+    <div class="col-md-11 table-container">
+      <div class="shadow-lg p-5 bg-white rounded ">
   <div class="container my-5">
-    <h1 class="text-center mb-4"></h1>
-    <table class="table table-striped">
-      <thead>
+    <h1 class=" text-info fw-bold text-center">Orders</h1>
+    <div class="row justify-content-center mt-5 ">
+      <div class="col-md-12">
+    <table class="table table-bordered">
+      <thead class=" text-center">
         <tr>
           <th>Customer</th>
           <th>Product</th>
@@ -189,7 +198,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class=" ">
         <% orders.forEach(order => { %>
         <tr>
           <td><%= order.user.name %></td>
@@ -225,39 +234,11 @@
           <td><%= order.orderStatus %></td>
           <td>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#statusModal" data-order-id="<%= order._id %>">
+            <button type="button" class="btn  btn-outline-info" data-toggle="modal" data-target="#statusModal" data-order-id="<%= order._id %>">
                 Change Status
               </button>
-    
-           
-            <!-- Modal -->
-            <!-- <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="statusModalLabel">Change Order Status</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                  
-                    <select class="form-control">
-                      <option selected>Select Status</option>
-                      <option value="Processing">Processing</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>">
+  
+            <button type="button" class="btn  btn-outline-secondary" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>">
               View Details
             </button>
           </td>
@@ -317,7 +298,9 @@
       </tbody>
     </table>
   </div>
-
+</div>
+</div>
+</div>
 
 
  <!-- Status Modal -->
@@ -356,22 +339,34 @@
 </div>
 
 
-<div class="pagination-area ml-100 pb-30 mt-30 mb-50">
+<div class="pagination-area mt-30 pb-30">
   <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-start">
-      <li class="page-item active"><a class="page-link" href="/admin/orders?page=1">01</a></li>
-      <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= page > 1 ? page - 1 : 1 %>">«</a></li>
-      <% for (let i = 1; i <= totalOrders; i++) { %>
-        <% if (page === i) { %>
-          <li class="page-item active"><a class="page-link" href="#"><%= i %></a></li>
-        <% } else { %>
-          <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %></a></li>
-        <% } %>
-      <% } %>
-      <li class="page-item"><a class="page-link" href="/admin/orders?page=<%= page < totalOrders ? page + 1 : totalOrders %>">»</a></li>
-    </ul>
+      <ul class="pagination justify-content-center">
+          <% if(page > 1) { %>
+              <li class="page-item">
+                  <a class="page-link" href="/admin/orders?page=<%= page-1 %>" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                      <span class="sr-only">Previous</span>
+                  </a>
+              </li>
+          <% } %>
+
+          <% for(let i = 1; i <= Math.ceil(totalOrders / limit); i++) { %>
+              <li class="page-item <%= i === page? 'active' : '' %>"><a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %></a></li>
+          <% } %>
+
+          <% if(page < Math.ceil(totalOrders / limit)) { %>
+              <li class="page-item">
+                  <a class="page-link" href="/admin/orders?page=<%= page+1 %>" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                  </a>
+              </li>
+          <% } %>
+      </ul>
   </nav>
 </div>
+
 
 </section>
         <footer class="main-footer font-xs">

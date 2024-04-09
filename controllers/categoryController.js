@@ -3,14 +3,22 @@ const Product = require('../models/productModel');
 
 
 const loadcategories = async (req, res) => {
-  try {
-    const categories = await Category.find({});
-    res.render('categories', { categories });
-  } catch (error) {
-    console.log(error.message);
-    res.redirect('/admin/errorpage')
-  }
-}
+    try {
+      const limit = 10; // Number of categories per page
+      const page = parseInt(req.query.page) || 1; // Current page number
+  
+      const categories = await Category.find({})
+        .skip((page - 1) * limit)
+        .limit(limit);
+  
+      const total = await Category.countDocuments({});
+  
+      res.render('categories', { categories, page, total, limit });
+    } catch (error) {
+      console.log(error.message);
+      res.redirect('/admin/errorpage');
+    }
+  };
 
 const addCategory = async (req, res) => {
   try {

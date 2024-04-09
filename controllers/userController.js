@@ -499,7 +499,13 @@ const userLogout = (req, res) => {
 const loadprofile = async (req, res) => {
   try {
     const user_id = req.session.user_id
-    const orders = await Order.find({ user: user_id })
+    const orders = await Order.find({ user: user_id }).sort({ orderDate: -1 })
+    .populate('cart')
+    .populate({
+       path: 'items.productId',
+       model: 'Product',
+       select: 'title image productPrice'
+     });
     const userData = await User.findById({ _id: req.session.user_id })
     const wallet = await  Wallet.findOne({ user: user_id})
     res.render('profile', { user: userData, orders: orders,wallet:wallet, errorMessage: null, successMessage: null })
