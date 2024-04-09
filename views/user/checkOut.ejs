@@ -20,10 +20,10 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
-.radio-button-small {
+/* .radio-button-small {
   width: 9px !important;;
   height: 16px !important;;
-}
+} */
 
      .cart-section{
       border: 1px solid #ccc;
@@ -333,6 +333,9 @@
               <button class="btn btn-primary" data-toggle="modal" data-target="#applyCouponModal">Apply Coupon</button>
             </div>
 
+            <div class="">
+              <button class="btn btn-danger">Apply Coupon</button>
+            </div>
 
             <table class="table">
               <tbody>
@@ -364,16 +367,16 @@
                 <div class="form-group">
                   <label>Payment Method:</label>
                   <div class="d-flex align-items-center">
-                    <div class="form-check me-3">
-                      <input class="form-check-input radio-button-small m-2" type="radio" name="paymentMethod" id="creditCard" value="Razorpay">
+                    <div class="form-check me-3 d-flex align-items-center">
+                      <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="creditCard" value="Razorpay">
                       <label class="form-check-label" for="creditCard">Razorpay</label>
                     </div>
-                    <div class="form-check me-3">
-                      <input class="form-check-input radio-button-small m-2" type="radio" name="paymentMethod" id="paypal" value="Paypal">
+                    <div class="form-check me-3 d-flex align-items-center">
+                      <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="paypal" value="Paypal">
                       <label class="form-check-label" for="paypal">Paypal</label>
                     </div>
-                    <div class="form-check">
-                      <input class="form-check-input radio-button-small m-2" type="radio" name="paymentMethod" id="cashOnDelivery" value="Cash On Delivery">
+                    <div class="form-check me-3 d-flex align-items-center">
+                      <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="cashOnDelivery" value="Cash On Delivery">
                       <label class="form-check-label" for="cashOnDelivery">Cash On Delivery</label>
                     </div>
                   </div>
