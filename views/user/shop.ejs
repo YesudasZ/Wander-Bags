@@ -156,45 +156,36 @@
                     <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
                 </div>
                 <div class="header-right d-flex align-items-center">
-                  <div class="search-style-2">
-                    <form action="/shop" method="GET">
-                      <select class="select-active">
-                        <option>All Products</option>
-                      </select>
-                      <input type="text" name="searchQuery" placeholder="Search for items...">
-                    </form>
-                  </div>
+                    <div class="search-style-2">
+                        <form action="#">
+                            <select class="select-active">
+                                <option>All Categories</option>
+                            </select>
+                            <input type="text" placeholder="Search for items...">
+                        </form>
+                    </div>
                     <div class="header-action-right d-flex align-items-center">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="/wishList">
-                                    <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
-                                  
-                                </a>
+                              <a href="/wishList">
+                                <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
+                                <% if (wishlistCount > 0) { %>
+                                  <span class="pro-count blue"><%= wishlistCount %></span>
+                                <% } %>
+                              </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="/cart">
-                                    <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
-                               
-                                </a>
+                              <a class="mini-cart-icon" href="/cart">
+                                <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
+                                <% if (cartCount > 0) { %>
+                                  <span class="pro-count blue"><%= cartCount %></span>
+                                <% } %>
+                              </a>
                             </div>
-                        </div>
+                          </div>
                         <div class="header-info header-info-right text-end">
                             <ul class="list-inline mb-0">
-                                <!-- <li class="list-inline-item">
-                                    <a class="language-dropdown-active text-dark" href="#"> <i class="fi-rs-world"></i> English</a>
-                                </li> -->
-                                <!-- <li class="list-inline-item dropdown">
-                                    <a class="dropdown-toggle text-black" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fi-rs-user"></i> <%= user.name %>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                                        <li><a class="dropdown-item" href="#">Order</a></li>
-                                        <li><a class="dropdown-item" href="#">Wallet</a></li>
-                                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                                    </ul>
-                                </li> -->
+                           
                                 <li class="dropdown nav-item m-5">
                                     <a class="dropdown-toggle text-black" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fi-rs-user"></i> <%= user.name %>
@@ -224,8 +215,8 @@
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
                         <nav>
                             <ul>
-                                <li><a href="/home">Home</a></li>
-                                <li><a class="active" href="/shop">Shop</a></li>
+                                <li><a class="active" href="/home">Home</a></li>
+                                <li><a href="/shop">Shop</a></li>
                             </ul>
                         </nav>
                     </div>

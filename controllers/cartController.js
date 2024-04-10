@@ -1,14 +1,16 @@
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Cart = require('../models/cartModel')
-
+const Wishlist = require('../models/wishlistModel')
 
 const loadCart = async (req, res) => {
     try {
         const userData = await User.findById({ _id: req.session.user_id })
         const cart = await Cart.findOne({ owner: userData._id }).populate('items.productId');
+        const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
 
-        res.render('cart', { cart: cart, user: userData });
+        res.render('cart', { cart: cart, user: userData,   cartCount: cart?.items?.length || 0,
+            wishlistCount: wishlist?.items?.length || 0, });
     } catch (error) {
         console.log(error.message);
         res.redirect('/pagenotfound')

@@ -20,10 +20,6 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
-/* .radio-button-small {
-  width: 9px !important;;
-  height: 16px !important;;
-} */
 
      .cart-section{
       border: 1px solid #ccc;
@@ -193,18 +189,22 @@
                     <div class="header-action-right d-flex align-items-center">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="/wishList">
-                                    <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
-                                    
-                                </a>
+                              <a href="/wishList">
+                                <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
+                                <% if (wishlistCount > 0) { %>
+                                  <span class="pro-count blue"><%= wishlistCount %></span>
+                                <% } %>
+                              </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="/cart">
-                                    <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
-                                    
-                                </a>
+                              <a class="mini-cart-icon" href="/cart">
+                                <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
+                                <% if (cartCount > 0) { %>
+                                  <span class="pro-count blue"><%= cartCount %></span>
+                                <% } %>
+                              </a>
                             </div>
-                        </div>
+                          </div>
                         <div class="header-info header-info-right text-end">
                             <ul class="list-inline mb-0">
                            
@@ -333,9 +333,7 @@
               <button class="btn btn-primary" data-toggle="modal" data-target="#applyCouponModal">Apply Coupon</button>
             </div>
 
-            <div class="">
-              <button class="btn btn-danger">Apply Coupon</button>
-            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-3" id="removeCouponBtn">Remove Coupon</button>
 
             <table class="table">
               <tbody>
@@ -347,6 +345,7 @@
                   <th colspan="3">Shipping</th>
                   <td><em>Free Shipping</em></td>
                 </tr>
+                
                 <tr>
                   <th colspan="3">Total</th>
                   <td><span class="font-xl text-brand fw-900" id="totalAmount">₹.<%= cart.billTotal %></span></td>
@@ -1112,8 +1111,8 @@ applyCouponBtn.addEventListener('click', async () => {
 
       const couponDiscountElement = document.createElement('tr');
       couponDiscountElement.innerHTML = `
-        <th colspan="3">Coupon Discount</th>
-        <td>-₹.${couponDiscountAmount.toFixed(2)}</td>
+        <th class="disc" colspan="3">Coupon Discount</th>
+        <td class="disc">-₹.${couponDiscountAmount.toFixed(2)}</td>
       `;
       const tableBody = document.querySelector('table tbody');
       tableBody.insertBefore(couponDiscountElement, tableBody.lastElementChild);
@@ -1154,6 +1153,51 @@ function showAlert(message, type) {
       });
   console.log(`${type}: ${message}`);
 }
+
+
+
+const removeCouponBtn = document.getElementById('removeCouponBtn');
+removeCouponBtn.addEventListener('click', async () => {
+  try {
+    const response = await fetch('/remove-coupon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Remove the coupon discount row from the table
+      const couponDiscountRow = document.querySelectorAll('.disc');
+      console.log("test",couponDiscountRow);
+      if (couponDiscountRow) {
+        couponDiscountRow.forEach((u)=>u.remove());
+      }
+
+      // Update the total amount
+      const totalAmountElement = document.getElementById('totalAmount');
+      totalAmountElement.textContent = `₹.${data.updatedTotalAmount.toFixed(2)}`;
+
+      // Enable the "Apply Coupon" button
+      const applyCouponBtn = document.getElementById('applyCouponBtn');
+      applyCouponBtn.disabled = false;
+      isCouponApplied = false;
+
+      // Show a success message
+      showAlert(data.message, 'success');
+    } else {
+      // Show an error message
+      showAlert(data.message, 'error');
+    }
+  } catch (error) {
+    console.error('Error removing coupon:', error);
+    // Show an error message
+    showAlert('An error occurred while removing the coupon', 'error');
+  }
+});
+
 
       </script>
 

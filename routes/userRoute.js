@@ -127,5 +127,8 @@ user_route.delete('/wishList/remove/:productId', auth.isLogin, userController.re
 
 user_route.post('/apply-coupon', auth.isLogin, couponController.applyCoupon);
 
+user_route.post('/remove-coupon', auth.isLogin, couponController.removeCoupon);
+
+
 
 module.exports = user_route;

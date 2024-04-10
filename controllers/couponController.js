@@ -111,6 +111,7 @@ let updatedTotalAmount;
 const couponDiscount = cart.billTotal- updatedTotalAmount
   
     cart.billTotal = updatedTotalAmount;
+    cart.couponDiscount = couponDiscount;
     await cart.save();
 
     res.status(200).json({ success: true, message: 'Coupon applied successfully', couponDiscount, updatedTotalAmount });
@@ -120,10 +121,31 @@ const couponDiscount = cart.billTotal- updatedTotalAmount
   }
 };
 
+
+
+const removeCoupon = async (req, res) => {
+  try {
+    console.log("TEST-1",req.session.user_id);
+    const userId = req.session.user_id;
+    const cart = await Cart.findOne({ owner: userId });
+console.log("test-2",cart.billTotal);
+console.log("test-3",cart.couponDiscount);
+    cart.billTotal = cart.billTotal + cart.couponDiscount;
+    cart.couponDiscount = 0;
+    await cart.save();
+    console.log("test-4",cart.billTotal);
+    res.status(200).json({ success: true, message: 'Coupon removed successfully', updatedTotalAmount: cart.billTotal });
+  } catch (error) {
+    console.error('Error removing coupon:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   loadCoupon,
   addCoupon,
   changeCouponStatus,
   applyCoupon,
-  
+  removeCoupon
 }

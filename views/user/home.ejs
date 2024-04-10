@@ -259,18 +259,22 @@ footer.main {
                         <div class="header-action-right d-flex align-items-center">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
-                                    <a href="/wishList">
-                                        <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
-                                        
-                                    </a>
+                                  <a href="/wishList">
+                                    <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
+                                    <% if (wishlistCount > 0) { %>
+                                      <span class="pro-count blue"><%= wishlistCount %></span>
+                                    <% } %>
+                                  </a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="/cart">
-                                        <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
-                                        
-                                    </a>
+                                  <a class="mini-cart-icon" href="/cart">
+                                    <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
+                                    <% if (cartCount > 0) { %>
+                                      <span class="pro-count blue"><%= cartCount %></span>
+                                    <% } %>
+                                  </a>
                                 </div>
-                            </div>
+                              </div>
                             <div class="header-info header-info-right text-end">
                                 <ul class="list-inline mb-0">
                                

@@ -182,11 +182,21 @@
           
             <section class="filter-section">
               <div class="container my-5">
-                <div class="row">
-                  <div class="col-md-3">
-                    <!-- <label for="customDate">Custom Date:</label> -->
-                    <input type="date" id="customDate" class="form-control">
-                  </div>
+                <div class="row justify-content-center">
+
+                    <div class="col-md-3">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" class="form-control">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" class="form-control">
+                      </div>
+                      <div class="col-md-2 pt-30">
+                        <button id="customDateRange" class="btn btn-primary">Apply</button>
+                      </div>
+                    </div>
+                      <div class="row justify-content-center mt-3">
                   <div class="col-md-2">
                     <!-- <label for="day">Day:</label> -->
                     <button id="day" class="btn btn-primary">Day</button>
@@ -373,77 +383,50 @@
     
 
 
-const customDateInput = document.getElementById('customDate');
+// const customDateInput = document.getElementById('customDate');
 const dayButton = document.getElementById('day');
 const weekButton = document.getElementById('week');
 const monthButton = document.getElementById('month');
 const yearButton = document.getElementById('year');
 
 
-customDateInput.addEventListener('change', applyFilter);
+// customDateInput.addEventListener('change', applyFilter);
 dayButton.addEventListener('click', applyFilter);
 weekButton.addEventListener('click', applyFilter);
 monthButton.addEventListener('click', applyFilter);
 yearButton.addEventListener('click', applyFilter);
 
 
+const startDateInput = document.getElementById('startDate');
+const endDateInput = document.getElementById('endDate');
+const customDateRangeButton = document.getElementById('customDateRange');
+
+customDateRangeButton.addEventListener('click', applyFilter);
+
 function applyFilter(event) {
   let filter = '';
-  let date = '';
+  let startDate = startDateInput.value;
+  let endDate = endDateInput.value;
 
-  if (event.target.id === 'customDate') {
-    filter = 'customDate';
-    date = event.target.value;
+  if (event.target.id === 'customDateRange') {
+    filter = 'customDateRange';
   } else {
     filter = event.target.id;
   }
 
- 
-  fetch(`/admin/salesReport?filter=${filter}&date=${date}`)
+  fetch(`/admin/salesReport?filter=${filter}&startDate=${startDate}&endDate=${endDate}`)
     .then(response => response.text())
     .then(html => {
-
-
-  const parser = new DOMParser();
+      const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       const tableHtml = doc.querySelector('.table-responsive').innerHTML;
 
-     
       const tableContainer = document.querySelector('.table-responsive');
       tableContainer.innerHTML = tableHtml;
-
     })
     .catch(error => console.error(error));
 }
 
-
-// const downloadPDFBtn = document.getElementById('downloadPDF');
-// const downloadExcelBtn = document.getElementById('downloadExcel');
-// const tableElement = document.querySelector('.table');
-
-// downloadPDFBtn.addEventListener('click', downloadPDF);
-// downloadExcelBtn.addEventListener('click', downloadExcel);
-
-// function downloadPDF() {
-    
-//   const doc = new jsPDF('p', 'pt', 'letter');
-//   const tableHTML = tableElement.outerHTML;
-
-//   doc.html(tableHTML, {
-//     callback: function (doc) {
-//       doc.save('sales_report.pdf');
-//     },
-//     x: 10,
-//     y: 10,
-//     autoPaging: 'text',
-//     margin: { top: 20, right: 20, bottom: 20, left: 20 },
-//   });
-// }
-
-// function downloadExcel() {
-//   const workbook = XLSX.utils.table_to_book(tableElement);
-//   XLSX.writeFile(workbook, 'sales_report.xlsx');
-// }
 
 
 

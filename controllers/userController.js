@@ -262,10 +262,13 @@ const loadshop = async (req, res) => {
         .limit(perPage);
       totalProducts = await Product.countDocuments();
     }
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
 
     const totalPages = Math.ceil(totalProducts / perPage);
 
-    res.render('shop', { categories,products, user: userData, currentPage, totalPages });
+    res.render('shop', { categories,products, user: userData, currentPage, totalPages,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0, });
   } catch (error) {
     console.log(error.message);
     res.redirect('/pagenotfound');
@@ -273,18 +276,24 @@ const loadshop = async (req, res) => {
 };
 
 
-
 const loadHome = async (req, res) => {
   try {
-    const userData = await User.findById({ _id: req.session.user_id })
+    const userData = await User.findById({ _id: req.session.user_id });
     const products = await Product.find();
-    res.render('home', { products, user: userData });
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+
+    res.render('home', {
+      products,
+      user: userData,
+      cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0,
+    });
   } catch (error) {
     console.log(error.message);
-    res.redirect('/pagenotfound')
+    res.redirect('/pagenotfound');
   }
-}
-
+};
 
 
 const sortProducts = async (req, res) => {
@@ -476,7 +485,11 @@ const getProductDetails = async (req, res) => {
    
     const productId = req.params.productId;
     const product = await Product.findById(productId);
-    res.render('productdetails', { product, user: userData });
+
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    res.render('productdetails', { product, user: userData,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0, });
   } catch (error) {
     console.error(error);
     res.redirect('/pagenotfound')
@@ -508,7 +521,10 @@ const loadprofile = async (req, res) => {
      });
     const userData = await User.findById({ _id: req.session.user_id })
     const wallet = await  Wallet.findOne({ user: user_id})
-    res.render('profile', { user: userData, orders: orders,wallet:wallet, errorMessage: null, successMessage: null })
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    res.render('profile', { user: userData, orders: orders,wallet:wallet, errorMessage: null, successMessage: null ,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0,})
   } catch (error) {
     console.error(error);
     res.redirect('/pagenotfound')
@@ -610,7 +626,10 @@ const loadWishlist = async(req,res)=>{
   try {
     const userData = await User.findById({ _id: req.session.user_id })
     const wishlist = await Wishlist.findOne({ user: userData._id }).populate('items.productId');
-    res.render('wishList', { user: userData,wishlist: wishlist });
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+
+    res.render('wishList', { user: userData,wishlist: wishlist, cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0, });
 } catch (error) {
     console.log(error.message);
     res.redirect('/pagenotfound')

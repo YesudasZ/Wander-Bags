@@ -6,6 +6,7 @@ const axios = require('axios')
 const Order = require("../models/orderModel");
 const Wallet = require("../models/walletModel")
 const Coupon  = require('../models/CouponModel');
+const Wishlist = require('../models/wishlistModel')
 require('dotenv').config();
 
 
@@ -15,9 +16,12 @@ const loadCheckout = async (req, res) => {
   try {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id }).populate('address');
-    const cart = await Cart.findOne({ owner: req.session.user_id })
+    // const cart = await Cart.findOne({ owner: req.session.user_id })
     const coupons= await Coupon.find({})
-    res.render('checkOut', { cart: cart, user: userData, coupons:coupons });
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    res.render('checkOut', { cart: cart, user: userData, coupons:coupons ,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0,});
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }
@@ -107,7 +111,10 @@ const loadOderplaced = async (req, res) => {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id })
     const order = await Order.findOne({ user: user_id })
-    res.render('orderPlaced', { user: userData, orders: order });
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    res.render('orderPlaced', { user: userData, orders: order ,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0,});
   } catch (error) {
     return res.redirect('/admin/errorpage')
   }

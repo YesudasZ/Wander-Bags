@@ -212,7 +212,8 @@ const SaleReport = async (req, res) => {
     const startIndex = (page - 1) * limit;
 
     let filter = req.query.filter;
-    let date = req.query.date;
+    let startDate = req.query.startDate;
+    let endDate = req.query.endDate;
 
     let query = {
       orderStatus: 'Delivered'
@@ -229,12 +230,12 @@ const SaleReport = async (req, res) => {
         $lt: new Date()
       };
     } else if (filter === 'month') {
-     const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-     const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
-     query.orderDate = {
-       $gte: firstDayOfMonth,
-       $lt: lastDayOfMonth
-     };
+      const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+      query.orderDate = {
+        $gte: firstDayOfMonth,
+        $lt: lastDayOfMonth
+      };
     } else if (filter === 'year') {
       const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);
       const lastDayOfYear = new Date(new Date().getFullYear(), 11, 31);
@@ -244,8 +245,13 @@ const SaleReport = async (req, res) => {
       };
     } else if (filter === 'customDate') {
       query.orderDate = {
-        $gte: new Date(date),
-        $lt: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+        $gte: new Date(startDate),
+        $lt: new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1))
+      };
+    } else if (filter === 'customDateRange') {
+      query.orderDate = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
       };
     }
 
