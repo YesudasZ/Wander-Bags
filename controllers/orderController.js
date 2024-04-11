@@ -209,51 +209,52 @@ const manageRazorpayOrder =  async (req,res)=> {
   }
 }
 
-
 const returnOrderAndRefund = async (req, res) => {
-
-  const  orderId  = req.params.id;
+  const orderId = req.params.id;
   const { returnReason } = req.body;
 
   try {
-    
-      
-      const order = await Order.findById(orderId);
-   
-      if (!order) {
-          return res.status(404).json({ success: false, message: "Order not found" });
-      }
+    const order = await Order.findById(orderId);
 
-    
-      order.orderStatus = 'Returned';
-      order.paymentStatus = 'Refunded';
-      order.returnReason = returnReason
-      await order.save();
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
 
-      const refundAmount = order.billTotal;
+    order.orderStatus = 'Returned';
+    order.paymentStatus = 'Refunded';
+    order.returnReason = returnReason;
+    await order.save();
 
-      
-     
-      let wallet = await Wallet.findOne({ user:req.session.user_id});
+    const refundAmount = order.billTotal;
+    let wallet = await Wallet.findOne({ user: req.session.user_id });
 
-     
-      if (!wallet) {
-          wallet = new Wallet({
-              user: req.session.user_id,
-              walletBalance: 0
-          });
-      }
-      wallet.walletBalance += refundAmount;
-      wallet.refundAmount += refundAmount;
-      await wallet.save();
-   
-      return res.status(200).json({ success: true, message: "Order returned successfully and refund processed to wallet" });
+    if (!wallet) {
+      wallet = new Wallet({
+        user: req.session.user_id,
+        walletBalance: 0,
+        transactions: []
+      });
+    }
+
+    wallet.walletBalance += refundAmount;
+    wallet.refundAmount += refundAmount;
+
+    // Add transaction details
+    wallet.transactions.push({
+      amount: refundAmount,
+      description: `Refund for order #${order.oId}`,
+      type: 'Refund',
+      transactionDate: new Date()
+    });
+
+    await wallet.save();
+
+    return res.status(200).json({ success: true, message: "Order returned successfully and refund processed to wallet" });
   } catch (error) {
-      console.error("Error returning order and refunding amount:", error);
-      return res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Error returning order and refunding amount:", error);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-
 
 module.exports = {
   loadCheckout,

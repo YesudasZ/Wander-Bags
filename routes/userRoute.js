@@ -3,7 +3,7 @@ const user_route = express();
 const auth = require('../middleware/userauth');
 const passport = require('passport')
  require('../passport');
- const formData = require('express-form-data');
+//  const formData = require('express-form-data');
  //user_route.use(formData.parse());
 
  user_route.use(passport.initialize());

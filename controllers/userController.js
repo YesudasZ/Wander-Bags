@@ -25,6 +25,19 @@ let transporter = nodemailer.createTransport({
 })
 
 
+function generatingRefferalCode() {
+  const characters = `ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+  let refferalCode = "";
+  const codeLength = 8;
+
+  for (let i = 0; i < codeLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    refferalCode += characters[randomIndex];
+  }
+  return refferalCode;
+}
+
+
 const securePassword = async (password) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
@@ -66,6 +79,7 @@ const landingLoad = async (req, res) => {
 
 const insertuser = async (req, res) => {
   try {
+    
     const email = req.body.email;
     const mobileNumber = req.body.mobile;
     const existingemail = await User.findOne({ email: email })
@@ -76,8 +90,23 @@ const insertuser = async (req, res) => {
     if (existingnumber) {
       return res.render("signup", { message: "Mobile already exists" })
     }
+    
+    if (req.body.referedBy) {
+      const referrer = await User.findOne({ refCode: req.body.referedBy });
+      if (!referrer) {
+        console.log("Invalid referral code");
+        return res.render("signup", {
+          message: "Invalid Referral Code",
+        });
+      }
+    }
+
+
+
+    const refCode = generatingRefferalCode();
     const otp = generateOTP();
     console.log(otp);
+    console.log("ref",refCode);
     const details = {
       name: req.body.name,
       email: req.body.email,
@@ -86,13 +115,15 @@ const insertuser = async (req, res) => {
       is_admin: 0,
       is_verified: 0,
       otp: otp,
-      otpExpiration: Date.now() + 60000
-    };
+      otpExpiration: Date.now() + 60000,
+      refCode:refCode,
+      referedBy: req.body.referedBy
+     };
 
     req.session.details = details
     req.session.save();
     res.redirect('/otpverify')
-    console.log(req.session.otp);
+    
     const mailoptions = {
       from: "wanderbags29@gmail.com",
       to: req.body.email,
@@ -204,14 +235,12 @@ const loadotpverify = async (req, res) => {
   }
 }
 
-
 const otpverify = async (req, res) => {
   try {
-    const otpcheck = await parseInt(req.body.otp);
-
+    const otpcheck = parseInt(req.body.otp);
     const dbotp = req.session.details.otp;
 
-    if (dbotp == otpcheck) {
+    if (dbotp === otpcheck) {
       if (req.session.details.otpExpiration < Date.now()) {
         return res.json({ success: false, message: 'OTP has expired' });
       }
@@ -221,15 +250,51 @@ const otpverify = async (req, res) => {
         name: req.session.details.name,
         email: req.session.details.email,
         mobile: req.session.details.mobile,
+        refCode: req.session.details.refCode,
+        referedBy: req.session.details.referedBy,
         password: spassword,
         is_admin: 0,
-        is_verified: 1
+        is_verified: 1,
       });
 
       const userData = await user.save();
+
+      const wallet = new Wallet({
+        user: userData._id,
+        walletBalance: 100,
+        transactions: [
+          {
+            amount: 100,
+            description: 'Sign up bonus',
+            type: 'Credit',
+          }
+        ]
+      });
+
+      await wallet.save();
+
+      if (req.session.details.referedBy) {
+        const referrer = await User.findOne({ refCode: req.session.details.referedBy });
+
+        if (referrer) {
+          const referrerWallet = await Wallet.findOneAndUpdate(
+            { user: referrer._id },
+            { $inc: { walletBalance: 100 } },
+            { new: true, upsert: true }
+          );
+
+          referrerWallet.transactions.push({
+            amount: 100,
+            description: `Referal bonus for ${userData.name}`,
+            type: 'Credit',
+          });
+
+          await referrerWallet.save();
+        }
+      }
+
       req.session.user_id = userData._id;
       req.session.user = true;
-     
       res.json({ success: true });
     } else {
       res.json({ success: false, message: 'Invalid OTP' });

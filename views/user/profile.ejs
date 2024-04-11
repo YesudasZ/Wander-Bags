@@ -452,28 +452,26 @@
                       <thead>
                         <tr class="table-header">
                           <th>Transaction Date</th>
-                          <th>Amount</th>
-                          <th>Order Status</th>
-                          <th>Payment Method</th>
-                          <th>Payment Status</th>
-                         
+                          <th>Description</th>
+                          <th>Status</th>
+                          <th>Payment Amount</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% orders.forEach(order=> { %>
-                          <% order.items.forEach(item=> { %>
-                            <% if (order.orderStatus==='Returned' ) { %>
-                              <tr>
-                                <td><%= order.orderDate.toDateString() %></td>
-                                <td><%= item.price.toFixed(2) %></td>
-                                <td><%= order.orderStatus %></td>
-                                <td><%= order.paymentMethod %></td>
-                                <td class="<%= order.paymentStatus === 'Pending' ? 'text-warning' : order.paymentStatus === 'Refunded' ? 'text-success' : '' %>"><%= order.paymentStatus %></td>
-                             
-                              </tr>
-                            <% } %>
+                        <% if (wallet && wallet.transactions.length > 0) { %>
+                          <% wallet.transactions.forEach(transaction => { %>
+                            <tr class="<%= transaction.type === 'Refund' || transaction.type === 'Credit' ? 'table-success' : 'table-danger' %>">
+                              <td><%= new Date(transaction.transactionDate).toLocaleDateString() %></td>
+                              <td><%= transaction.description %></td>
+                              <td><%= transaction.type %></td>
+                              <td><%= transaction.amount.toFixed(2) %></td>
+                            </tr>
                           <% }) %>
-                        <% }) %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="4">No transactions found.</td>
+                          </tr>
+                        <% } %>
                       </tbody>
                     </table>
                   </div>
