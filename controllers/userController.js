@@ -583,7 +583,12 @@ const loadprofile = async (req, res) => {
        path: 'items.productId',
        model: 'Product',
        select: 'title image productPrice'
+     }).populate('user', 'name')
+     .populate({
+       path: 'items.productId',
+       select: 'title image productPrice'
      });
+     ;
     const userData = await User.findById({ _id: req.session.user_id })
     const wallet = await  Wallet.findOne({ user: user_id})
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
@@ -787,6 +792,35 @@ const removeFromWishlist= async (req, res) => {
 };
 
 
+
+
+const getOrderDetails = async (req, res) => {
+  try {
+
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId)
+      .populate('user', 'name')
+      .populate({
+        path: 'items.productId',
+        select: 'title image productPrice'
+      });
+
+      console.log("test-get",order.user.name);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
 module.exports = {
   loginLoad,
   loadRegister,
@@ -819,7 +853,8 @@ module.exports = {
   loadWishlist,
   addToWishlist,
   removeFromWishlist,
-  filterProducts
+  filterProducts,
+  getOrderDetails
   
 
 

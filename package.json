@@ -20,6 +20,7 @@
     "express-form-data": "^2.0.23",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
+    "html-pdf": "^3.0.1",
     "jspdf": "^2.5.1",
     "mongodb": "^6.4.0",
     "mongoose": "^8.2.0",
