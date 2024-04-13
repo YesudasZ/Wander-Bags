@@ -371,8 +371,8 @@
                       <label class="form-check-label" for="creditCard">Razorpay</label>
                     </div>
                     <div class="form-check me-3 d-flex align-items-center">
-                      <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="paypal" value="Paypal">
-                      <label class="form-check-label" for="paypal">Paypal</label>
+                      <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="Wallet" value="Wallet">
+                      <label class="form-check-label" for="paypal">Wallet</label>
                     </div>
                     <div class="form-check me-3 d-flex align-items-center">
                       <input class=" radio-button-smaller m-2" style="width: 20px;" type="radio" name="paymentMethod" id="cashOnDelivery" value="Cash On Delivery">
@@ -846,6 +846,19 @@ placeOrderBtn.addEventListener('click', () => {
   const addressId = selectedAddress.value;
 
   const orderNotes = document.getElementById('orderNotes').value;
+
+  const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹.', ''));
+
+  if (paymentMethod === "Cash On Delivery" && totalAmount > 1000) {
+    Swal.fire({
+      title: 'Warning',
+      text: 'Above 1000 INR order is not allowed for Cash on Delivery',
+      icon: 'warning'
+    });
+    return;
+  }
+
+
 if(paymentMethod == "Cash On Delivery" ){
  
   fetch('/checkout', {
@@ -892,7 +905,7 @@ createRazorpayOrder()
             description: 'Payment for Order',
             handler: function (response) {
                 console.log('payment successfull', response);
-                placeOrderAfterPayment();
+                placeOrderAfterPayment('Success');
             }
             // ,
             // prefill:{
@@ -905,6 +918,31 @@ createRazorpayOrder()
         };
        
         const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+            handlePaymentFailure(response);
+
+            function handlePaymentFailure(response) {
+    Swal.fire({
+        title:'Payment Failed',
+        text:'Your payment failed. Please try again.',
+        icon:'error',
+        allowOutsideClick: false,
+    }).then((result) => {
+      console.log("Working")
+        if (result.isConfirmed) {
+          console.log("Working-2")
+          placeOrderAfterPayment('Failed')
+            .then(() => {
+                window.location.href = '/orderFailed';
+            })
+           .catch(error => {
+                console.error('Error placing order:', error);
+           })
+        }
+    })
+}
+
+        })
         rzp.open();
     })
     .catch(error => {
@@ -912,7 +950,7 @@ createRazorpayOrder()
     })
 }
 
-function placeOrderAfterPayment(){
+function placeOrderAfterPayment(paymentStatus){
 
   fetch('/checkout', {
     method: 'POST',
@@ -920,13 +958,18 @@ function placeOrderAfterPayment(){
       'Content-Type': 'application/json',
      
     },
-    body: JSON.stringify({ addressId, paymentMethod, orderNotes }),
+    body: JSON.stringify({ addressId, paymentMethod, orderNotes,paymentStatus }),
   })
     .then(response => {
       if (response.ok) {
        
         console.log('Order placed successfully');
-        window.location.href = '/orderPlaced';
+        if(paymentStatus=="Success"){
+          window.location.href = '/orderPlaced';
+        }else{
+          window.location.href = '/orderFailed';
+        }
+      
        
       } else {
        
@@ -942,6 +985,10 @@ function placeOrderAfterPayment(){
 
     }
 });
+
+
+
+
 
 
 

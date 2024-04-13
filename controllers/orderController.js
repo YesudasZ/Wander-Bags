@@ -16,9 +16,12 @@ const loadCheckout = async (req, res) => {
   try {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id }).populate('address');
-    // const cart = await Cart.findOne({ owner: req.session.user_id })
+  
     const coupons= await Coupon.find({})
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    if (!cart || cart.items.length === 0) {
+      return res.redirect('/cart');
+    }
     const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
     res.render('checkOut', { cart: cart, user: userData, coupons:coupons ,   cartCount: cart?.items?.length || 0,
       wishlistCount: wishlist?.items?.length || 0,});
@@ -32,7 +35,7 @@ const placeOrder = async (req, res) => {
   try {
 
 
-    const { addressId, paymentMethod, orderNotes } = req.body;
+    const { addressId, paymentMethod, orderNotes,paymentStatus } = req.body;
     const user_id = req.session.user_id;
     const user = await User.findById({ _id: user_id });
 
@@ -76,6 +79,14 @@ const placeOrder = async (req, res) => {
       })
     );
 
+    let PaymentStatus = "";
+    if (paymentMethod === "Cash On Delivery") {
+      PaymentStatus = "Pending";
+    } else {
+      PaymentStatus = paymentStatus ;
+    }
+
+
 
     const oId = uuidv4();
 
@@ -89,6 +100,8 @@ const placeOrder = async (req, res) => {
       shippingAddress: userAddress,
       paymentMethod,
       orderNotes,
+      paymentStatus: PaymentStatus,
+    
     };
 
     cart.items = [];
@@ -119,6 +132,23 @@ const loadOderplaced = async (req, res) => {
     return res.redirect('/admin/errorpage')
   }
 }
+
+const loadOderfailed = async (req, res) => {
+  try {
+    const user_id = req.session.user_id
+    const userData = await User.findById({ _id: user_id })
+    const order = await Order.findOne({ user: user_id })
+    const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+    const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    res.render('orderFailed', { user: userData, orders: order ,   cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0,});
+  } catch (error) {
+    return res.redirect('/admin/errorpage')
+  }
+}
+
+
+
 
 
 const loadOrders = async (req, res) => {
@@ -263,5 +293,6 @@ module.exports = {
   loadOrders,
   cancelOrder,
   manageRazorpayOrder,
-  returnOrderAndRefund
+  returnOrderAndRefund,
+  loadOderfailed
 }

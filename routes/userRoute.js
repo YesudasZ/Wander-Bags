@@ -111,6 +111,8 @@ user_route.post('/checkout',auth.isLogin,orderController.placeOrder)
 
 user_route.get('/orderPlaced',auth.isLogin,orderController.loadOderplaced)
 
+user_route.get('/orderFailed',auth.isLogin,orderController.loadOderfailed)
+
 user_route.put('/orders/:id/cancel',auth.isLogin, orderController.cancelOrder);
 
 user_route.put('/orders/:id/return',auth.isLogin, orderController.returnOrderAndRefund);
@@ -122,8 +124,6 @@ user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
 user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)
 
 user_route.delete('/wishList/remove/:productId', auth.isLogin, userController.removeFromWishlist);
-
-// user_route.post('/get-available-coupons',auth.isLogin,couponController.getAvailableCoupons)
 
 user_route.post('/apply-coupon', auth.isLogin, couponController.applyCoupon);
 

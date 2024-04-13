@@ -493,6 +493,7 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Status</th>
+                        <th>Payment</th>
                         <th>Action</th>
                         <th>Details</th>
                       </tr>
@@ -517,6 +518,13 @@
                                 class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
                                 <%= order.orderStatus %>
                               </span></td>
+                              <td><span
+                                class="<%= order.paymentStatus.toLowerCase() === 'Pending' ? 'warning' : order.paymentStatus.toLowerCase() === 'Success' ? 'info' : order.paymentStatus.toLowerCase() === 'Refunded' ? 'primary' : order.paymentStatus.toLowerCase() === 'Failed' ? 'success' : 'danger' %>">
+                                <%= order.paymentStatus %>
+                              </span>
+                            </td>
+                        
+                             
                             <td>
                               <% if (order.orderStatus.toLowerCase()==='pending' ||
                                 order.orderStatus.toLowerCase()==='confirmed' ) { %>
@@ -1721,10 +1729,10 @@
       orderData.items.forEach(item => {
   
 
-        doc.text(`${item.title}    `, 34, startY);
-        doc.text(`       ${item.productPrice ? item.productPrice.toString() : ''}`, 94, startY);
-        doc.text(`${item.quantity}`, 124, startY);
-        doc.text(`${item.price ? item.price.toString() : ''}`, 154, startY);
+        doc.text(`${item.title} `,20, startY);
+        doc.text(`  ${item.productPrice ? item.productPrice.toString() : ''}`, 94, startY);
+        doc.text(`  ${item.quantity}`, 124, startY);
+        doc.text(`  ${item.price ? item.price.toString() : ''}`, 154, startY);
         startY += 8;
       });
 
@@ -1734,7 +1742,7 @@
       doc.setTextColor(255);
       doc.setFillColor(180, 180, 180);
       doc.rect(14, startY, doc.internal.pageSize.getWidth() - 28, 10, 'FD');
-      doc.text(`Bill Total: ${orderData.billTotal}`, 14, startY + 8);
+      doc.text(`Bill Total: ${orderData.billTotal}`, 135, startY + 8);
 
       // Save the PDF
       doc.save(`${orderData.oId}.pdf`);
