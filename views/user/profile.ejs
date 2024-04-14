@@ -28,6 +28,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
 
 
@@ -406,7 +408,7 @@
 </header>
 
   <main class="main">
-    <section class="pt-50 pb-50">
+    <section class="pt-20 pb-50">
       <div class="content p-5 m-5" >
         <div class="row">
           <div class="col-md-3">
@@ -519,14 +521,17 @@
                                 <%= order.orderStatus %>
                               </span></td>
                               <td><span
-                                class="<%= order.paymentStatus.toLowerCase() === 'Pending' ? 'warning' : order.paymentStatus.toLowerCase() === 'Success' ? 'info' : order.paymentStatus.toLowerCase() === 'Refunded' ? 'primary' : order.paymentStatus.toLowerCase() === 'Failed' ? 'success' : 'danger' %>">
+                                class="badge order-status badge-<%= order.paymentStatus === 'Pending' ? 'info' : order.paymentStatus === 'Success' ? 'success' : order.paymentStatus === 'Refunded' ? 'secondary' : order.paymentStatus === 'Failed' ? 'danger' : 'danger' %>">
                                 <%= order.paymentStatus %>
                               </span>
                             </td>
                         
                              
                             <td>
-                              <% if (order.orderStatus.toLowerCase()==='pending' ||
+                              <%   if (order.paymentStatus === 'Failed') { %>
+                                <button type="button" class="btn btn-warning col-10" onclick="initiateFailureRazorPayPayment('<%= order._id %>','<%= order.billTotal %>')">Retry
+                                  </button>
+                                  <% } else if (order.orderStatus.toLowerCase()==='pending' ||
                                 order.orderStatus.toLowerCase()==='confirmed' ) { %>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                   data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
@@ -551,7 +556,12 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+        
+            <% if ( order.paymentStatus === 'Failed') { %>
+            <h1 class="mb-4 text-danger fw-bold text-center">Payment Failed</h1>
+            <% } else { %>
+              <h1 class="modal-title mb-4 text-info fw-bold text-center" id="orderDetailsModalLabel">Order Details</h1>
+              <% } %>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -589,10 +599,14 @@
             </div>
           </div>
           <div>
+
+            <% if ( order.paymentStatus !== 'Failed') { %>
             <button class="invoice-button btn btn-primary" type="button"  data-order='<%= JSON.stringify(order) %>'>
               Invoice
             </button>
           </div>
+          <% } %>
+   
           
 
 
@@ -1748,6 +1762,96 @@
       doc.save(`${orderData.oId}.pdf`);
     });
   });
+
+
+
+
+
+
+
+  async function initiateFailureRazorPayPayment(orderId, billTotal) {
+    try {
+        const response = await fetch('/retry/razorpayOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderId: orderId,
+                billTotal
+            })
+        });
+
+        const data = await response.json();
+        const options = {
+            key:'rzp_test_U3ASSzGpya8Oey',
+            amount: data.amount,
+            order_id: data.id,
+            name:'Wander',
+            description: 'Payment for Order',
+            handler: function (response) {
+                console.log('payment successfull', response);
+                handlePaymentResponse(response, orderId);
+            }
+            ,
+            theme:{
+                color:'#002D75'
+            }
+        };
+       
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+    } catch (error) {
+        console.error('Error initiating Razorpay payment:', error);
+    }
+}
+
+
+
+function handlePaymentResponse(response, orderId){
+    if (response.razorpay_payment_id) {
+        Swal.fire({
+            title: 'Payment Success',
+            text: 'Your Order is placed successfully.Thank You',
+            icon: 'success',
+            timer:1500,
+            timerProgressBar: true,
+        });      
+        updatePaymentStatus(orderId,'Success');
+        setTimeout(() => {
+            window.location.reload()
+        },1500)
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Payment Failed',
+            text: 'Order is not placed'
+        });
+        updatePaymentStatus(orderId,'Failed');
+    }
+}
+
+function updatePaymentStatus(orderId,status){
+    fetch('/update/paymentStatus', {
+        method:'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            orderId:orderId,
+            status: status
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Payment status updated:', data);
+    })
+    .catch(error => {
+            console.error('Error updating payment status:', error);
+    });
+}
+
 
 
   </script>

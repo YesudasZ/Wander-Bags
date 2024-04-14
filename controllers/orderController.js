@@ -239,6 +239,36 @@ const manageRazorpayOrder =  async (req,res)=> {
   }
 }
 
+
+const retryRazorpayOrder =  async (req,res)=> {
+  const { orderId, billTotal } = req.body;
+  try {
+    const orderData1 = await Order.findById(orderId);
+    if (!orderData1) {
+      res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+     
+    let data={
+      amount : billTotal*100,   //In INR
+      currency:"INR",  
+      receipt:`receipt_${orderId}`,
+      payment_capture:1,
+     
+    }
+    const orderData = await razorpayOrder(data);
+   
+    res.status(200).json(orderData);
+  } catch (error) {
+    console.error('Error creating RazorPay order:', error);
+    res.status(500).json({success:false,message:'Internal Server Error'});
+  }
+}
+
+
+
+
+
 const returnOrderAndRefund = async (req, res) => {
   const orderId = req.params.id;
   const { returnReason } = req.body;
@@ -286,6 +316,41 @@ const returnOrderAndRefund = async (req, res) => {
   }
 };
 
+
+
+
+const updatePaymentStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.body;
+    console.log("reqbody is receving", req.body);
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    order.paymentStatus = status;
+
+    //Handling quantity for success payment
+    if (order.paymentStatus === "Success")
+      for (const item of order.items) {
+        await Product.findByIdAndUpdate(item.productId, {
+          $inc: { countInStock: -item.quantity },
+        });
+      }
+
+    const updatedOrder = await order.save();
+    console.log("Updated order:", updatedOrder);
+
+    res.status(200).json({ success: true, order: updatedOrder });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -294,5 +359,7 @@ module.exports = {
   cancelOrder,
   manageRazorpayOrder,
   returnOrderAndRefund,
-  loadOderfailed
+  loadOderfailed,
+  retryRazorpayOrder,
+  updatePaymentStatus
 }

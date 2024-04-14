@@ -25,6 +25,8 @@ admin_route.post('/',auth.isAdminLogout,adminController.verifyLogin)
 
 admin_route.get('/adminpanel',auth.isAdminLogin,adminController.loadadminpanel)
 
+admin_route.get('/salesdata',auth.isAdminLogin,  adminController.getSalesData)
+
 admin_route.get('/customers',auth.isAdminLogin,adminController.loadcustomers)
 
 admin_route.post('/block-user',auth.isAdminLogin,adminController.loadblockUser)

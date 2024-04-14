@@ -119,6 +119,10 @@ user_route.put('/orders/:id/return',auth.isLogin, orderController.returnOrderAnd
 
 user_route.post('/create/razorpayOrder',auth.isLogin,orderController.manageRazorpayOrder)
 
+user_route.post('/retry/razorpayOrder',auth.isLogin,orderController.retryRazorpayOrder)
+
+user_route.patch('/update/paymentStatus',auth.isLogin,orderController.updatePaymentStatus);
+
 user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
 
 user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)

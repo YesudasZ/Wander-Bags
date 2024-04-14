@@ -3,6 +3,7 @@ const Order = require("../models/orderModel");
 const bcrypt = require('bcrypt')
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
+const moment = require('moment');
 
 
 
@@ -60,12 +61,167 @@ const verifyLogin = async (req, res) => {
 
 const loadadminpanel = async (req, res) => {
   try {
-    res.render('adminpanel');
+    const totalRevenue = await Order.aggregate([
+      {
+        $match: {
+          $or: [
+            { orderStatus: "Delivered" },
+            { paymentStatus: "Success" }
+          ]
+        },
+      }, {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$billTotal' }
+        }
+      }
+    ]);
+
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    const totalRevenueMonthly = await Order.aggregate([
+      {
+        $match: {
+          $or: [
+            { orderStatus: "Delivered" },
+            { paymentStatus: "Success" }
+          ],
+          orderDate: {
+            $gte: new Date(currentYear, currentMonth, 1),
+            $lt: new Date(currentYear, currentMonth + 1, 1)
+          }
+        },
+      }, {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$billTotal' }
+        }
+      }
+    ]);
+
+    const totalProducts = await Product.countDocuments({});
+    const totalOrders = await Order.countDocuments({});
+    res.render('adminpanel', { totalOrders: totalOrders, 
+                              totalProducts: totalProducts, 
+                              totalRevenue: totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0,
+                              totalRevenueMonthly: totalRevenueMonthly.length > 0 ? totalRevenueMonthly[0].totalRevenue : 0 });
   } catch (error) {
     console.log(error.message);
     res.redirect('/admin/errorpage')
   }
 }
+
+
+
+const getSalesData = async (req, res) => {
+  try {
+    const period = req.query.period;
+    let salesData;
+
+    switch (period) {
+      case 'weekly':
+        salesData = await getWeeklySalesData();
+        break;
+      case 'monthly':
+        salesData = await getMonthlySalesData();
+        break;
+      case 'yearly':
+        salesData = await getYearlySalesData();
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid period' });
+    }
+
+    res.json(salesData);
+  } catch (error) {
+    console.error('Error fetching sales data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Helper function to fetch weekly sales data
+async function getWeeklySalesData() {
+  const currentDate = moment().startOf('week');
+  const labels = [];
+  const data = [];
+
+
+  for (let i = 0; i < 7; i++) {
+    const day = currentDate.clone().add(i, 'days').format('MM/DD/YYYY');
+    labels.push(day);
+
+    const orderCount = await Order.countDocuments({
+      orderDate: {
+        $gte: currentDate.clone().add(i, 'days').startOf('day').toDate(),
+        $lt: currentDate.clone().add(i, 'days').endOf('day').toDate(),
+      }
+      // ,
+      // orderStatus: 'Delivered',
+      // paymentStatus: 'Success',
+    });
+
+    data.push(orderCount);
+  }
+
+  return { labels, data };
+}
+
+// Helper function to fetch monthly sales data
+async function getMonthlySalesData() {
+  const currentDate = moment().startOf('month');
+  const labels = [];
+  const data = [];
+
+  const daysInMonth = currentDate.daysInMonth();
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const day = currentDate.clone().date(i).format('MM/DD/YYYY');
+    labels.push(day);
+
+    const orderCount = await Order.countDocuments({
+      orderDate: {
+        $gte: currentDate.clone().date(i).startOf('day').toDate(),
+        $lt: currentDate.clone().date(i).endOf('day').toDate(),
+      }
+      // ,
+      // orderStatus: 'Delivered',
+      // paymentStatus: 'Success',
+    });
+ 
+    data.push(orderCount);
+  }
+
+  return { labels, data };
+}
+
+// Helper function to fetch yearly sales data
+async function getYearlySalesData() {
+  const currentDate = moment().startOf('year');
+  const labels = [];
+  const data = [];
+
+  for (let i = 0; i < 12; i++) {
+    const month = currentDate.clone().add(i, 'months').format('MMM');
+    labels.push(month);
+
+    const orderCount = await Order.countDocuments({
+      orderDate: {
+        $gte: currentDate.clone().add(i, 'months').startOf('month').toDate(),
+        $lt: currentDate.clone().add(i, 'months').endOf('month').toDate(),
+      }
+      // ,
+      // orderStatus: 'Delivered',
+      // paymentStatus: 'Success',
+    });
+  
+    data.push(orderCount);
+  }
+
+  return { labels, data };
+}
+
+
+
 
 const loadcustomers = async (req, res) => {
   try {
@@ -73,8 +229,8 @@ const loadcustomers = async (req, res) => {
     const page = req.query.page || 1;
 
     const users = await User.find({ is_admin: 0 })
-     .skip((page - 1) * perPage)
-     .limit(perPage);
+      .skip((page - 1) * perPage)
+      .limit(perPage);
 
     const totalUsers = await User.countDocuments({ is_admin: 0 });
     const totalPages = Math.ceil(totalUsers / perPage);
@@ -274,11 +430,11 @@ const SaleReport = async (req, res) => {
 }
 
 
-const loadOffers = async  (req, res) => {
+const loadOffers = async (req, res) => {
   try {
-    const products  = await Product.find({ status: "active" });
+    const products = await Product.find({ status: "active" });
     const categories = await Category.find({ status: "active" });
-    res.render('offers',{products: products ,categories : categories});
+    res.render('offers', { products: products, categories: categories });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage');
@@ -289,20 +445,20 @@ const createCategoryOffer = async (req, res) => {
 
   try {
     const { startDate, endDate, category, discountPercentage } = req.body;
-    const categore = await Category.findById({ _id:category  });
+    const categore = await Category.findById({ _id: category });
     categore.offer = discountPercentage;
-    categore.offerStart= startDate;
-    categore.offerEnd=endDate;
+    categore.offerStart = startDate;
+    categore.offerEnd = endDate;
     await categore.save();
-    const products = await Product.find({ category:categore.name });
-  
+    const products = await Product.find({ category: categore.name });
+
     products.forEach((product) => {
-   
+
       product.afterDiscount = product.discountPrice;
       product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
       product.save();
     });
-   
+
     res.status(200).json({ message: 'Category offer created successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error creating category offer' });
@@ -312,26 +468,26 @@ const createCategoryOffer = async (req, res) => {
 const createProducOffer = async (req, res) => {
   try {
     const { productId, discountPercentage } = req.body;
-    console.log("ok",discountPercentage);
-    const product = await Product.findById({ _id:productId  });
+    console.log("ok", discountPercentage);
+    const product = await Product.findById({ _id: productId });
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-console.log("test-1",product.discountPrice - (product.discountPrice * (discountPercentage / 100)));
-console.log("test-2",(product.afterDiscount * (discountPercentage / 100)),"test-2.1",product.afterDiscount - product.discountPrice);
-    if( product.discountPrice > product.afterDiscount ){
+    console.log("test-1", product.discountPrice - (product.discountPrice * (discountPercentage / 100)));
+    console.log("test-2", (product.afterDiscount * (discountPercentage / 100)), "test-2.1", product.afterDiscount - product.discountPrice);
+    if (product.discountPrice > product.afterDiscount) {
       product.afterDiscount = product.discountPrice;
       product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
       product.save();
-    }else if(product.afterDiscount - product.discountPrice < (product.afterDiscount * (discountPercentage / 100))){
+    } else if (product.afterDiscount - product.discountPrice < (product.afterDiscount * (discountPercentage / 100))) {
       product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
       product.save();
-    }else{
+    } else {
       return res.status(404).json({ message: "The product has a better offer with the category offer." });
     }
- 
-    const discountAmount =  product.afterDiscount - product.discountPrice;
-  
+
+    const discountAmount = product.afterDiscount - product.discountPrice;
+
     res.status(200).json({ message: 'Discount applied', discountAmount });
   } catch (error) {
     console.error(error);
@@ -355,5 +511,6 @@ module.exports = {
   SaleReport,
   loadOffers,
   createCategoryOffer,
-  createProducOffer
+  createProducOffer,
+  getSalesData
 }
