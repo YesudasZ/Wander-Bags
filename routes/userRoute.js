@@ -123,6 +123,8 @@ user_route.post('/retry/razorpayOrder',auth.isLogin,orderController.retryRazorpa
 
 user_route.patch('/update/paymentStatus',auth.isLogin,orderController.updatePaymentStatus);
 
+user_route.get('/wallet/balance', auth.isLogin, orderController.getWalletBalance);
+
 user_route.get('/wishList',auth.isLogin,userController.loadWishlist)
 
 user_route.post('/wishList/add', auth.isLogin, userController.addToWishlist)

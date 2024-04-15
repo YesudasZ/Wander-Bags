@@ -980,8 +980,58 @@ function placeOrderAfterPayment(paymentStatus){
 }
 
     }else if(paymentMethod == "Wallet" ){
-      
+      // Check if wallet balance is sufficient
+  fetch('/wallet/balance', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      const walletBalance = data.walletBalance;
+      const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹.', ''));
+
+      if (walletBalance >= totalAmount) {
+        // Wallet balance is sufficient, proceed with order placement
+        placeOrderWithWallet(addressId, paymentMethod, orderNotes, totalAmount);
+      } else {
+        // Wallet balance is insufficient
+        Swal.fire({
+          title: 'Insufficient Balance',
+          text: 'Your wallet balance is insufficient. Please choose another payment option.',
+          icon: 'warning',
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
     }
+
+    function placeOrderWithWallet(addressId, paymentMethod, orderNotes, totalAmount) {
+  fetch('/checkout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ addressId, paymentMethod, orderNotes, totalAmount }),
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Order placed successfully');
+        window.location.href = '/orderPlaced';
+      } else {
+        console.error('Failed to place order');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+
 });
 
 

@@ -79,16 +79,39 @@ const placeOrder = async (req, res) => {
       })
     );
 
+
+
+    const oId = uuidv4();
+
     let PaymentStatus = "";
     if (paymentMethod === "Cash On Delivery") {
       PaymentStatus = "Pending";
+    } else if (paymentMethod === 'Wallet') {
+      PaymentStatus = 'Success';
+     
+      const wallet = await Wallet.findOne({ user: user_id });
+      if (!wallet) {
+        return res.status(400).json({ success: false, message: 'Wallet not found' });
+      }
+      // if (wallet.walletBalance < totalAmount) {
+      //   return res.status(400).json({ success: false, message: 'Insufficient wallet balance' });
+      // }
+      wallet.walletBalance -= cart.billTotal;
+      wallet.amountSpent += cart.billTotal;
+      wallet.transactions.push({
+        amount: cart.billTotal,
+        description: `Payment for Order #${oId}`,
+        type: 'Debit',
+        transactionDate: new Date(),
+      });
+      await wallet.save();
     } else {
       PaymentStatus = paymentStatus ;
     }
 
 
 
-    const oId = uuidv4();
+   
 
     const orderData = {
       user: user._id,
@@ -325,6 +348,21 @@ const returnOrderAndRefund = async (req, res) => {
 };
 
 
+const getWalletBalance = async (req, res) => {
+  try {
+    const user_id = req.session.user_id;
+    const wallet = await Wallet.findOne({ user: user_id });
+
+    if (!wallet) {
+      return res.status(404).json({ success: false, message: 'Wallet not found' });
+    }
+
+    return res.status(200).json({ success: true, walletBalance: wallet.walletBalance });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
 
 
 const updatePaymentStatus = async (req, res) => {
@@ -369,5 +407,6 @@ module.exports = {
   returnOrderAndRefund,
   loadOderfailed,
   retryRazorpayOrder,
-  updatePaymentStatus
+  updatePaymentStatus,
+  getWalletBalance
 }
