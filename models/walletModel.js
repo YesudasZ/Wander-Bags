@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema({
     default: Date.now,
   }
 }, {
-  _id: false // This will prevent mongoose from creating a separate _id field for transactions
+  _id: false 
 });
 
 const walletSchema = mongoose.Schema({
@@ -31,7 +31,7 @@ const walletSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
-  transactions: [transactionSchema], // This is the updated field
+  transactions: [transactionSchema], 
 }, {
   timestamps: true
 });
