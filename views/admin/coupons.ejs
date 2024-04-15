@@ -171,6 +171,7 @@
                     <th>Coupon Code</th>
                     <th>Status</th>
                     <th>Action</th>
+                    <th>Modify</th>
                   </tr>
                 </thead>
                 <tbody id="couponTableBody">
@@ -185,13 +186,15 @@
                       <td><%= coupon.discount %></td>
                       <td><%= coupon.couponCode %></td>
                       <td><%= coupon.status %></td>
+                      
                       <td>
                         <% if (coupon.status === 'Active') { %>
-                          <button class="btn btn-danger change-status" data-id="<%= coupon._id %>">Inactive</button>
+                          <button class="btn btn-warning change-status" data-id="<%= coupon._id %>">Inactive</button>
                         <% } else { %>
                           <button class="btn btn-success change-status" data-id="<%= coupon._id %>">Active</button>
                         <% } %>
                       </td>
+                      <td><button id="deletebtn" class="btn btn-danger " data-id="<%= coupon._id %>">Delete</button></td>
                     </tr>
                   <% }) %>
                 </tbody>
@@ -434,6 +437,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+  });
+});
+
+
+
+const deleteCouponButtons = document.querySelectorAll('#deletebtn');
+
+deleteCouponButtons.forEach(button => {
+  button.addEventListener('click', async () => {
+    const couponId = button.dataset.id;
+    const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to delete this coupon.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => result.isConfirmed);
+
+    if (confirmed) {
+      try {
+        const response = await fetch(`/admin/coupons/${couponId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          Swal.fire('Success', 'Coupon successfully deleted', 'success');
+          button.closest('tr').remove();
+        } else {
+          Swal.fire('Error', 'Something went wrong', 'error');
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'Something went wrong', 'error');
+      }
+    }
   });
 });
 

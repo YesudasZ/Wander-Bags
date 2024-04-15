@@ -71,11 +71,15 @@ admin_route.get('/coupons',auth.isAdminLogin,couponController.loadCoupon)
 
 admin_route.post('/addCoupon',auth.isAdminLogin,couponController.addCoupon)
 
+admin_route.delete('/coupons/:couponId', auth.isAdminLogin, couponController.deleteCoupon);
+
 admin_route.patch('/coupons/changeStatus/:couponId', auth.isAdminLogin, couponController.changeCouponStatus);
 
 admin_route.get('/salesReport',auth.isAdminLogin,adminController.SaleReport)
 
 admin_route.get('/offers',auth.isAdminLogin,adminController.loadOffers)
+
+admin_route.post('/applyReferralOffer', auth.isAdminLogin, adminController.applyReferralOffer);
 
 admin_route.post('/offers',auth.isAdminLogin,adminController.createCategoryOffer)
 

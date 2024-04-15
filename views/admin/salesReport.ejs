@@ -152,8 +152,11 @@
         </header>
 
         <section class="">
+          <div class="row justify-content-center mt-5 pb-100">
+            <div class="col-md-11 table-container">
+              <div class="shadow-lg p-5 bg-white rounded ">
           <div class="container my-5">
-          
+            <h1 class="mb-4 text-info fw-bold text-center">Sales Report</h1>
             <section class="filter-section">
               <div class="container my-5">
                 <div class="row justify-content-center">
@@ -197,8 +200,8 @@
 
             
             <div class="table-responsive">
-              <table class="table table-bordered table-striped table-hover shadow">
-                  <thead class="thead-dark">
+              <table class="table table-bordered shadow">
+                  <thead  class="text-center">
                       <tr>
                           <th>Date</th>
                           <th>Order No.</th>
@@ -210,7 +213,7 @@
                           <th>Total Sales</th>
                       </tr>
                   </thead>
-                  <tbody class="tbody">
+                  <tbody  class="text-center">
                       <% let overallOrderCount = 0; %>
                       <% let overallOrderAmount = 0; %>
                       <% let overallDiscountAmount = 0; %>
@@ -280,6 +283,11 @@
             <button id="downloadExcel" class="btn btn-primary">Download Excel</button>
           </div>
   
+
+        </div>
+      </div>
+  </div>
+
 
           <div class="pagination-area ml-100 pb-30 mt-30 mb-50">
             <nav aria-label="Page navigation example">

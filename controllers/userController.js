@@ -118,6 +118,7 @@ const insertuser = async (req, res) => {
       otpExpiration: Date.now() + 60000,
       refCode:refCode,
       referedBy: req.body.referedBy
+     
      };
 
     req.session.details = details
@@ -261,10 +262,10 @@ const otpverify = async (req, res) => {
 
       const wallet = new Wallet({
         user: userData._id,
-        walletBalance: 100,
+        walletBalance: userData.referredUserReward,
         transactions: [
           {
-            amount: 100,
+            amount: userData.referredUserReward,
             description: 'Sign up bonus',
             type: 'Credit',
           }
@@ -279,12 +280,12 @@ const otpverify = async (req, res) => {
         if (referrer) {
           const referrerWallet = await Wallet.findOneAndUpdate(
             { user: referrer._id },
-            { $inc: { walletBalance: 100 } },
+            { $inc: { walletBalance: referrer.referringUserReward } },
             { new: true, upsert: true }
           );
 
           referrerWallet.transactions.push({
-            amount: 100,
+            amount: referrer.referringUserReward,
             description: `Referal bonus for ${userData.name}`,
             type: 'Credit',
           });
@@ -292,7 +293,6 @@ const otpverify = async (req, res) => {
           await referrerWallet.save();
         }
       }
-
       req.session.user_id = userData._id;
       req.session.user = true;
       res.json({ success: true });

@@ -502,12 +502,36 @@ const loadOffers = async (req, res) => {
   try {
     const products = await Product.find({ status: "active" });
     const categories = await Category.find({ status: "active" });
-    res.render('offers', { products: products, categories: categories });
+    const user = await User.findById(req.session.admin_id);
+    res.render('offers', { products: products, categories: categories ,referredUserReward: user.referredUserReward, referringUserReward: user.referringUserReward});
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage');
   }
 }
+
+
+const applyReferralOffer = async (req, res) => {
+  try {console.log("test-0");
+    const { referredUserReward, referringUserReward } = req.body;
+    console.log("test-1",referredUserReward+"ed"+referringUserReward+'ing');
+  
+    await User.updateMany({}, { referredUserReward, referringUserReward });
+    console.log("test-2");
+    const user = await User.findById(req.session.admin_id);
+
+    console.log("test-3" ,user.referredUserReward,user.referringUserReward);
+    res.json({
+      message: 'Offer successfully applied',
+      referredUserReward: user.referredUserReward,
+      referringUserReward: user.referringUserReward
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while applying the offer.' });
+  }
+};
+
 
 const createCategoryOffer = async (req, res) => {
 
@@ -580,5 +604,6 @@ module.exports = {
   loadOffers,
   createCategoryOffer,
   createProducOffer,
-  getSalesData
+  getSalesData,
+  applyReferralOffer
 }

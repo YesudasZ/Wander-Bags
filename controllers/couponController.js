@@ -142,10 +142,24 @@ console.log("test-3",cart.couponDiscount);
 };
 
 
+
+
+const deleteCoupon = async (req, res) => {
+  try {
+    const couponId = req.params.couponId;
+    await Coupon.findByIdAndDelete(couponId);
+    res.status(200).json({ message: 'Coupon successfully deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+
 module.exports = {
   loadCoupon,
   addCoupon,
   changeCouponStatus,
   applyCoupon,
-  removeCoupon
+  removeCoupon,
+  deleteCoupon
 }

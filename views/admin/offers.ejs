@@ -159,133 +159,156 @@
         </div>
     </header>
 
+    
+  
 
 
-        <div class="row justify-content-center mt-5 ">
-          <div class="col-md-10 table-container">
-            <div class="shadow-lg p-5 bg-white rounded ">
-              <section>
-                <div class="container mt-5">
-                  <h1 class="mb-4 text-info fw-bold text-center">Category Offers</h1>
-                  <button type="button" class="btn btn-secondary mb-4 text-left" data-bs-toggle="modal" data-bs-target="#createCategoryOfferModal">
-                    Create Category Offer
-                  </button>
-                  <div class="row justify-content-center ">
-                    <div class="col-md-6"  style="max-height: 400px; overflow-y: auto;">
-                      <table class="table  table-hover " id="categoryOffersTable">
-                        <thead>
-                          <tr>
-                            <th>Category Name</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Discount Percentage</th>
-                         
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <% categories.forEach(function(category) { %>
-                            <% if (category.offer > 0) { %>
-                              <tr>
-                                <td><%= category.name %></td>
-                                <td><%= new Date(category.offerStart).toLocaleDateString() %></td>
-                                <td><%= new Date(category.offerEnd).toLocaleDateString() %></td>
-                                <td><%= category.offer %>%</td>
-                               
-                              </tr>
-                            <% } %>
-                          <% }); %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-        
-                <!-- Create Category Offer Modal -->
-                <div class="modal fade" id="createCategoryOfferModal" tabindex="-1" aria-labelledby="createCategoryOfferModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="createCategoryOfferModalLabel">Create Category Offer</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="container-fluid">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-11">
+          <div class="shadow-lg p-5 bg-white rounded">
+            <h1 class="mb-4 text-info fw-bold text-center">Offers</h1>
+            <div class="row">
+              <div class="col-md-4">
+                <div class=" p-5 bg-white rounded mt-20">
+                  <div class="referral-offer text-center justify-content-center">
+                    <h3 class="mb-4 text-secondary fw-bold">Referral Offer</h3>
+                    <div class="rewards">
+                      <div class="referred-user-reward">
+                        <p class="fw-bold">Referred User Reward:</p>
+                        <input type="number" id="referredUserReward" value="<%= referredUserReward %>">
                       </div>
-                      <div class="modal-body">
-                        <form id="createCategoryOfferForm">
-                          <div class="mb-3">
-                            <label for="startDate" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="startDate" required min="<%= new Date().toISOString().split('T')[0] %>">
-                          </div>
-                          <div class="mb-3">
-                            <label for="endDate" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="endDate" required min="<%= new Date().toISOString().split('T')[0] %>">
-                          </div>
-                          <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select class="form-select" id="category" required>
-                              <% categories.forEach(function(category) { %>
-                                <option value="<%= category._id %>"><%= category.name %></option>
-                              <% }); %>
-                            </select>
-                          </div>
-                          <div class="mb-3">
-                            <label for="discountPercentage" class="form-label">Discount Percentage</label>
-                            <input type="number" class="form-control" id="discountPercentage" min="1" max="100" required>
-                          </div>
-                          <button type="submit" class="btn btn-primary">Create Offer</button>
-                        </form>
+                      <div class="referring-user-reward mt-3">
+                        <p class="fw-bold">Referring User Reward:</p>
+                        <input type="number" id="referringUserReward" value="<%= referringUserReward %>">
+                      </div>
+                      <div class="apply-offer m-2">
+                        <button id="applyOffer" class="btn btn-primary">Apply Offer</button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </section>
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="row justify-content-center mt-5 pb-100">
-          <div class="col-md-10 table-container">
-            <div class="shadow-lg p-5 bg-white rounded ">
-              <section>
-                <div class="container mt-5">
-                  <h1 class="mb-4 text-info fw-bold text-center">Product Offers</h1>
-                  <div class="row justify-content-center ">
-                    <div class="col-md-12" style="max-height: 400px; overflow-y: auto;">
-                      <table class="table  table-hover "  id="productOffersTable">
-                        <thead class=" text-center">
-                          <tr>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Price</th>
-                            <th>Offer Price</th>
-                            <th>Discount</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody class=" text-center" >
-                          <% products.forEach(function(product) { %>
+              </div>
+              <div class="col-md-8">
+                <div class=" p-5 bg-white rounded">
+                  <section>
+                    <h3 class="mb-4 text-secondary fw-bold text-center">Category Offers</h3>
+                    <button type="button" class="btn btn-secondary mb-4 text-left" data-bs-toggle="modal" data-bs-target="#createCategoryOfferModal">
+                      Create Category Offer
+                    </button>
+                    <div class="row justify-content-center">
+                      <div class="col-md-12" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered border-primary" id="categoryOffersTable">
+                          <thead  class="text-center">
                             <tr>
-                              <td><%= product.name %></td>
-                              <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
-                              <td><%= product.price %></td>
-                              <td><%= product.discountPrice %></td>
-                              <td style="max-width: 20px"> <input type="number" class="form-control discount-percentage" id="discountPercentage" min="1" max="100" required></td>
-                              <td>
-                                <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
-                                  Apply
-                                </button>
-                              </td>
+                              <th>Category Name</th>
+                              <th>Start Date</th>
+                              <th>End Date</th>
+                              <th>Discount Percentage</th>
                             </tr>
-                          <% }); %>
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody  class="text-center">
+                            <% categories.forEach(function(category) { %>
+                              <% if (category.offer > 0) { %>
+                                <tr>
+                                  <td><%= category.name %></td>
+                                  <td><%= new Date(category.offerStart).toLocaleDateString() %></td>
+                                  <td><%= new Date(category.offerEnd).toLocaleDateString() %></td>
+                                  <td><%= category.offer %>%</td>
+                                </tr>
+                              <% } %>
+                            <% }); %>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                  </section>
                 </div>
-              </section>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <div class=" p -5 bg-white rounded">
+                  <section>
+                    <h2 class="mb-4 text-secondary fw-bold text-center">Product Offers</h2>
+                    <div class="row justify-content-center">
+                      <div class="col-md-12" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered border-info" id="productOffersTable">
+                          <thead class="text-center">
+                            <tr>
+                              <th>Name</th>
+                              <th>Image</th>
+                              <th>Price</th>
+                              <th>Offer Price</th>
+                              <th>Discount</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody class="text-center">
+                            <% products.forEach(function(product) { %>
+                              <tr>
+                                <td><%= product.name %></td>
+                                <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
+                                <td><%= product.price %></td>
+                                <td><%= product.discountPrice %></td>
+                                <td style="max-width: 20px"><input type="number" class="form-control discount-percentage" id="discountPercentage" min="1" max="100" required></td>
+                                <td>
+                                  <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
+                                    Apply
+                                  </button>
+                                </td>
+                              </tr>
+                            <% }); %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    
+    <!-- Create Category Offer Modal -->
+    <div class="modal fade" id="createCategoryOfferModal" tabindex="-1" aria-labelledby="createCategoryOfferModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createCategoryOfferModalLabel">Create Category Offer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="createCategoryOfferForm">
+              <div class="mb-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" required min="<%= new Date().toISOString().split('T')[0] %>">
+              </div>
+              <div class="mb-3">
+                <label for="endDate" class="form -label">End Date</label>
+                <input type="date" class="form-control" id="endDate" required min="<%= new Date().toISOString().split('T')[0] %>">
+              </div>
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" required>
+                  <% categories.forEach(function(category) { %>
+                    <option value="<%= category._id %>"><%= category.name %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                <input type="number" class="form-control" id="discountPercentage" min="1" max="100" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Create Offer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
         <footer class="main-footer  font-xs ">
@@ -321,6 +344,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybB5IXNxFwWQfE7u8Lj+XJHAxKlXiG/8rsrtpb6PEdzD828Ii" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert2 library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
 
@@ -431,12 +457,35 @@ const applyDiscount = async (productId, discountPercentage) => {
 
 
 
+const applyOfferBtn = document.getElementById('applyOffer');
 
+applyOfferBtn.addEventListener('click', async () => {
+  const referredUserReward = document.getElementById('referredUserReward').value;
+  const referringUserReward = document.getElementById('referringUserReward').value;
 
+  try {
+    const response = await fetch('/admin/applyReferralOffer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ referredUserReward, referringUserReward })
+    });
 
-
-
-
+    if (response.ok) {
+      const data = await response.json();
+      Swal.fire('Success', data.message, 'success');
+      document.getElementById('referredUserReward').value = data.referredUserReward;
+      document.getElementById('referringUserReward').value = data.referringUserReward;
+    } else {
+      const error = await response.json();
+      Swal.fire('Error', error.message, 'error');
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Error', 'An error occurred while applying the offer.', 'error');
+  }
+});
 
 
 // Handle apply discount button click
@@ -504,6 +553,10 @@ const renderProductOffers = (products) => {
 
 // Initialize
 fetchProductOffers();
+
+
+
+
 
 
     </script>

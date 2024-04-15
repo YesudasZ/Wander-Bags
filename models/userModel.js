@@ -62,6 +62,14 @@ const userSchema = new mongoose.Schema({
   },
   referedBy:{
       type:String,
+  },
+  referredUserReward: {
+    type: Number,
+    default: 100
+  },
+  referringUserReward: {
+    type: Number,
+    default: 150
   }
 })
 
