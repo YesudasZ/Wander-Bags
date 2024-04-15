@@ -1371,7 +1371,7 @@
           // Update the name in the profile section without refreshing
           document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
           $('#editNameModal').modal('hide');
-          window.location.reload();
+          window.location.href='/profile';
         } else {
           // Handle error if any
           console.error('Error updating name');

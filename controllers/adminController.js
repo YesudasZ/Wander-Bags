@@ -101,10 +101,63 @@ const loadadminpanel = async (req, res) => {
 
     const totalProducts = await Product.countDocuments({});
     const totalOrders = await Order.countDocuments({});
-    res.render('adminpanel', { totalOrders: totalOrders, 
-                              totalProducts: totalProducts, 
-                              totalRevenue: totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0,
-                              totalRevenueMonthly: totalRevenueMonthly.length > 0 ? totalRevenueMonthly[0].totalRevenue : 0 });
+
+    // Get top 10 products based on total sales
+    const topProducts = await Order.aggregate([
+      { $unwind: '$items' },
+      { $group: {
+        _id: '$items.productId',
+        totalSales: { $sum: '$items.quantity' },
+        productDetails: { $first: '$$ROOT.items' }
+      }},
+      { $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'product'
+      }},
+      { $unwind: '$product' },
+      { $project: {
+        _id: 0,
+        name: '$product.name',
+        images: '$product.images',
+        discountPrice: '$product.discountPrice',
+        status: '$product.status',
+        category: '$product.category',
+        totalSales: 1
+      }},
+      { $sort: { totalSales: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // Get top categories based on total sales
+    const topCategories = await Order.aggregate([
+      { $unwind: '$items' },
+      { $lookup: {
+        from: 'products',
+        localField: 'items.productId',
+        foreignField: '_id',
+        as: 'product'
+      }},
+      { $unwind: '$product' },
+      { $group: {
+        _id: '$product.category',
+        totalSales: { $sum: '$items.quantity' }
+      }},
+      { $sort: { totalSales: -1 } }
+    ]);
+
+    const maxCategorySales = topCategories.length > 0 ? topCategories[0].totalSales : 1;
+
+    res.render('adminpanel', {
+      totalOrders: totalOrders,
+      totalProducts: totalProducts,
+      totalRevenue: totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0,
+      totalRevenueMonthly: totalRevenueMonthly.length > 0 ? totalRevenueMonthly[0].totalRevenue : 0,
+      topProducts: topProducts,
+      topCategories: topCategories,
+      maxCategorySales: maxCategorySales
+    });
   } catch (error) {
     console.log(error.message);
     res.redirect('/admin/errorpage')
@@ -301,6 +354,7 @@ const loadOrders = async (req, res) => {
         model: 'Product',
         select: 'title image productPrice'
       })
+      .sort({ orderDate: -1 })
       .skip(startIndex)
       .limit(limit);
 
@@ -343,17 +397,31 @@ const updateOrderStatus = async (req, res) => {
     const orderId = req.params.id;
     const { orderStatus } = req.body;
 
-    const order = await Order.findByIdAndUpdate(
-      orderId,
-      { orderStatus },
-      { new: true }
-    );
+    const order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    res.json(order);
+    // Check if the payment method is "Cash On Delivery" and the order status is being set to "Delivered"
+    if (order.paymentMethod === 'Cash On Delivery' && orderStatus === 'Delivered') {
+      // Update the order with the new orderStatus and set paymentStatus to "Success"
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        { orderStatus, paymentStatus: 'Success' },
+        { new: true }
+      );
+      return res.json(updatedOrder);
+    }
+
+    // If the conditions are not met, only update the orderStatus
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { orderStatus },
+      { new: true }
+    );
+
+    res.json(updatedOrder);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

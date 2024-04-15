@@ -165,9 +165,21 @@ const loadOrders = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
-   
     const orderId = req.params.id;
     const { cancellationReason } = req.body;
+
+    const order = await Order.findById(orderId).populate('items.productId');
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    // Update the countInStock of each product in the order
+    for (const item of order.items) {
+      const product = item.productId;
+      const updatedCountInStock = product.countInStock + item.quantity;
+      await Product.findByIdAndUpdate(product._id, { countInStock: updatedCountInStock });
+    }
 
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
@@ -177,10 +189,6 @@ const cancelOrder = async (req, res) => {
       },
       { new: true }
     );
-
-    if (!updatedOrder) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
-    }
 
     res.json({ success: true, message: 'Order cancelled successfully' });
   } catch (error) {

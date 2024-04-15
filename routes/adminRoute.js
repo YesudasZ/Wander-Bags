@@ -83,4 +83,6 @@ admin_route.post('/productOffers',auth.isAdminLogin,adminController.createProduc
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 
+admin_route.get('/*',auth.isAdminLogin,adminController.errorload)
+
 module.exports = admin_route;

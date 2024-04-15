@@ -135,6 +135,6 @@ user_route.post('/remove-coupon', auth.isLogin, couponController.removeCoupon);
 
 user_route.get('/orders/:id',auth.isLogin,userController.getOrderDetails)
 
-
+user_route.get('/pageNotfound',userController.pagenotfound)
 
 module.exports = user_route;

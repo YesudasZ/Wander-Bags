@@ -442,6 +442,14 @@ function downloadExcel() {
 
 
 
+
+
+
+const currentDate = new Date().toISOString().split('T')[0];
+
+// Set the max attribute for the start date and end date input fields
+document.getElementById('startDate').max = currentDate;
+document.getElementById('endDate').max = currentDate;
     </script>
 
     

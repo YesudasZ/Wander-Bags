@@ -222,12 +222,72 @@
                 </div>
               </div>
 
-              <div>
-                <button>Top Products</button>
-                <button></button>
-              </div>
 
-                
+
+              <div class="row justify-content-center mt-20 pb-100">
+                <div class="col-md-10 ">
+                    <div class="shadow-lg p-5 bg-white rounded ">
+                        <h1 class="mb-4 text-secondary fw-bold text-center">Best Selling</h1>
+                        <div>
+                            <button id="topProductsBtn" class="btn bt-lg btn-outline-info active">Top Products</button>
+                            <button id="topCategoriesBtn" class="btn btn-outline-info">Top Categories</button>
+                        </div>
+                        <div id="productList"  style="display:true;">
+                            <h1 class="mb-4 text-info fw-bold text-center">Top 10 Products</h1>
+                            <div class="table-container mt-3"  style="max-height: 500px; overflow-y: auto;" >
+                                <table class="table table-bordered">
+                                    <thead class=" text-center">
+                                        <tr>
+                                            <th>Sl No.</th>
+                                            <th>Image</th>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Category</th>
+                                            <th>Total Sales</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class=" text-center">
+                                        <% topProducts.forEach((product, index) => { %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
+                                                <td><%= product.name %></td>
+                                                <td><%= product.discountPrice %></td>
+                                                <td><%= product.status %></td>
+                                                <td><%= product.category %></td>
+                                                <td><%= product.totalSales %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+            
+                        <div id="categoryList" style="display: none;">
+                            <h1 class="mb-4 mt-4 text-info fw-bold text-center">Top Categories</h1>
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <% topCategories.forEach((category, index) => { %>
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class=".bg-info.bg-gradient fw-bold"><%= index + 1 %>. <%= category._id %></span>
+                                                    <span class="badge bg-info rounded-pill">Total Sales: <%= category.totalSales %></span>
+                                                </div>
+                                                <div class="progress  mt-2">
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: <%= (category.totalSales / maxCategorySales) * 100 %>%;" aria-valuenow="<%= (category.totalSales / maxCategorySales) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>      
 
 
 
@@ -346,6 +406,36 @@
             // Initial load with weekly data
             weeklyFilter.click();
         });
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function (){
+    const topProductsBtn = document.getElementById('topProductsBtn');
+    const topCategoriesBtn = document.getElementById('topCategoriesBtn');
+    const productList = document.getElementById('productList');
+    const categoryList = document.getElementById('categoryList');
+
+    topProductsBtn.addEventListener('click', function (){
+        productList.style.display = 'block';
+        categoryList.style.display = 'none';
+        topProductsBtn.classList.add('active');
+        topCategoriesBtn.classList.remove('active');
+    });
+
+    topCategoriesBtn.addEventListener('click', function (){
+        productList.style.display = 'none';
+        categoryList.style.display = 'block';
+        topProductsBtn.classList.remove('active');
+        topCategoriesBtn.classList.add('active');
+    })
+})
+
+
+
+
+
+
     </script>
 </body>
 

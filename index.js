@@ -39,4 +39,9 @@ const adminRoute = require('./routes/adminRoute');
 app.use('/admin',adminRoute)
 
 
+
+app.use('/*',async(req,res)=>{
+  res.redirect('/pageNotfound')
+})
+
 app.listen(4000,()=>console.log("Click here to go to the login page: http://localhost:4000"))
