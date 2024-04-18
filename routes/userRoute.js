@@ -3,8 +3,7 @@ const user_route = express();
 const auth = require('../middleware/userauth');
 const passport = require('passport')
  require('../passport');
-//  const formData = require('express-form-data');
- //user_route.use(formData.parse());
+
 
  user_route.use(passport.initialize());
 
@@ -136,6 +135,8 @@ user_route.post('/apply-coupon', auth.isLogin, couponController.applyCoupon);
 user_route.post('/remove-coupon', auth.isLogin, couponController.removeCoupon);
 
 user_route.get('/orders/:id',auth.isLogin,userController.getOrderDetails)
+
+user_route.get('/orders/:orderId/invoice',auth.isLogin, userController.downloadInvoice);
 
 user_route.get('/pageNotfound',userController.pagenotfound)
 

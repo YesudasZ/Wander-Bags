@@ -212,7 +212,7 @@
                                   <span class="font-weight-bold" style="color:<%= item.productId.countInStock > 0 ? 'green' : 'red' %>;"><%= item.productId.countInStock > 0 ? 'In Stock' : 'Out of Stock' %></span>
                               </td>
                                 <td class="text-right align-middle" data-title="Cart">
-                                  <button class="btn btn-success btn-sm trendy-btn mr-2" id="addToCartBtn" data-productid="<%= item.productId._id %>"><i class="fi-rs-shopping-bag mr-2"></i>Add to Cart</button>
+                                  <button class="btn btn-success btn-sm trendy-btn mr-2 addToCartBtn" data-productid="<%= item.productId._id %>"><i class="fi-rs-shopping-bag mr-2"></i>Add to Cart</button>
                               </td>
                                 <td class="action align-middle" data-title="Remove">
                                   <button class="remove-btn btn-danger" data-productid="<%= item.productId._id %>">
@@ -229,6 +229,7 @@
         </div>
     </div>
 </section>
+
 
 
 
@@ -426,43 +427,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-document.getElementById('addToCartBtn').addEventListener('click', function() {
-        var productId = this.getAttribute('data-productid');
-        
-      
-        fetch('/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ productId: productId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: data.message
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartBtns = document.querySelectorAll('.addToCartBtn');
+
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const productId = btn.getAttribute('data-productid');
+
+            try {
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId: productId })
                 });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Failed',
-                    text: data.message
-                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    const error = await response.json();
+                    Swal.fire('Error', error.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire('Error', 'Something went wrong!', 'error');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!'
-            });
         });
     });
-
+});
 
 
   </script>

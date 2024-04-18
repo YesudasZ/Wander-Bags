@@ -27,7 +27,7 @@ const addToCart = async (req, res) => {
             userCart = new Cart({
                 owner: req.session.user_id,
                 items: [],
-                billTotal: 0,
+               
             });
         }
 
@@ -58,29 +58,21 @@ const addToCart = async (req, res) => {
                 const quantityToAdd = product.countInStock <= 4 ? product.countInStock : 4;
                 userCart.items.push({
                     productId: productId,
-                    title: product.name,
-                    image: product.images,
-                    productPrice: product.discountPrice,
+                  
                     quantity: quantityToAdd,
-                    price: quantityToAdd * product.discountPrice,
-                    productStatus: 'active',
-                    selected: false
+                    
                 });
             } else {
                 userCart.items.push({
                     productId: productId,
-                    title: product.name,
-                    image: product.images,
-                    productPrice: product.discountPrice,
+                   
                     quantity: 1,
-                    price: product.discountPrice,
-                    productStatus: 'active',
-                    selected: false
+                    
                 });
             }
         }
 
-        userCart.billTotal = userCart.items.reduce((total, item) => total + item.price, 0);
+       
         await userCart.save();
 
         res.status(200).json({ success: true, message: 'Product added to cart successfully' });

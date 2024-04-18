@@ -570,6 +570,8 @@
             <div class="row">
               <div class="col-md-6">
                 <h6>Order Information</h6>
+            
+
                 <p><strong>Order ID:</strong> <%= order.oId %></p>
                 <p><strong>Customer:</strong> <%= order.user.name %></p>
                 <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleString() %></p>
@@ -578,6 +580,7 @@
                 <p><strong>Shipping Address:</strong> <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.country %>, <%= order.shippingAddress.postalCode %></p>
                 <p><strong>Order Notes:</strong> <%= order.orderNotes %></p>
                 <p><strong>Cancellation Reason:</strong> <%= order.cancellationReason %></p>
+                
               </div>
               <div class="col-md-6">
                 <h6>Order Items</h6>
@@ -601,9 +604,16 @@
           <div>
 
             <% if ( order.paymentStatus !== 'Failed') { %>
-            <button class="invoice-button btn btn-primary" type="button"  data-order='<%= JSON.stringify(order) %>'>
+            <!-- <button class="invoice-button btn btn-primary" type="button"  data-order='<%= JSON.stringify(order) %>'>
               Invoice
-            </button>
+            </button> -->
+
+
+            <a href="/orders/<%= order._id %>/invoice" target="_blank" class="btn btn-primary">Download Invoice</a>
+
+            <!-- <a class="btn btn-secondary print ms-2" href="/invoice?id=<%= order._id %>" title="Download Invoice">
+              <i class="material-symbols-outlined">download</i>
+          </a> -->
           </div>
           <% } %>
    
@@ -613,9 +623,7 @@
 
 
 
-        
-
-
+  
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1853,6 +1861,28 @@ function updatePaymentStatus(orderId,status){
 }
 
 
+
+
+
+
+
+
+
+
+// script.js
+// document.querySelectorAll('a[href^="/orders/"]').forEach(linkElement => {
+//   linkElement.addEventListener('click', async (event) => {
+//     event.preventDefault();
+//     const url = linkElement.href;
+//     const response = await fetch(url);
+//     const blob = await response.blob();
+//     const downloadUrl = window.URL.createObjectURL(blob);
+//     const link = document.createElement('a');
+//     link.href = downloadUrl;
+//     link.download = `invoice_${url.split('/').pop()}.pdf`;
+//     link.click();
+//   });
+// });
 
   </script>
 </body>

@@ -423,8 +423,13 @@
   </div>
   <div class="product-price-cover mt-3 trendy-price-cover">
       <div class="product-price trendy-product-price">
-          <ins class="font-weight-bold trendy-discount-price">₹.<%= product.discountPrice %></ins>
-          <del class="old-price ml-2 trendy-old-price">₹.<%= product.price %>/-</del>
+          <% if (product.discountPrice) { %>
+              <ins class="font-weight-bold trendy-discount-price">₹.<%= product.discountPrice %></ins>
+              <del class="old-price ml-2 trendy-old-price">₹.<%= product.price %>/-</del>
+              <span class="text-success trendy-discount-percentage">(<%= Math.round((1 - product.discountPrice / product.price) * 100) %>% off)</span>
+          <% } else { %>
+              <ins class="font-weight-bold trendy-discount-price">₹.<%= product.price %></ins>
+          <% } %>
       </div>
   </div>
   <hr>
@@ -454,8 +459,6 @@
   </div>
   
 </div>
-
-
 </div>
                 <!-- End Product Details -->
 

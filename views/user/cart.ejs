@@ -204,21 +204,26 @@
                             <% cart.items.forEach((item, index) => { %>
                             <tr id="item-<%= index + 1 %>">
                                
-                                <td class="image product-thumbnail"><img src="/productImages/<%= item.image[0] %>" alt="#" style="max-width: 100px;"></td>
+                                <td class="image product-thumbnail"><img src="/productImages/<%= item.productId.images[0] %>" alt="#" style="max-width: 100px;"></td>
                                
                                 <td class="product-des product-name">
-                                    <h5><a href="#" class="text-dark"><%= item.title %></a></h5>
-                                    <% if (item.productStatus === 'Limit-Exceeded') { %>
+                                    <h5><a href="#" class="text-dark"><%= item.productId.name %></a></h5>
+                                    <% if (item.productId.productStatus === 'Limit-Exceeded') { %>
                                     <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Maximum quantity limit reached</p>
-                                    <% } else if (item.countInStock <= 0) { %>
+                                    <% } else if (item.productId.countInStock <= 0) { %>
                                     <p class="font-xs text-danger">Out of Stock</p>
-                                    <% } else if (item.countInStock <= 10) { %>
+                                    <% } else if (item.productId.countInStock <= 10) { %>
                                     <p class="font-xs text-danger" id="countInStock-<%= item._id %>">Only <%= item.countInStock %> stocks Left</p>
                                     <% } else { %>
                                     <p class="font-xs text-info" id="countInStock-<%= item._id %>">In Stock</p>
                                     <% } %>
                                 </td>
-                                <td class="price" data-title="Price"><span>Rs.<%= item.productPrice %>/-</span></td>
+                                <td class="price" data-title="Price">  <% if (item.productId.discountPrice) { %>
+                                  <span class=" discount-price">₹.<%=item.productId.discountPrice %></span>
+                                
+                              <% } else { %>
+                                  <span class="discount-price">₹.<%= item.productId.price %></span>
+                              <% } %></td>
                                 <td class="text-center" data-title="Quantity" style="width: 200px;">
                                   <div class="d-flex justify-content-center align-items-center">
                                         <button class="btn btn-sm  btn-outline-secondary  decrease-quantity" data-id="<%= item._id %>">-</button>
@@ -227,7 +232,12 @@
                                     </div>
                                 </td>
                                 <td class="text-right subtotal" data-title="Total" id="price-<%= item._id %>">
-                                    <span>Rs.<%= item.price %>/-</span>
+                                  <% if (item.productId.discountPrice) { %>
+                                    <span class=" discount-price">₹.<%=item.productId.discountPrice * item.quantity %></span>
+                                  
+                                <% } else { %>
+                                    <span class="discount-price">₹.<%= item.productId.price * item.productId.quantity %></span>
+                                <% } %>
                                 </td>
                                 <td class="action" data-title="Remove">
                                     <button class="btn btn-sm btn-danger remove-item" data-id="<%= item._id %>"><i class="fi-rs-trash"></i></button>
@@ -264,7 +274,15 @@
                                     <tbody>
                                         <tr>
                                             <td class="cart_total_label">Cart Subtotal</td>
-                                            <td class="cart_total_amount"><span class="font-lg fw-bold text-brand" id="cart-subtotal"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-bold text-brand" id="cart-subtotal"> <% let cartSubtotal = 0; %>
+                                              <% cart.items.forEach(item => { %>
+                                                  <% if (item.productId.discountPrice) { %>
+                                                      <% cartSubtotal += (item.productId.discountPrice * item.quantity); %>
+                                                  <% } else { %>
+                                                      <% cartSubtotal += (item.productId.price * item.quantity); %>
+                                                  <% } %>
+                                              <% }); %>
+                                              ₹.<%= cartSubtotal %></span></td>
                                         </tr>
                                         <tr>
                                             <td class="cart_total_label">Shipping</td>
@@ -272,7 +290,7 @@
                                         </tr>
                                         <tr>
                                             <td class="cart_total_label">Total</td>
-                                            <td class="cart_total_amount"><strong><span class="font-xl fw-bold text-brand" id="cart-total"><%= cart ? `Rs.${cart.billTotal}/-` : 'Rs.0/-' %></span></strong></td>
+                                            <td class="cart_total_amount"><strong><span class="font-xl fw-bold text-brand" id="cart-total">  ₹.<%= cartSubtotal %></span></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -595,7 +613,7 @@ function showErrorMessage(message) {
                       countInStockElement.classList.remove('text-danger', 'text-info');
                       countInStockElement.classList.add('text-danger');
                   } else if (item.countInStock <= 10) {
-                      countInStockElement.textContent = `Only ${item.countInStock} stocks Left`;
+                      countInStockElement.textContent = `Only few stocks Left`;
                       countInStockElement.classList.remove('text-danger', 'text-info');
                       countInStockElement.classList.add('text-danger');
                   } else {
@@ -638,24 +656,28 @@ function showErrorMessage(message) {
   }
 
   function updateTotals() {
-      fetch('/cart/totals')
-      .then(response => response.json())
-      .then(data => {
-          if (data.success) {
-              const cartSubtotalElement = document.getElementById('cart-subtotal');
-              const cartTotalElement = document.getElementById('cart-total');
+    const cartItems = document.querySelectorAll('.trendy-quantity-input');
+    let subtotal = 0;
+    let total = 0;
 
-              cartSubtotalElement.textContent = `Rs.${data.billTotal}/-`;
-              cartTotalElement.textContent = `Rs.${data.billTotal}/-`;
-          } else {
-              showAlert('An error occurred while updating the cart totals.', 'error');
-          }
-      })
-      .catch(error => {
-          console.error('Error updating totals:', error);
-          showAlert('An error occurred while updating the cart totals.', 'error');
-      });
-  }
+    cartItems.forEach(input => {
+        const itemId = input.dataset.id;
+        const quantity = parseInt(input.value);
+        const priceElement = document.getElementById(`price-${itemId}`);
+        const price = parseFloat(priceElement.querySelector('span').textContent.replace('Rs.', ''));
+        const itemTotal = price ;
+
+        subtotal += itemTotal;
+    });
+
+    total = subtotal;
+
+    const cartSubtotalElement = document.getElementById('cart-subtotal');
+    const cartTotalElement = document.getElementById('cart-total');
+
+    cartSubtotalElement.textContent = `Rs.${subtotal.toFixed(1)}/-`;
+    cartTotalElement.textContent = `Rs.${total.toFixed(1)}/-`;
+}
 
   function showAlert(message, type) {
       Swal.fire({

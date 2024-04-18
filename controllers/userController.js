@@ -7,6 +7,12 @@ const Cart = require('../models/cartModel')
 const Wishlist = require('../models/wishlistModel')
 const Wallet = require("../models/walletModel")
 const Category = require('../models/categoryModel');
+const easyinvoice = require('easyinvoice');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
+const ejs = require("ejs");
+const pdf = require('html-pdf');
 require('dotenv').config();
 
 
@@ -819,6 +825,64 @@ const getOrderDetails = async (req, res) => {
 
 
 
+const downloadInvoice = async (req, res) => {
+  try {
+    const orderId = req.params.orderId
+    console.log("orderid,",req.params);
+    const order = await Order.findById(orderId)
+      .populate('user', 'name')
+      .populate({
+        path: 'items.productId',
+        select: 'title image productPrice'
+      });
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    const invoiceTemplatePath = path.join(
+      __dirname,
+      "..",
+      "views",
+      "user",
+      "Invoice.ejs"
+    );
+
+    const invoiceHtml = await ejs.renderFile(invoiceTemplatePath, {
+    order
+    });
+
+    const options = {
+      format: "A4",
+      orientation: "portrait",
+      border: "10mm",
+    };
+
+    pdf.create(invoiceHtml, options).toStream((err, stream) => {
+      if (err) {
+        console.log("Error generating PDF:", err);
+        return res
+          .status(500)
+          .json({ success: false, message: "Error generating PDF" });
+      }
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="Invoice.pdf"'
+      );
+
+      stream.pipe(res);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
 
 
 module.exports = {
@@ -854,7 +918,8 @@ module.exports = {
   addToWishlist,
   removeFromWishlist,
   filterProducts,
-  getOrderDetails
+  getOrderDetails,
+  downloadInvoice
   
 
 

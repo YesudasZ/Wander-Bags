@@ -48,6 +48,11 @@ const Product = mongoose.Schema({
     productAddDate:{
       type:Date,
       default:Date.now()
+    },
+    productSalecount:{
+      type:Number,
+      default:0
+
     }
 });
 
