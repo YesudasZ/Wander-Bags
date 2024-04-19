@@ -88,7 +88,8 @@ const updateCartItemQuantity = async (req, res) => {
     try {
         const { productId } = req.params;
         const { quantity } = req.body;
-        let userCart = await Cart.findOne({ owner: req.session.user_id });
+        let userCart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+        
         if (!userCart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
         }
@@ -105,8 +106,6 @@ const updateCartItemQuantity = async (req, res) => {
 
         if (quantity > product.countInStock) {
             return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
-            // cartItem.quantity = product.countInStock;
-            // cartItem.productStatus = 'Limit-Exceeded';
         } else if (quantity > 4) {
             return res.status(403).json({ success: false, message: 'Maximum quantity limit reached for this product.' });
         } else {
@@ -114,13 +113,24 @@ const updateCartItemQuantity = async (req, res) => {
             cartItem.productStatus = 'active';
         }
 
-        cartItem.price = cartItem.quantity * product.discountPrice;
-        userCart.items[existingCartItemIndex] = cartItem;
+        // Update the cartItem.price based on the product's discount price or regular price
+        if (product.discountPrice) {
+            cartItem.price = product.discountPrice * quantity;
+        } else {
+            cartItem.price = product.price * quantity;
+        }
 
-        userCart.billTotal = userCart.items.reduce((total, item) => total + item.price, 0);
+        userCart.items[existingCartItemIndex] = cartItem;
         await userCart.save();
 
-        res.status(200).json({ success: true, message: 'Cart item quantity updated successfully', newPrice: cartItem.price });
+        // Recalculate the cart totals after updating the cart item
+        const cartSubtotal = userCart.items.reduce((total, item) => {
+            const product = item.productId;
+            const price = product.discountPrice? product.discountPrice : product.price;
+            return total + price * item.quantity;
+          }, 0);
+        console.log("da",cartSubtotal);
+        res.status(200).json({ success: true, message: 'Cart item quantity updated successfully', newPrice: cartItem.price, cartSubtotal });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -133,7 +143,7 @@ const removeCartItem = async (req, res) => {
 
         const { productId } = req.params;
 
-        let userCart = await Cart.findOne({ owner: req.session.user_id });
+        let userCart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
 
         if (!userCart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
@@ -149,7 +159,12 @@ const removeCartItem = async (req, res) => {
         userCart.billTotal = userCart.items.reduce((total, item) => total + item.price, 0);
         await userCart.save();
 
-        res.status(200).json({ success: true, message: 'Item removed from cart successfully', itemIndex: itemIndex + 1 });
+        const cartSubtotal = userCart.items.reduce((total, item) => {
+            const product = item.productId;
+            const price = product.discountPrice? product.discountPrice : product.price;
+            return total + price * item.quantity;
+          }, 0);
+        res.status(200).json({ success: true, message: 'Item removed from cart successfully', itemIndex: itemIndex + 1 ,cartSubtotal});
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error' });

@@ -232,12 +232,12 @@
                                     </div>
                                 </td>
                                 <td class="text-right subtotal" data-title="Total" id="price-<%= item._id %>">
-                                  <% if (item.productId.discountPrice) { %>
+                                  <!-- <% if (item.productId.discountPrice) { %> -->
                                     <span class=" discount-price">₹.<%=item.productId.discountPrice * item.quantity %></span>
-                                  
+<!--                                   
                                 <% } else { %>
                                     <span class="discount-price">₹.<%= item.productId.price * item.productId.quantity %></span>
-                                <% } %>
+                                <% } %> -->
                                 </td>
                                 <td class="action" data-title="Remove">
                                     <button class="btn btn-sm btn-danger remove-item" data-id="<%= item._id %>"><i class="fi-rs-trash"></i></button>
@@ -545,7 +545,10 @@ function showErrorMessage(message) {
                   input.value = newQuantity;
                   const priceElement = document.getElementById(`price-${productId}`);
                   priceElement.querySelector('span').textContent = `Rs.${data.newPrice}/-`;
-                  updateTotals();
+                  // console.log("test-1",data);
+                
+                  console.log("test-1",data.cartSubtotal);
+                  updateTotals(data.cartSubtotal);
                 showAlert(data.message, 'success');
               
               } else {
@@ -574,7 +577,7 @@ function showErrorMessage(message) {
           if (data.success) {
               const itemRow = document.querySelector(`#item-${data.itemIndex}`);
               itemRow.remove();
-              updateTotals();
+              updateTotals(data.cartSubtotal);
              
               showAlert(data.message, 'success');
           } else {
@@ -613,7 +616,7 @@ function showErrorMessage(message) {
                       countInStockElement.classList.remove('text-danger', 'text-info');
                       countInStockElement.classList.add('text-danger');
                   } else if (item.countInStock <= 10) {
-                      countInStockElement.textContent = `Only few stocks Left`;
+                      countInStockElement.textContent = `Only ${item.countInStock} stocks Left`;
                       countInStockElement.classList.remove('text-danger', 'text-info');
                       countInStockElement.classList.add('text-danger');
                   } else {
@@ -655,28 +658,21 @@ function showErrorMessage(message) {
     })
   }
 
-  function updateTotals() {
+  function updateTotals(cartSubtotal) {
     const cartItems = document.querySelectorAll('.trendy-quantity-input');
-    let subtotal = 0;
-    let total = 0;
+    let subtotal = cartSubtotal;
+    let total = cartSubtotal;
 
-    cartItems.forEach(input => {
-        const itemId = input.dataset.id;
-        const quantity = parseInt(input.value);
-        const priceElement = document.getElementById(`price-${itemId}`);
-        const price = parseFloat(priceElement.querySelector('span').textContent.replace('Rs.', ''));
-        const itemTotal = price ;
 
-        subtotal += itemTotal;
-    });
-
-    total = subtotal;
 
     const cartSubtotalElement = document.getElementById('cart-subtotal');
+  
     const cartTotalElement = document.getElementById('cart-total');
-
+  
     cartSubtotalElement.textContent = `Rs.${subtotal.toFixed(1)}/-`;
+ 
     cartTotalElement.textContent = `Rs.${total.toFixed(1)}/-`;
+
 }
 
   function showAlert(message, type) {
