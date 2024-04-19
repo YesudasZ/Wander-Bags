@@ -84,6 +84,14 @@ const orderSchema = Schema({
     reasonForReturn: {
         default: 'nil',
         type: String
+    },
+    couponAmount:{
+        default: 0,
+        type: Number
+    },
+    couponCode:{
+        default: 'nil',
+        type: String
     }
 }, {
     timestamps: true,

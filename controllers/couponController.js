@@ -155,11 +155,27 @@ const deleteCoupon = async (req, res) => {
   }
 };
 
+
+const getCoupons = async (req, res) => {
+  try {
+    console.log("coupons");
+    const coupon = await Coupon.findById(req.params.id);
+    if (!coupon) {
+      return res.status(404).json({ error: 'Coupon not found' });
+    }
+    res.json(coupon);
+  } catch (error) {
+    console.error('Error fetching coupon:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   loadCoupon,
   addCoupon,
   changeCouponStatus,
   applyCoupon,
   removeCoupon,
-  deleteCoupon
+  deleteCoupon,
+  getCoupons
 }

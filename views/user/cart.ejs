@@ -232,12 +232,12 @@
                                     </div>
                                 </td>
                                 <td class="text-right subtotal" data-title="Total" id="price-<%= item._id %>">
-                                  <!-- <% if (item.productId.discountPrice) { %> -->
+                                  <% if (item.productId.discountPrice) { %>
                                     <span class=" discount-price">₹.<%=item.productId.discountPrice * item.quantity %></span>
-<!--                                   
+                                  
                                 <% } else { %>
                                     <span class="discount-price">₹.<%= item.productId.price * item.productId.quantity %></span>
-                                <% } %> -->
+                                <% } %>
                                 </td>
                                 <td class="action" data-title="Remove">
                                     <button class="btn btn-sm btn-danger remove-item" data-id="<%= item._id %>"><i class="fi-rs-trash"></i></button>

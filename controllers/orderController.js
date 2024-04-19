@@ -17,7 +17,7 @@ const loadCheckout = async (req, res) => {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id }).populate('address');
   
-    const coupons= await Coupon.find({})
+    const coupons= await Coupon.find({status:'Active'})
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
     if (!cart || cart.items.length === 0) {
       return res.redirect('/cart');

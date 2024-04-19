@@ -304,24 +304,37 @@
               <div class="cart-item mb-3">
                 <div class="row g-0 align-items-center">
                   <div class="col-md-3">
-                    <img src="/productImages/<%= item.image[0] %>" alt="Product Image" class="img-fluid">
+                    <img src="/productImages/<%= item.productId.images[0] %>" alt="Product Image" class="img-fluid">
                   </div>
                
                   <div class="col-md-6">
                     <div class="card-body">
-                      <h5 class="card-title"><%= item.title %></h5>
-                      <p class="card-text">Discounted Price: ₹.<%= item.productPrice %></p>
+                      <h5 class="card-title"><%= item.productId.name %></h5>
+                      <p class="card-text"> <% if (item.productId.discountPrice) { %>
+                        Price: ₹ <%=item.productId.discountPrice %>
+                        
+                      <% } else { %>
+                        Price: ₹ <%= item.productId.price %>
+                      <% } %></p>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="quantity-wrapper d-flex align-items-center justify-content-end">
-                      <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-id="<%= item._id %>" data-price="<%= item.productPrice %>">-</button>
-                      <input type="number" class="form-control black-border black-spin-buttons trendy-quantity-input text-center quantity" value="<%= item.quantity %>" min="1" max="4" data-id="<%= item._id %>" data-price="<%= item.productPrice %>"  readonly>
-                      <button class="btn btn-sm btn-outline-success increase-quantity" data-id="<%= item._id %>" data-price="<%= item.productPrice %>">+</button>
-                    </div>
+                  <div class="col-md-2">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <!-- <button class="btn btn-sm  btn-outline-secondary  decrease-quantity" data-id="<%= item._id %>">-</button> -->
+                      <input type="number" class="form-control black-border black-spin-buttons trendy-quantity-input text-center" value="<%= item.quantity %>" min="1" max="4" data-id="<%= item._id %>" readonly>
+                      <!-- <button class="btn btn-sm btn-outline-success  increase-quantity" data-id="<%= item._id %>">+</button> -->
+                      
+                  </div>
+                 
                     <div class="text-right subtotal mt-2" data-title="Total" id="price-<%= item._id %>">
-                      <strong>Total: ₹.<span class="item-total"><%= item.price %></span></strong>
+                      <strong>Total: ₹ <span class="item-total"><% if (item.productId.discountPrice) { %>
+                        <%=item.productId.discountPrice * item.quantity %>
+                        
+                      <% } else { %>
+                        <%= item.productId.price * item.quantity %>
+                      <% } %>/-</span></strong>
                     </div>
+                   
                   </div>
                 </div>
               </div>
@@ -339,16 +352,28 @@
               <tbody>
                 <tr>
                   <th colspan="3" id="cart-subtotal">SubTotal</th>
-                  <td id="subtotalAmount">₹.<%= cart.billTotal %></td>
+                  <td id="subtotalAmount"><% let cartSubtotal = 0; %>
+                    <% cart.items.forEach(item => { %>
+                        <% if (item.productId.discountPrice) { %>
+                            <% cartSubtotal += (item.productId.discountPrice * item.quantity); %>
+                        <% } else { %>
+                            <% cartSubtotal += (item.productId.price * item.quantity); %>
+                        <% } %>
+                    <% }); %>
+                    ₹ <%= cartSubtotal %>/-</td>
                 </tr>
                 <tr>
                   <th colspan="3">Shipping</th>
                   <td><em>Free Shipping</em></td>
                 </tr>
+                <tr id="couponDiscountRow" style="display: none;">
+                  <th colspan="3">Coupon Discount</th>
+                  <td id="couponDiscount">₹ 0.00</td>
+                </tr>
                 
                 <tr>
                   <th colspan="3">Total</th>
-                  <td><span class="font-xl text-brand fw-900" id="totalAmount">₹.<%= cart.billTotal %></span></td>
+                  <td><span class="font-xl text-brand fw-900" id="totalAmount"> ₹ <%= cartSubtotal %>/-</span></td>
                 </tr>
               </tbody>
             </table>
@@ -698,63 +723,14 @@
 
       <script>
 
-let totalAmount = parseFloat("<%= cart.billTotal %>");
-let subtotalAmount = parseFloat("<%= cart.billTotal %>");
 
-function updateQuantity(input, change) {
-  const productId = input.dataset.id;
-  const currentQuantity = parseInt(input.value);
-  const newQuantity = currentQuantity + change;
-  const itemPrice = parseFloat(input.dataset.price);
 
-  if (newQuantity >= 1 && newQuantity <= 5) {
-    fetch(`/cart/update/${productId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ quantity: newQuantity })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          input.value = newQuantity;
-          const priceElement = document.getElementById(`price-${productId}`);
-          const newItemTotal = itemPrice * newQuantity;
-          priceElement.querySelector('.item-total').textContent = `${newItemTotal.toFixed(2)}`;
 
-          updateTotals(newItemTotal - (itemPrice * currentQuantity));
-          showAlert(data.message, 'success');
-        } else {
-          showAlert(data.message, 'error');
-        }
-      })
-      .catch(error => {
-        console.error('Error updating quantity:', error);
-        showAlert('An error occurred while updating the quantity.', 'error');
-      });
-  } else {
-    showAlert('Quantity must be between 1 and 5.', 'error');
-  }
-}
 
-function updateTotals(priceChange) {
-  subtotalAmount += priceChange;
-  totalAmount += priceChange;
 
-  document.getElementById('subtotalAmount').textContent = `₹.${subtotalAmount.toFixed(2)}`;
-  document.getElementById('totalAmount').textContent = `₹.${totalAmount.toFixed(2)}`;
-}
 
-// Add event listeners for quantity buttons
-const quantityButtons = document.querySelectorAll('.decrease-quantity, .increase-quantity');
-quantityButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const input = button.parentNode.querySelector('input.trendy-quantity-input');
-    const change = button.classList.contains('increase-quantity') ? 1 : -1;
-    updateQuantity(input, change);
-  });
-});
+
+
 
         document.addEventListener('DOMContentLoaded', () => {
           const editAddressForms = document.querySelectorAll('.edit-address-form');
@@ -1172,126 +1148,202 @@ function fetchAndDisplayAddress() {
 
 
 
-const applyCouponBtn = document.getElementById('applyCouponBtn');
-let isCouponApplied = false; // Flag to track if a coupon has been applied
 
-applyCouponBtn.addEventListener('click', async () => {
-  if (isCouponApplied) {
-  //  showAlert('A coupon has already been applied for this order.', 'info');
 
-   
-    return  Swal.fire({
-      icon: 'info',
-      title: 'Coupon',
-      text: 'A coupon has already been applied for this order.'
-    });;
+document.getElementById('applyCouponBtn').addEventListener('click', async () => {
+  const selectedCouponId = document.querySelector('input[name="selectedCoupon"]:checked')?.value;
+  if (!selectedCouponId) {
+    // No coupon selected
+    return;
   }
 
-  const selectedCouponId = document.querySelector('input[name="selectedCoupon"]:checked').value;
+  const selectedCoupon = await fetchCouponDetails(selectedCouponId);
+  if (!selectedCoupon) {
+    // Coupon not found
+    return;
+  }
 
-  try {
-    const response = await fetch('/apply-coupon', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ couponId: selectedCouponId })
+  const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹', ''));
+  const minimumAmount = selectedCoupon.minimumAmount;
+console.log("total",totalAmount);
+  if (totalAmount < minimumAmount) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Minimum Purchase Amount',
+      text: `Minimum purchase amount for this coupon is ₹${minimumAmount}.`,
     });
-
-    const data = await response.json();
-
-    if (data.success) {
-      const couponDiscountAmount = data.couponDiscount;
-      const updatedTotalAmount = data.updatedTotalAmount;
-
-      const couponDiscountElement = document.createElement('tr');
-      couponDiscountElement.innerHTML = `
-        <th class="disc" colspan="3">Coupon Discount</th>
-        <td class="disc">-₹.${couponDiscountAmount.toFixed(2)}</td>
-      `;
-      const tableBody = document.querySelector('table tbody');
-      tableBody.insertBefore(couponDiscountElement, tableBody.lastElementChild);
-
-      document.getElementById('totalAmount').textContent = `₹.${updatedTotalAmount.toFixed(2)}`;
-
-      // Close the modal
-      const modal = document.getElementById('applyCouponModal');
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-
-      // Disable the "Apply Coupon" button
-      applyCouponBtn.disabled = true;
-      isCouponApplied = true;
-
-      showAlert(data.message, 'success');
-    } else {
-      showAlert(data.message, 'error');
-    }
-  } catch (error) {
-    console.error('Error applying coupon:', error);
-    showAlert('An error occurred while applying the coupon.', 'error');
+    return;
   }
+
+  const discountAmount = calculateDiscount(totalAmount, selectedCoupon);
+  const newTotalAmount = totalAmount - discountAmount;
+
+  // Update the UI
+  document.getElementById('totalAmount').textContent = `₹${newTotalAmount.toFixed(2)}/-`;
+  document.getElementById('couponDiscount').textContent = `₹${discountAmount.toFixed(2)}`;
+  document.getElementById('couponDiscount').parentElement.style.display = 'table-row';
+
+  // Close the modal
+  $('#applyCouponModal').modal('hide');
 });
 
 
-function showAlert(message, type) {
-  Swal.fire({
-          icon: type,
-          title: type === 'success' ? 'Success' : 'Error',
-          text: message
-      });
-  console.log(`${type}: ${message}`);
+
+
+
+
+document.getElementById('removeCouponBtn').addEventListener('click', () => {
+  const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹', ''));
+  const couponDiscount = parseFloat(document.getElementById('couponDiscount').textContent.replace('₹', ''));
+  const newTotalAmount = totalAmount + couponDiscount;
+
+  document.getElementById('totalAmount').textContent = `₹${newTotalAmount.toFixed(2)}/-`;
+  document.getElementById('couponDiscount').textContent = `₹0.00`;
+  document.getElementById('couponDiscount').parentElement.style.display = 'none';
+});
+
+function calculateDiscount(totalAmount, coupon) {
+  const discountPercentage = coupon.discount / 100;
+  const discountAmount = totalAmount * discountPercentage;
+  const maximumAmount = coupon.maximumAmount;
+
+  return discountAmount > maximumAmount ? maximumAmount : discountAmount;
+}
+
+async function fetchCouponDetails(couponId) {
+  console.log("working",couponId);
+  try {
+    const response = await fetch(`/coupons/${couponId}`);
+    const coupon = await response.json();
+    return coupon;
+  } catch (error) {
+    console.error('Error fetching coupon details:', error);
+    return null;
+  }
 }
 
 
 
-const removeCouponBtn = document.getElementById('removeCouponBtn');
-removeCouponBtn.addEventListener('click', async () => {
-  try {
-    const response = await fetch('/remove-coupon', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+// const applyCouponBtn = document.getElementById('applyCouponBtn');
+// let isCouponApplied = false; // Flag to track if a coupon has been applied
 
-    const data = await response.json();
+// applyCouponBtn.addEventListener('click', async () => {
+//   if (isCouponApplied) {
+//   //  showAlert('A coupon has already been applied for this order.', 'info');
 
-    if (data.success) {
-      // Remove the coupon discount row from the table
-      const couponDiscountRow = document.querySelectorAll('.disc');
-      console.log("test",couponDiscountRow);
-      if (couponDiscountRow) {
-        couponDiscountRow.forEach((u)=>u.remove());
-      }
+   
+//     return  Swal.fire({
+//       icon: 'info',
+//       title: 'Coupon',
+//       text: 'A coupon has already been applied for this order.'
+//     });;
+//   }
 
-      // Update the total amount
-      const totalAmountElement = document.getElementById('totalAmount');
-      totalAmountElement.textContent = `₹.${data.updatedTotalAmount.toFixed(2)}`;
+//   const selectedCouponId = document.querySelector('input[name="selectedCoupon"]:checked').value;
 
-      // Enable the "Apply Coupon" button
-      const applyCouponBtn = document.getElementById('applyCouponBtn');
-      applyCouponBtn.disabled = false;
-      isCouponApplied = false;
+//   try {
+//     const response = await fetch('/apply-coupon', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ couponId: selectedCouponId })
+//     });
 
-      // Show a success message
-      showAlert(data.message, 'success');
-    } else {
-      // Show an error message
-      showAlert(data.message, 'error');
-    }
-  } catch (error) {
-    console.error('Error removing coupon:', error);
-    // Show an error message
-    showAlert('An error occurred while removing the coupon', 'error');
-  }
-});
+//     const data = await response.json();
+
+//     if (data.success) {
+//       const couponDiscountAmount = data.couponDiscount;
+//       const updatedTotalAmount = data.updatedTotalAmount;
+
+//       const couponDiscountElement = document.createElement('tr');
+//       couponDiscountElement.innerHTML = `
+//         <th class="disc" colspan="3">Coupon Discount</th>
+//         <td class="disc">-₹.${couponDiscountAmount.toFixed(2)}</td>
+//       `;
+//       const tableBody = document.querySelector('table tbody');
+//       tableBody.insertBefore(couponDiscountElement, tableBody.lastElementChild);
+
+//       document.getElementById('totalAmount').textContent = `₹.${updatedTotalAmount.toFixed(2)}`;
+
+//       // Close the modal
+//       const modal = document.getElementById('applyCouponModal');
+//       const modalBackdrop = document.querySelector('.modal-backdrop');
+
+//       modal.classList.remove('show');
+//       modal.style.display = 'none';
+
+//       if (modalBackdrop) {
+//         modalBackdrop.remove();
+//       }
+
+//       // Disable the "Apply Coupon" button
+//       applyCouponBtn.disabled = true;
+//       isCouponApplied = true;
+
+//       showAlert(data.message, 'success');
+//     } else {
+//       showAlert(data.message, 'error');
+//     }
+//   } catch (error) {
+//     console.error('Error applying coupon:', error);
+//     showAlert('An error occurred while applying the coupon.', 'error');
+//   }
+// });
+
+
+// function showAlert(message, type) {
+//   Swal.fire({
+//           icon: type,
+//           title: type === 'success' ? 'Success' : 'Error',
+//           text: message
+//       });
+//   console.log(`${type}: ${message}`);
+// }
+
+
+
+// const removeCouponBtn = document.getElementById('removeCouponBtn');
+// removeCouponBtn.addEventListener('click', async () => {
+//   try {
+//     const response = await fetch('/remove-coupon', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     });
+
+//     const data = await response.json();
+
+//     if (data.success) {
+//       // Remove the coupon discount row from the table
+//       const couponDiscountRow = document.querySelectorAll('.disc');
+//       console.log("test",couponDiscountRow);
+//       if (couponDiscountRow) {
+//         couponDiscountRow.forEach((u)=>u.remove());
+//       }
+
+//       // Update the total amount
+//       const totalAmountElement = document.getElementById('totalAmount');
+//       totalAmountElement.textContent = `₹.${data.updatedTotalAmount.toFixed(2)}`;
+
+//       // Enable the "Apply Coupon" button
+//       const applyCouponBtn = document.getElementById('applyCouponBtn');
+//       applyCouponBtn.disabled = false;
+//       isCouponApplied = false;
+
+//       // Show a success message
+//       showAlert(data.message, 'success');
+//     } else {
+//       // Show an error message
+//       showAlert(data.message, 'error');
+//     }
+//   } catch (error) {
+//     console.error('Error removing coupon:', error);
+//     // Show an error message
+//     showAlert('An error occurred while removing the coupon', 'error');
+//   }
+// });
 
 
       </script>
