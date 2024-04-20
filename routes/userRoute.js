@@ -108,6 +108,8 @@ user_route.get('/checkout',auth.isLogin,orderController.loadCheckout)
 
 user_route.post('/checkout',auth.isLogin,orderController.placeOrder)
 
+user_route.get('/cart/items',orderController.checkQuantity)
+
 user_route.get('/orderPlaced',auth.isLogin,orderController.loadOderplaced)
 
 user_route.get('/orderFailed',auth.isLogin,orderController.loadOderfailed)

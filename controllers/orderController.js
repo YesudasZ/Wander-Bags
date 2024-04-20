@@ -33,9 +33,7 @@ const loadCheckout = async (req, res) => {
 
 const placeOrder = async (req, res) => {
   try {
-
-
-    const { addressId, paymentMethod, orderNotes,paymentStatus } = req.body;
+    const { addressId, paymentMethod, orderNotes, paymentStatus, totalAmount, couponDiscount } = req.body;
     const user_id = req.session.user_id;
     const user = await User.findById({ _id: user_id });
 
@@ -54,64 +52,55 @@ const placeOrder = async (req, res) => {
     const orderItems = await Promise.all(
       cart.items.map(async (item) => {
         const product = item.productId;
-        let productStatus = 'active';
-        const updatedCountInStock = product.countInStock - item.quantity;
 
-        if (updatedCountInStock === 0) {
-          productStatus = 'out-of-stock';
+        if (product.countInStock < item.quantity) {
+          return res.status(400).json({ success: false, message: `${product.name} is out of stock` });
         }
 
+        const updatedCountInStock = product.countInStock - item.quantity;
 
         await Product.findByIdAndUpdate(product._id, {
           countInStock: updatedCountInStock,
-          status: productStatus,
         });
 
         return {
           productId: product._id,
           title: product.name,
           image: product.images,
-          productPrice: item.productPrice,
+          productPrice: product.discountPrice ? product.discountPrice : product.price,
           quantity: item.quantity,
-          price: item.price,
-          productStatus: productStatus,
+          price: product.discountPrice ? product.discountPrice * item.quantity : product.price * item.quantity,
         };
       })
     );
 
-
-
     const oId = uuidv4();
 
-    let PaymentStatus = "";
-    if (paymentMethod === "Cash On Delivery") {
-      PaymentStatus = "Pending";
+    let PaymentStatus = '';
+    if (paymentMethod === 'Cash On Delivery') {
+      PaymentStatus = 'Pending';
     } else if (paymentMethod === 'Wallet') {
       PaymentStatus = 'Success';
-     
+
       const wallet = await Wallet.findOne({ user: user_id });
       if (!wallet) {
         return res.status(400).json({ success: false, message: 'Wallet not found' });
       }
-      // if (wallet.walletBalance < totalAmount) {
-      //   return res.status(400).json({ success: false, message: 'Insufficient wallet balance' });
-      // }
-      wallet.walletBalance -= cart.billTotal;
-      wallet.amountSpent += cart.billTotal;
+      if (wallet.walletBalance < totalAmount) {
+        return res.status(400).json({ success: false, message: 'Insufficient wallet balance' });
+      }
+      wallet.walletBalance -= totalAmount;
+      wallet.amountSpent += totalAmount;
       wallet.transactions.push({
-        amount: cart.billTotal,
+        amount: totalAmount,
         description: `Payment for Order #${oId}`,
         type: 'Debit',
         transactionDate: new Date(),
       });
       await wallet.save();
     } else {
-      PaymentStatus = paymentStatus ;
+      PaymentStatus = paymentStatus;
     }
-
-
-
-   
 
     const orderData = {
       user: user._id,
@@ -119,12 +108,12 @@ const placeOrder = async (req, res) => {
       oId,
       orderStatus: 'Pending',
       items: orderItems,
-      billTotal: cart.billTotal,
+      billTotal: totalAmount,
       shippingAddress: userAddress,
       paymentMethod,
       orderNotes,
       paymentStatus: PaymentStatus,
-    
+      couponAmount: couponDiscount,
     };
 
     cart.items = [];
@@ -379,7 +368,7 @@ const updatePaymentStatus = async (req, res) => {
 
     order.paymentStatus = status;
 
-    //Handling quantity for success payment
+   
     if (order.paymentStatus === "Success")
       for (const item of order.items) {
         await Product.findByIdAndUpdate(item.productId, {
@@ -397,6 +386,45 @@ const updatePaymentStatus = async (req, res) => {
   }
 };
 
+
+
+const checkQuantity = async (req, res) => {
+  try {
+
+    console.log("working",req.session.user_id);
+    const userId = req.session.user_id; 
+
+  
+    const cart = await Cart.findOne({ owner: userId }).populate({
+      path: 'items.productId',
+      model: 'Product',
+      select: 'name countInStock',
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+   
+    const cartItems = cart.items.map(item => ({
+      productId: {
+        name: item.productId.name,
+        countInStock: item.productId.countInStock,
+      },
+      quantity: item.quantity,
+    }));
+
+    res.status(200).json({ items: cartItems });
+  } catch (error) {
+    console.error('Error retrieving cart items:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+
+
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -408,5 +436,6 @@ module.exports = {
   loadOderfailed,
   retryRazorpayOrder,
   updatePaymentStatus,
-  getWalletBalance
+  getWalletBalance,
+  checkQuantity
 }
