@@ -490,17 +490,17 @@
                  
                   <div style="max-height: 500px; overflow-y: auto;" >
                   <table class="table table-hover" >
-                    <thead>
+                    <thead class="text-center">
                       <tr>
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Status</th>
-                        <th>Payment</th>
+                        <th>Amount</th>
                         <th>Action</th>
                         <th>Details</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                       <% orders.forEach(order=> { %>
                         <% order.items.forEach((item, index)=> { %>
                           <tr class="order-row" data-order-id="<%= order._id %>">
@@ -520,10 +520,12 @@
                                 class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
                                 <%= order.orderStatus %>
                               </span></td>
-                              <td><span
+                              <td>
+                                <!-- <span
                                 class="badge order-status badge-<%= order.paymentStatus === 'Pending' ? 'info' : order.paymentStatus === 'Success' ? 'success' : order.paymentStatus === 'Refunded' ? 'secondary' : order.paymentStatus === 'Failed' ? 'danger' : 'danger' %>">
                                 <%= order.paymentStatus %>
-                              </span>
+                              </span> -->
+                         <strong><%= order.billTotal %></strong>
                             </td>
                         
                              
@@ -577,6 +579,7 @@
                 <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleString() %></p>
                 <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
                 <p><strong>Payment Status:</strong> <%= order.paymentStatus %></p>
+                <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
                 <p><strong>Shipping Address:</strong> <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.country %>, <%= order.shippingAddress.postalCode %></p>
                 <p><strong>Order Notes:</strong> <%= order.orderNotes %></p>
                 <p><strong>Cancellation Reason:</strong> <%= order.cancellationReason %></p>
@@ -597,23 +600,17 @@
                   </li>
                   <% }) %>
                 </ul>
+                <p><strong>Coupon Discount:</strong> <%= order.couponAmount %></p>
                 <p class="mt-3"><strong>Bill Total:</strong> <%= order.billTotal %></p>
               </div>
             </div>
           </div>
-          <div>
+         
 
-            <% if ( order.paymentStatus !== 'Failed') { %>
-            <!-- <button class="invoice-button btn btn-primary" type="button"  data-order='<%= JSON.stringify(order) %>'>
-              Invoice
-            </button> -->
-
-
+            <% if ( order.paymentStatus !== 'Failed' ||order.orderStatus !== 'Cancelled' ||order.orderStatus !== 'Returned') { %>
+          
+            <div>
             <a href="/orders/<%= order._id %>/invoice" target="_blank" class="btn btn-primary">Download Invoice</a>
-
-            <!-- <a class="btn btn-secondary print ms-2" href="/invoice?id=<%= order._id %>" title="Download Invoice">
-              <i class="material-symbols-outlined">download</i>
-          </a> -->
           </div>
           <% } %>
    
@@ -743,59 +740,55 @@
 
 
 
-
               <div class="tab-pane fade" id="addaddress" role="tabpanel" aria-labelledby="addaddress-tab">
                 <div class="card">
                   <div class="card-header">
                     <h5>Add Address</h5>
                   </div>
                   <div class="card-body">
-                    <form id="addAddressForm" method="post" name="enq" onsubmit="return validateForm()">
+                    <form id="addAddressForm" method="post" name="enq">
                       <div class="row">
                         <div class="form-group col-md-6">
                           <label>House Name / Flat No.<span class="required">*</span></label>
-                          <input class="form-control square" name="houseName" id="houseName" type="text">
-                          <small class="text-danger invalid-feedback"></small>
+                          <input class="form-control square" name="houseName" id="houseName" type="text" onkeyup="houseNameValidation()">
+                          <small id="houseNameError" class="error"></small>
                         </div>
                         <div class="form-group col-md-6">
                           <label>Street<span class="required">*</span></label>
-                          <input class="form-control square" name="street" id="street" type="text">
-                          <small class="text-danger invalid-feedback"></small>
+                          <input class="form-control square" name="street" id="street" type="text" onkeyup="streetValidation()">
+                          <small id="streetError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>City <span class="required">*</span></label>
-                          <input class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$">
-                          <small class="text-danger invalid-feedback">gjagjkgajkhgf</small>
+                          <input class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="cityValidation()">
+                          <small id="cityError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>State <span class="required">*</span></label>
-                          <input class="form-control square" name="state" id="state" type="text"
-                            pattern="^[a-zA-Z\s]+$">
-                          <small class="text-danger invalid-feedback"></small>
+                          <input class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="stateValidation()">
+                          <small id="stateError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Country <span class="required">*</span></label>
-                          <input class="form-control square" name="country" id="country" type="text"
-                            pattern="^[a-zA-Z\s]+$">
-                          <small class="text-danger invalid-feedback"></small>
+                          <input class="form-control square" name="country" id="country" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="countryValidation()">
+                          <small id="countryError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Postalcode <span class="required">*</span></label>
-                          <input class="form-control square" name="postalCode" id="postalCode" type="text"
-                            pattern="^[0-9]+$">
-                          <small class="text-danger invalid-feedback"></small>
+                          <input class="form-control square" name="postalCode" id="postalCode" type="text" pattern="^[0-9]{6}$" onkeyup="postalCodeValidation()">
+                          <small id="postalCodeError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Type <span class="required">*</span></label>
-                          <select class="form-control" id="addressType" name="addressType">
+                          <select class="form-control" id="addressType" name="addressType" onchange="addressTypeValidation()">
+                            <option value="">Select Address Type</option>
                             <option value="home">Home</option>
                             <option value="office">Office</option>
                           </select>
-                          <small class="text-danger invalid-feedback"></small>
+                          <small id="addressTypeError" class="error"></small>
                         </div>
                         <div class="col-md-12">
-                          <button type="submit" class="btn btn-fill-out submit" name="submit"
-                            value="Submit">Save</button>
+                          <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -849,62 +842,60 @@
                 </div>
               </div>
 
-              <!-- Edit Address Modal -->
-              <% user.address.forEach((address, index)=> { %>
-                <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog"
-                  aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <!-- Form for editing address -->
-                        <form id="editAddressForm<%= index %>" class="edit-address-form"
-                          data-address-id="<%= address._id %>">
-                          <div class="form-group">
-                            <label for="houseName<%= index %>">House Name / Flat No.</label>
-                            <input type="text" class="form-control" id="houseName<%= index %>" name="houseName"
-                              value="<%= address.houseName %>" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="street<%= index %>">Street</label>
-                            <input type="text" class="form-control" id="street<%= index %>" name="street"
-                              value="<%= address.street %>" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="city<%= index %>">City</label>
-                            <input type="text" class="form-control" id="city<%= index %>" name="city"
-                              value="<%= address.city %>" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="state<%= index %>">State</label>
-                            <input type="text" class="form-control" id="state<%= index %>" name="state"
-                              value="<%= address.state %>" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="country<%= index %>">Country</label>
-                            <input type="text" class="form-control" id="country<%= index %>" name="country"
-                              value="<%= address.country %>" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="postalCode<%= index %>">Postal Code</label>
-                            <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode"
-                              value="<%= address.postalCode %>" required>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <% }) %>
+             <!-- Edit Address Modal -->
+<% user.address.forEach((address, index)=> { %>
+  <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form for editing address -->
+          <form id="editAddressForm<%= index %>" class="edit-address-form" data-address-id="<%= address._id %>">
+            <div class="form-group">
+              <label for="houseName<%= index %>">House Name / Flat No.<span class="required">*</span></label>
+              <input type="text" class="form-control" id="houseName<%= index %>" name="houseName" value="<%= address.houseName %>" required>
+              <small id="houseNameError<%= index %>" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="street<%= index %>">Street<span class="required">*</span></label>
+              <input type="text" class="form-control" id="street<%= index %>" name="street" value="<%= address.street %>" required>
+              <small id="streetError<%= index %>" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="city<%= index %>">City <span class="required">*</span></label>
+              <input type="text" class="form-control" id="city<%= index %>" name="city" value="<%= address.city %>" pattern="^[a-zA-Z\s]+$" required>
+              <small id="cityError<%= index %>" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="state<%= index %>">State <span class="required">*</span></label>
+              <input type="text" class="form-control" id="state<%= index %>" name="state" value="<%= address.state %>" pattern="^[a-zA-Z\s]+$" required>
+              <small id="stateError<%= index %>" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="country<%= index %>">Country <span class="required">*</span></label>
+              <input type="text" class="form-control" id="country<%= index %>" name="country" value="<%= address.country %>" pattern="^[a-zA-Z\s]+$"  required>
+              <small id="countryError<%= index %>" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="postalCode<%= index %>">Postal Code<span class="required">*</span></label>
+              <input type="text" class="form-control" id="postalCode<%= index %>" name="postalCode" value="<%= address.postalCode %>" pattern="^[0-9]{6}$" required>
+              <small id="postalCodeError<%= index %>" class="error"></small>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
 
 
                   <!-- Delete Address Modal -->
@@ -940,65 +931,64 @@
     </section>
   </main>
 
-  <!-- Edit Name Modal -->
-  <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="editNameForm">
-            <div class="form-group">
-              <label for="newName">New Name</label>
-              <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
-        </div>
+<!-- Edit Name Modal -->
+<div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editNameForm">
+          <div class="form-group">
+            <label for="newName">New Name</label>
+            <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name" onkeyup="validateName()" required>
+            <small id="newNameError" class="error"></small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Change Password Modal -->
-  <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="changePasswordForm">
-            <div class="form-group">
-              <label for="currentPassword">Current Password</label>
-              <input type="password" class="form-control" id="currentPassword" name="currentPassword"
-                placeholder="Enter current password">
-            </div>
-            <div class="form-group">
-              <label for="newPassword">New Password</label>
-              <input type="password" class="form-control" id="newPassword" name="newPassword"
-                placeholder="Enter new password">
-            </div>
-            <div class="form-group">
-              <label for="confirmPassword">Confirm Password</label>
-              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                placeholder="Confirm new password">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
-        </div>
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="changePasswordForm">
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password" onkeyup="newPasswordValidation()">
+            <small id="newPasswordError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" onkeyup="confirmPasswordValidation()">
+            <small id="confirmPasswordError" class="error"></small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Toast notification HTML for password mismatch -->
   <div class="toast" id="passwordMismatchToast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1198,287 +1188,561 @@
   <script>
 
 
-    function validateForm() {
-      const houseName = document.getElementById("houseName").value;
-      const street = document.getElementById("street").value;
-      const city = document.getElementById("city").value;
-      const state = document.getElementById("state").value;
-      const country = document.getElementById("country").value;
-      const postalCode = document.getElementById("postalCode").value;
+// Function to handle changing the password
+document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+  const currentPassword = document.getElementById('currentPassword').value.trim();
+  const newPassword = document.getElementById('newPassword').value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-      if (!houseName || !street || !city || !state || !country || !postalCode) {
+  const isNewPasswordValid = newPasswordValidation();
+  const isConfirmPasswordValid = confirmPasswordValidation();
 
-        return false;
-      }
+  if (!isNewPasswordValid || !isConfirmPasswordValid || newPassword !== confirmPassword) {
+    return;
+  }
 
-      if (!/^[A-Za-z]+$/.test(city)) {
-        document.getElementById("cityError").innerText = "City must contain only letters.";
-        return false;
-      }
-
-      if (!/^[A-Za-z]+$/.test(state)) {
-        document.getElementById("stateError").innerText = "State must contain only letters.";
-        return false;
-      }
-
-      if (!/^[A-Za-z]+$/.test(country)) {
-        document.getElementById("countryError").innerText = "Country must contain only letters.";
-        return false;
-      }
-
-      if (!/^[0-9]+$/.test(postalCode)) {
-        document.getElementById("postalCodeError").innerText = "Postal code must contain only numbers.";
-        return false;
-      }
-
-      return true;
+  try {
+    const response = await fetch('/profile/changePassword', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    if (response.ok) {
+      // Password changed successfully
+      $('#changePasswordModal').modal('hide');
+      window.location.reload();
+    } else {
+      // Handle error if any
+      alert('Failed to change password. Please check your current password.');
     }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+function newPasswordValidation() {
+  const newPasswordValue = document.getElementById("newPassword").value.trim();
+  const newPasswordError = document.getElementById("newPasswordError");
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  if (newPasswordValue === '') {
+    newPasswordError.textContent = 'New Password is required';
+    newPasswordError.style.color = 'red';
+    document.getElementById("newPassword").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (!passwordRegex.test(newPasswordValue)) {
+    newPasswordError.textContent = 'New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+    newPasswordError.style.color = 'red';
+    document.getElementById("newPassword").style.border = "solid 2px red";
+    return false;
+  }
+
+  newPasswordError.textContent = '';
+  document.getElementById("newPassword").style.border = "solid 2px green";
+  return true;
+}
+
+function confirmPasswordValidation() {
+  const confirmPasswordValue = document.getElementById("confirmPassword").value.trim();
+  const newPasswordValue = document.getElementById("newPassword").value.trim();
+  const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+  if (confirmPasswordValue === '') {
+    confirmPasswordError.textContent = 'Confirm Password is required';
+    confirmPasswordError.style.color = 'red';
+    document.getElementById("confirmPassword").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (confirmPasswordValue !== newPasswordValue) {
+    confirmPasswordError.textContent = 'Confirm Password does not match New Password';
+    confirmPasswordError.style.color = 'red';
+    document.getElementById("confirmPassword").style.border = "solid 2px red";
+    return false;
+  }
+
+  confirmPasswordError.textContent = '';
+  document.getElementById("confirmPassword").style.border = "solid 2px green";
+  return true;
+}
 
 
 
 
-    // Function to handle editing the name
-    document.getElementById('saveNameBtn').addEventListener('click', async () => {
-      const newName = document.getElementById('newName').value.trim();
-      try {
-        const response = await fetch('/profile/updateName', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ newName })
-        });
-        if (response.ok) {
-          // Update the name in the profile section without refreshing
-          document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
-          $('#editNameModal').modal('hide');
-      
-        window.location.reload();
-     
-        } else {
-          // Handle error if any
-          console.error('Error updating name');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
-    // Function to handle changing the password
-    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
-      const currentPassword = document.getElementById('currentPassword').value.trim();
-      const newPassword = document.getElementById('newPassword').value.trim();
-      const confirmPassword = document.getElementById('confirmPassword').value.trim();
-      if (newPassword !== confirmPassword) {
-        // Show error message if passwords don't match
-        alert('New password and confirm password must match.');
-        return;
-      }
-      try {
-        const response = await fetch('/profile/changePassword', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ currentPassword, newPassword })
-        });
-        if (response.ok) {
-          // Password changed successfully
-          $('#changePasswordModal').modal('hide');
-          window.location.reload();
-        } else {
-          // Handle error if any
-          alert('Failed to change password. Please check your current password.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
+
+
     document.getElementById("addAddressForm").addEventListener("submit", async function (event) {
-      event.preventDefault();
-      // Retrieve form data
-      var houseName = document.getElementById("houseName").value;
-      var street = document.getElementById("street").value;
-      var city = document.getElementById("city").value;
-      var state = document.getElementById("state").value;
-      var country = document.getElementById("country").value;
-      var postalCode = document.getElementById("postalCode").value;
-      var addressType = document.getElementById("addressType").value;
-      // Validation logic
-      if (houseName.trim() === '' || street.trim() === '' || city.trim() === '' || state.trim() === '' || country.trim() === '' || postalCode.trim() === '') {
+  event.preventDefault(); // Prevent form submission
+
+  const isValid = houseNameValidation() &&
+    streetValidation() &&
+    cityValidation() &&
+    stateValidation() &&
+    countryValidation() &&
+    postalCodeValidation() &&
+    addressTypeValidation();
+
+  if (isValid) {
+    const houseName = document.getElementById("houseName").value.trim();
+    const street = document.getElementById("street").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const state = document.getElementById("state").value.trim();
+    const country = document.getElementById("country").value.trim();
+    const postalCode = document.getElementById("postalCode").value.trim();
+    const addressType = document.getElementById("addressType").value;
+
+    try {
+      const response = await fetch('/profile/addAddress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          houseName,
+          street,
+          city,
+          state,
+          country,
+          postalCode,
+          addressType
+        })
+      });
+      if (response.ok) {
+        document.getElementById("addAddressForm").reset();
         Toastify({
-          text: "Please fill in all fields",
+          text: "Address added successfully",
           duration: 3000,
-          gravity: "top", // toast will be shown at top of the page
-          position: 'right', // toast position
+          gravity: "top",
+          position: 'right',
           backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
         }).showToast();
-        return false;
-      }
-      try {
-        const response = await fetch('/profile/addAddress', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json' // Specify content type as JSON
-          },
-          body: JSON.stringify({ // Convert form data to JSON
-            houseName,
-            street,
-            city,
-            state,
-            country,
-            postalCode,
-            addressType
-          })
-        });
-        if (response.ok) {
-          document.getElementById("addAddressForm").reset();
-          Toastify({
-            text: "Address added successfully",
-            duration: 3000,
-            gravity: "top",
-            position: 'right',
-            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-          }).showToast();
-          // window.location.reload();
-          // Optionally, you can redirect the user or perform any other action here
-        } else {
-          Toastify({
-            text: "Failed to add address",
-            duration: 3000,
-            gravity: "top",
-            position: 'right',
-            backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-          }).showToast();
-        }
-      } catch (error) {
-        console.error(error);
+      } else {
         Toastify({
-          text: "An error occurred",
+          text: "Failed to add address",
           duration: 3000,
           gravity: "top",
           position: 'right',
           backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
         }).showToast();
       }
-    });
+    } catch (error) {
+      console.error(error);
+      Toastify({
+        text: "An error occurred",
+        duration: 3000,
+        gravity: "top",
+        position: 'right',
+        backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+      }).showToast();
+    }
+  }
+});
 
-    // Function to handle editing the name
-    document.getElementById('saveNameBtn').addEventListener('click', async () => {
-      const newName = document.getElementById('newName').value.trim();
+function houseNameValidation() {
+  const houseNameValue = document.getElementById("houseName").value.trim();
+  const houseNameError = document.getElementById("houseNameError");
 
-      try {
-        const response = await fetch('/profile/updateName', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ newName })
-        });
+  if (houseNameValue === '') {
+    houseNameError.textContent = 'House Name / Flat No. is required';
+    houseNameError.style.color = 'red'
+    document.getElementById("houseName").style.border = "solid 2px red";
+    return false;
+  }
 
-        if (response.ok) {
-          // Update the name in the profile section without refreshing
-          document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
-          $('#editNameModal').modal('hide');
-          window.location.href='/profile';
-        } else {
-          // Handle error if any
-          console.error('Error updating name');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
+  houseNameError.textContent = '';
+  document.getElementById("houseName").style.border = "solid 2px green";
+  return true;
+}
+
+function streetValidation() {
+  const streetValue = document.getElementById("street").value.trim();
+  const streetError = document.getElementById("streetError");
+
+  if (streetValue === '') {
+    streetError.textContent = 'Street is required';
+    streetError.style.color = 'red'
+    document.getElementById("street").style.border = "solid 2px red";
+    return false;
+  }
+
+  streetError.textContent = '';
+  document.getElementById("street").style.border = "solid 2px green";
+  return true;
+}
+
+function cityValidation() {
+  const cityValue = document.getElementById("city").value.trim();
+  const cityError = document.getElementById("cityError");
+  const cityRegex = /^[a-zA-Z\s]+$/;
+
+  if (cityValue === '') {
+    cityError.textContent = 'City is required';
+    cityError.style.color = 'red'
+    document.getElementById("city").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (!cityRegex.test(cityValue)) {
+    cityError.textContent = 'City should contain only letters and spaces';
+    cityError.style.color = 'red'
+    document.getElementById("city").style.border = "solid 2px red";
+    return false;
+  }
+
+  cityError.textContent = '';
+  document.getElementById("city").style.border = "solid 2px green";
+  return true;
+}
+
+function stateValidation() {
+  const stateValue = document.getElementById("state").value.trim();
+  const stateError = document.getElementById("stateError");
+  const stateRegex = /^[a-zA-Z\s]+$/;
+
+  if (stateValue === '') {
+    stateError.textContent = 'State is required';
+    stateError.style.color = 'red'
+    document.getElementById("state").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (!stateRegex.test(stateValue)) {
+    stateError.textContent = 'State should contain only letters and spaces';
+    stateError.style.color = 'red'
+    document.getElementById("state").style.border = "solid 2px red";
+    return false;
+  }
+
+  stateError.textContent = '';
+  document.getElementById("state").style.border = "solid 2px green";
+  return true;
+}
+
+function countryValidation() {
+  const countryValue = document.getElementById("country").value.trim();
+  const countryError = document.getElementById("countryError");
+  const countryRegex = /^[a-zA-Z\s]+$/;
+
+  if (countryValue === '') {
+    countryError.textContent = 'Country is required';
+    countryError.style.color = 'red'
+    document.getElementById("country").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (!countryRegex.test(countryValue)) {
+    countryError.textContent = 'Country should contain only letters and spaces';
+    countryError.style.color = 'red'
+    document.getElementById("country").style.border = "solid 2px red";
+    return false;
+  }
+
+  countryError.textContent = '';
+  document.getElementById("country").style.border = "solid 2px green";
+  return true;
+}
+
+function postalCodeValidation() {
+  const postalCodeValue = document.getElementById("postalCode").value.trim();
+  const postalCodeError = document.getElementById("postalCodeError");
+  const postalCodeRegex = /^[0-9]{6}$/;
+
+  if (postalCodeValue === '') {
+    postalCodeError.textContent = 'Postal Code is required';
+    postalCodeError.style.color = 'red'
+    document.getElementById("postalCode").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (!postalCodeRegex.test(postalCodeValue)) {
+    postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
+    postalCodeError.style.color = 'red'
+    document.getElementById("postalCode").style.border = "solid 2px red";
+    return false;
+  }
+
+  postalCodeError.textContent = '';
+  document.getElementById("postalCode").style.border = "solid 2px green";
+  return true;
+}
+
+function addressTypeValidation() {
+  const addressTypeValue = document.getElementById("addressType").value;
+  const addressTypeError = document.getElementById("addressTypeError");
+
+  if (addressTypeValue === '') {
+    addressTypeError.textContent = 'Address Type is required';
+    addressTypeError.style.color = 'red'
+    document.getElementById("addressType").style.border = "solid 2px red";
+    return false;
+  }
+
+  addressTypeError.textContent = '';
+  document.getElementById("addressType").style.border = "solid 2px green";
+  return true;
+}
 
 
-    var passwordMismatchToast = new bootstrap.Toast(document.getElementById('passwordMismatchToast'));
-    var passwordSuccessToast = new bootstrap.Toast(document.getElementById('passwordSuccessToast'));
-    var passwordErrorToast = new bootstrap.Toast(document.getElementById('passwordErrorToast'));
-
-    // Handle click event on change password button
-    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
-      const currentPassword = document.getElementById('currentPassword').value.trim();
-      const newPassword = document.getElementById('newPassword').value.trim();
-      const confirmPassword = document.getElementById('confirmPassword').value.trim();
-
-      if (newPassword !== confirmPassword) {
-        // Show error toast message if passwords don't match
-        passwordMismatchToast.show();
-        return;
-      }
-
-      try {
-        const response = await fetch('/profile/changePassword', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ currentPassword, newPassword })
-        });
-
-        if (response.ok) {
-          // Password changed successfully
-          $('#changePasswordModal').modal('hide');
-          passwordSuccessToast.show();
-          // Optionally, you can redirect the user or perform any other action here
-          window.location.reload()
-        } else {
-          // Handle error if any
-          passwordErrorToast.show();
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const editAddressForms = document.querySelectorAll('.edit-address-form');
 
-      editAddressForms.forEach((form, index) => {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
 
-          const addressId = form.dataset.addressId;
-          const formData = new FormData(form);
-          const addressData = {};
 
-          for (const [key, value] of formData.entries()) {
-            addressData[key] = value;
-          }
 
-          try {
-            const response = await fetch(`/profile/update-address/${addressId}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(addressData),
-            });
 
-            if (!response.ok) {
-              throw new Error('Error updating address');
-            }
 
-            // Close the modal
-            const modal = document.querySelector(`#editAddressModal${index}`);
-            const modalBackdrop = document.querySelector('.modal-backdrop');
 
-            modal.classList.remove('show');
-            modal.style.display = 'none';
 
-            if (modalBackdrop) {
-              modalBackdrop.remove();
-            }
 
-            // Reload the page
-            window.location.reload();
-          } catch (err) {
-            console.error(err);
-            alert(err.message);
-          }
-        });
+
+
+
+// Function to validate the name field
+function validateName() {
+  const nameValue = document.getElementById('newName').value.trim();
+  const nameError = document.getElementById('newNameError');
+  const nameRegex = /^(?!\s*$)[a-zA-Z\s]{4,}$/;
+
+  if (nameValue === '') {
+    nameError.textContent = 'Name is required';
+    nameError.style.color = 'red';
+    document.getElementById('newName').style.border = '2px solid red';
+    return false;
+  }
+
+  if (!nameRegex.test(nameValue)) {
+    nameError.textContent = 'Name must be at least 4 characters long and contain only letters and spaces (no single spaces allowed)';
+    nameError.style.color = 'red';
+    document.getElementById('newName').style.border = '2px solid red';
+    return false;
+  }
+
+  nameError.textContent = '';
+  document.getElementById('newName').style.border = '2px solid green';
+  return true;
+}
+
+// Function to handle editing the name
+document.getElementById('saveNameBtn').addEventListener('click', async () => {
+  const isValid = validateName();
+
+  if (isValid) {
+    const newName = document.getElementById('newName').value.trim();
+
+    try {
+      const response = await fetch('/profile/updateName', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ newName })
       });
+
+      if (response.ok) {
+        // Update the name in the profile section without refreshing
+        document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+        $('#editNameModal').modal('hide');
+        window.location.href = '/profile';
+      } else {
+        // Handle error if any
+        console.error('Error updating name');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+});
+
+  
+    document.addEventListener('DOMContentLoaded', () => {
+  const editAddressForms = document.querySelectorAll('.edit-address-form');
+
+  editAddressForms.forEach((form,index) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const isValid = houseNameValidation(index) &&
+        streetValidation(index) &&
+        cityValidation(index) &&
+        stateValidation(index) &&
+        countryValidation(index) &&
+        postalCodeValidation(index);
+
+      if (isValid) {
+        const addressId = form.dataset.addressId;
+        const formData = new FormData(form);
+        const addressData = {};
+
+        for (const [key, value] of formData.entries()) {
+          addressData[key] = value;
+        }
+
+        try {
+          const response = await fetch(`/profile/update-address/${addressId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(addressData),
+          });
+
+          if (!response.ok) {
+            throw new Error('Error updating address');
+          }
+
+          // Close the modal
+          const modal = document.querySelector(`#editAddressModal${index}`);
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+
+          modal.classList.remove('show');
+          modal.style.display = 'none';
+
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+
+          // Reload the page
+          window.location.reload();
+        } catch (err) {
+          console.error(err);
+          alert(err.message);
+        }
+      }
     });
+  });
+});
+
+// function houseNameValidation(index) {
+//   const houseNameValue = document.getElementById(`houseName${index}`).value.trim();
+//   const houseNameError = document.getElementById(`houseNameError${index}`);
+
+//   if (houseNameValue === '') {
+//     houseNameError.textContent = 'House Name / Flat No. is required';
+//     houseNameError.style.color = 'red'
+//     document.getElementById(`houseName${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   houseNameError.textContent = '';
+//   document.getElementById(`houseName${index}`).style.border = "solid 2px green";
+//   return true;
+// }
+
+// function streetValidation(index) {
+//   const streetValue = document.getElementById(`street${index}`).value.trim();
+//   const streetError = document.getElementById(`streetError${index}`);
+
+//   if (streetValue === '') {
+//     streetError.textContent = 'Street is required';
+//     streetError.style.color = 'red'
+//     document.getElementById(`street${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   streetError.textContent = '';
+//   document.getElementById(`street${index}`).style.border = "solid 2px green";
+//   return true;
+// }
+
+// function cityValidation(index) {
+//   const cityValue = document.getElementById(`city${index}`).value.trim();
+//   const cityError = document.getElementById(`cityError${index}`);
+//   const cityRegex = /^[a-zA-Z\s]+$/;
+
+//   if (cityValue === '') {
+//     cityError.textContent = 'City is required';
+//     cityError.style.color = 'red'
+//     document.getElementById(`city${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   if (!cityRegex.test(cityValue)) {
+//     cityError.textContent = 'City should contain only letters and spaces';
+//     cityError.style.color = 'red'
+//     document.getElementById(`city${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   cityError.textContent = '';
+//   document.getElementById(`city${index}`).style.border = "solid 2px green";
+//   return true;
+// }
+
+// function stateValidation(index) {
+//   const stateValue = document.getElementById(`state${index}`).value.trim();
+//   const stateError = document.getElementById(`stateError${index}`);
+//   const stateRegex = /^[a-zA-Z\s]+$/;
+
+//   if (stateValue === '') {
+//     stateError.textContent = 'State is required';
+//     stateError.style.color = 'red'
+//     document.getElementById(`state${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   if (!stateRegex.test(stateValue)) {
+//     stateError.textContent = 'State should contain only letters and spaces';
+//     stateError.style.color = 'red'
+//     document.getElementById(`state${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   stateError.textContent = '';
+//   document.getElementById(`state${index}`).style.border = "solid 2px green";
+//   return true;
+// }
+
+// function countryValidation(index) {
+//   const countryValue = document.getElementById(`country${index}`).value.trim();
+//   const countryError = document.getElementById(`countryError${index}`);
+//   const countryRegex = /^[a-zA-Z\s]+$/;
+
+//   if (countryValue === '') {
+//     countryError.textContent = 'Country is required';
+//     countryError.style.color = 'red'
+//     document.getElementById(`country${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   if (!countryRegex.test(countryValue)) {
+//     countryError.textContent = 'Country should contain only letters and spaces';
+//     countryError.style.color = 'red'
+//     document.getElementById(`country${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   countryError.textContent = '';
+//   document.getElementById(`country${index}`).style.border = "solid 2px green";
+//   return true;
+// }
+
+// function postalCodeValidation(index) {
+//   const postalCodeValue = document.getElementById(`postalCode${index}`).value.trim();
+//   const postalCodeError = document.getElementById(`postalCodeError${index}`);
+//   const postalCodeRegex = /^[0-9]{6}$/;
+
+//   if (postalCodeValue === '') {
+//     postalCodeError.textContent = 'Postal Code is required';
+//     postalCodeError.style.color = 'red'
+//     document.getElementById(`postalCode${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   if (!postalCodeRegex.test(postalCodeValue)) {
+//     postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
+//     postalCodeError.style.color = 'red'
+//     document.getElementById(`postalCode${index}`).style.border = "solid 2px red";
+//     return false;
+//   }
+
+//   postalCodeError.textContent = '';
+//   document.getElementById(`postalCode${index}`).style.border = "solid 2px green";
+//   return true;
+// }
 
 
     $(document).ready(function () {

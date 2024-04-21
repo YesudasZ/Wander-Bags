@@ -897,13 +897,14 @@ if(paymentMethod == "Cash On Delivery" ){
       
     });}else if(paymentMethod == "Razorpay" ){
 
-createRazorpayOrder()
-      function  createRazorpayOrder(){
+createRazorpayOrder(totalAmount)
+      function  createRazorpayOrder(totalAmount){
   fetch('/create/razorpayOrder',{
         method:'POST',
         headers:{
             'Content-Type':'application/json',
-        }
+        },
+    body: JSON.stringify({  totalAmount })
     })
     .then(response => response.json())
     .then(data =>{
@@ -1001,8 +1002,9 @@ function placeOrderAfterPayment(paymentStatus){
     .then(response => response.json())
     .then(data => {
       const walletBalance = data.walletBalance;
-      const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹.', ''));
-
+      const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹', ''));
+console.log("wa",walletBalance);
+console.log("ot",totalAmount);
       if (walletBalance >= totalAmount) {
         // Wallet balance is sufficient, proceed with order placement
         placeOrderWithWallet(addressId, paymentMethod, orderNotes, totalAmount,couponDiscount);

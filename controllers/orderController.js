@@ -170,7 +170,7 @@ const loadOrders = async (req, res) => {
     const order = await Order.findOne({ user: user_id })
     res.render('oders', { user: userData, orders: order });
   } catch (error) {
-    return res.redirect('/admin/errorpage')
+    console.error('Error cancelling order:', error);
   }
 }
 
@@ -193,6 +193,32 @@ const cancelOrder = async (req, res) => {
       await Product.findByIdAndUpdate(product._id, { countInStock: updatedCountInStock });
     }
 
+    if (order.paymentStatus === 'Success') {
+      const refundAmount = order.billTotal;
+      let wallet = await Wallet.findOne({ user: req.session.user_id });
+
+      if (!wallet) {
+        wallet = new Wallet({
+          user: req.session.user_id,
+          walletBalance: 0,
+          transactions: []
+        });
+      }
+
+      wallet.walletBalance += refundAmount;
+      wallet.refundAmount += refundAmount;
+
+      // Add transaction details
+      wallet.transactions.push({
+        amount: refundAmount,
+        description: `Refund for order #${order.oId}`,
+        type: 'Refund',
+        transactionDate: new Date()
+      });
+
+      await wallet.save();
+    }
+
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       {
@@ -202,13 +228,12 @@ const cancelOrder = async (req, res) => {
       { new: true }
     );
 
-    res.json({ success: true, message: 'Order cancelled successfully' });
+    res.json({ success: true, message: 'Order cancelled successfully', updatedOrder });
   } catch (error) {
     console.error('Error cancelling order:', error);
     res.status(500).json({ success: false, message: 'An error occurred while cancelling the order' });
   }
 };
-
 
 
 const razorpayOrder = async (data)=>{
@@ -232,19 +257,19 @@ const razorpayOrder = async (data)=>{
 
 const manageRazorpayOrder =  async (req,res)=> {
   try {
-
+    const { totalAmount} = req.body;
   
 
     const cart = await Cart.findOne({ owner: req.session.user_id })
 
   const cartId = cart._id
-  const  billTotal = cart.billTotal
+ 
 
     if (!cart) {
     return res.status(400).json({ success: false, message: 'Cart not found' });
     }    
     let data={
-      amount : billTotal*100,   //In INR
+      amount : totalAmount*100,   //In INR
       currency:"INR",  
       receipt:`receipt_${cartId}`,
       payment_capture:1,
