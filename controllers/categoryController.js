@@ -43,26 +43,43 @@ const addCategory = async (req, res) => {
 };
 
 
- const updateCategory = async (req, res) => {
+const updateCategory = async (req, res) => {
   try {
-      const { id } = req.params;
-      const { name, status } = req.body;
-      if (!name) {
-          return res.status(400).json({ message: 'Category name is required' });
-      }
-      const category = await Category.findById(id);
-      if (!category) {
-          return res.status(404).json({ message: 'Category not found' });
-      }
-      category.name = name;
-      category.status = status;
+    const { id } = req.params;
+    const { name, status } = req.body;
+    const category = await Category.findById(id);
+ 
+    if (!category) {
+      return  res.render('editcategory',{ message: 'Category not found',category });
+    }
+    if (!name) {
+      return  res.render('editcategory',{category},{ message: 'Category name is required' });
+    }
+    const existingCategory = await Category.findOne({
+      name: new RegExp(`^${name}$`, 'i'),
+      _id: { $ne: id },
+    });
+
+    if (existingCategory) {
+      return  res.render('editcategory',{ message: 'Category name already exists',category });
+    }
+
+    await Product.updateMany(
+      { category: { $regex: new RegExp("^" + category.name + "$", "i") } },
+      { $set: { category: name, status: status } }
+    );
+
+    category.name = name;
+    category.status = status;
       await category.save();
-      res.redirect('/admin/categories');
+    res.redirect('/admin/categories');
   } catch (err) {
-      console.error(err);
-      res.redirect('/admin/errorpage')
+    console.error(err);
+    res.redirect('/admin/errorpage');
   }
 };
+
+
 
 const deleteCategory = async (req, res) => {
   try {

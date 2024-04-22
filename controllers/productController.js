@@ -23,7 +23,7 @@ const getProducts = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Current page number
 
     const products = await Product.find({})
-     .sort({ productAddDate: -1 }) // Sort by productAddDate in descending order
+    //  .sort({ productAddDate: -1 }) // Sort by productAddDate in descending order
      .skip((page - 1) * limit)
      .limit(limit);
 
@@ -39,7 +39,7 @@ const getProducts = async (req, res) => {
 
 const addloadProducts = async (req, res) => {
   try {
-    const categories = await Category.find({});
+    const categories = await Category.find({status:'active'});
     res.render('addproduct', { categories });
   } catch (err) {
     console.error(err);
@@ -116,7 +116,7 @@ const editProductPage = async (req, res) => {
   const productId = req.params.productId;
   try {
 
-    const categories = await Category.find({});
+    const categories = await Category.find({status:'active'});
 
 
     const product = await Product.findById(productId);

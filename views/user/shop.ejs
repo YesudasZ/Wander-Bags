@@ -279,9 +279,16 @@
                 <h4 class="product-title text-black fw-bold mb-1">
                   <%= product.name %>
                 </h4>
-                <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                <!-- <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
                 <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %>
-                </p>
+                </p> -->
+                <% if (product.discountPrice) { %>
+                  <p class="product-price text-muted mb-1"><del>INR <%= product.price %></del></p>
+                  <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %>
+                  </p>
+              <% } else { %>
+                  <span class="discount-price  text-danger fw-bold">INR <%= product.price %></span>
+              <% } %>
               </div>
             </div>
           </div>

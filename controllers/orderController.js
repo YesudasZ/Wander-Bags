@@ -17,7 +17,10 @@ const loadCheckout = async (req, res) => {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id }).populate('address');
   
-    const coupons= await Coupon.find({status:'Active'})
+    const coupons = await Coupon.find({
+      status: 'Active',
+      // endDate: { $gte: currentDate }
+    });
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
     if (!cart || cart.items.length === 0) {
       return res.redirect('/cart');
@@ -26,7 +29,7 @@ const loadCheckout = async (req, res) => {
     res.render('checkOut', { cart: cart, user: userData, coupons:coupons ,   cartCount: cart?.items?.length || 0,
       wishlistCount: wishlist?.items?.length || 0,});
   } catch (error) {
-    return res.redirect('/admin/errorpage')
+    return res.redirect('/pagenotfound')
   }
 }
 
@@ -168,7 +171,7 @@ const loadOrders = async (req, res) => {
     const user_id = req.session.user_id
     const userData = await User.findById({ _id: user_id })
     const order = await Order.findOne({ user: user_id })
-    res.render('oders', { user: userData, orders: order });
+    res.render('orders', { user: userData, orders: order });
   } catch (error) {
     console.error('Error cancelling order:', error);
   }

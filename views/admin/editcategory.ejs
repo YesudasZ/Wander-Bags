@@ -179,6 +179,10 @@
                 <!-- Edit Category Form -->
                 <div class="edit-category-container">
                     <h1 class="text-center">Edit Category</h1>
+                    <% if(typeof message !== 'undefined'){ %>
+                        <h4 style="color: red;"><%=message %></h4>
+                    <% } %>
+
                     <form id="edit-category-form" action="/admin/categories/<%= category._id %>" method="POST">
                         <div class="form-group">
                             <label for="name">Category Name:</label>

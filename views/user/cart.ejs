@@ -236,7 +236,7 @@
                                     <span class=" discount-price">₹.<%=item.productId.discountPrice * item.quantity %></span>
                                   
                                 <% } else { %>
-                                    <span class="discount-price">₹.<%= item.productId.price * item.productId.quantity %></span>
+                                    <span class="discount-price">₹.<%= item.productId.price * item.quantity %></span>
                                 <% } %>
                                 </td>
                                 <td class="action" data-title="Remove">

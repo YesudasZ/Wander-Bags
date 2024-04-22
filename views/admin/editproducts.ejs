@@ -187,63 +187,75 @@
                 </ul>
             </div>
         </header>
-     <section class="content-main">
-        <div class="container">
-            <div class="edit-product-container">
-                <h1 class="text-center mb-4">Edit Product</h1>
-                <form action="/admin/products/edit/<%= product._id %>" method="post" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name:</label>
-                        <input type="text" id="name" name="name" value="<%= product.name %>" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description:</label>
-                        <textarea id="description" name="description" class="form-control" required><%= product.description %></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="existingImages" class="form-label">Existing Images:</label>
-                        <ul class="list-unstyled">
-                            <% product.images.forEach(image => { %>
-                            <li>
-                                <img src="/productimages/<%= image %>" alt="<%= image %>" width="100" class="mr-2">
-                                <input type="checkbox" name="deleteImages[]" value="<%= image %>"> Delete
-                            </li>
-                            <% }); %>
-                        </ul>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newImages" class="form-label">Add New Images:</label>
-                        <input type="file" id="newImages" name="newImages[]" accept="image/*" multiple class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status:</label>
-                        <select id="status" name="status"  value="<%= product.status %>"  class="form-control" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                            <option value="deleted">Deleted</option>
-                            <option value="draft">Draft</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Price:</label>
-                        <input type="number" id="price" name="price" value="<%= product.price %>" min="0" step="0.01" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="discountPrice" class="form-label">Discount Price:</label>
-                        <input type="number" id="discountPrice" name="discountPrice"  value="<%= product.discountPrice %>" min="0" step="0.01" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="countInStock" class="form-label">Count In Stock:</label>
-                        <input type="number" id="countInStock" name="countInStock"  value="<%= product.countInStock %>" min="0" class="form-control" required>
-                    </div>
-              
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-submit">Update Product</button>
-                    </div>
-                </form>
+        <section class="content-main">
+            <div class="container">
+                <div class="edit-product-container">
+                    <h1 class="text-center mb-4">Edit Product</h1>
+                    <form id="editProductForm" action="/admin/products/edit/<%= product._id %>" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
+                            <input type="text" id="name" name="name" value="<%= product.name %>" class="form-control" required onkeyup="nameValidation()">
+                            <small id="nameError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea id="description" name="description" class="form-control" required onkeyup="descriptionValidation()"><%= product.description %></textarea>
+                            <small id="descriptionError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="existingImages" class="form-label">Existing Images:</label>
+                            <ul class="list-unstyled">
+                                <% product.images.forEach(image => { %>
+                                <li>
+                                    <img src="/productimages/<%= image %>" alt="<%= image %>" width="100" class="mr-2">
+                                    <input type="checkbox" name="deleteImages[]" value="<%= image %>"> Delete
+                                </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newImages" class="form-label">Add New Images:</label>
+                            <input type="file" id="newImages" name="newImages[]" accept=".jpg,.jpeg,.png,.webp" multiple class="form-control" oninput="imageValidation()">
+                            <small id="imageError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category:</label>
+                            <select id="category" name="category" class="form-control" required onkeyup="categoryValidation()">
+                                <% categories.filter(category => category.status !== 'delete' && category.status !== 'inactive').forEach(category => { %>
+                                <option value="<%= category.name %>" <% if (category.name === product.category) { %>selected<% } %>>
+                                    <%= category.name %>
+                                </option>
+                                <% }) %>
+                            </select>
+                            <small id="categoryError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status:</label>
+                            <select id="status" name="status" class="form-control" required onkeyup="statusValidation()">
+                                <option value="active" <% if (product.status === 'active') { %>selected<% } %>>Active</option>
+                                <option value="inactive" <% if (product.status === 'inactive') { %>selected<% } %>>Inactive</option>
+                                <option value="deleted" <% if (product.status === 'deleted') { %>selected<% } %>>Deleted</option>
+                            </select>
+                            <small id="statusError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price:</label>
+                            <input type="number" id="price" name="price" value="<%= product.price %>" min="1" step="0.01" class="form-control" required onkeyup="priceValidation()">
+                            <small id="priceError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="countInStock" class="form-label">Count In Stock:</label>
+                            <input type="number" id="countInStock" name="countInStock" value="<%= product.countInStock %>" min="0" class="form-control" required onkeyup="countInStockValidation()">
+                            <small id="countInStockError" class="error"></small>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-submit">Update Product</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    </section>  
+        </section>
+        
   
         <footer class="main-footer font-xs mt-50">
             <div class="row pb-30 pt-15">
@@ -272,6 +284,183 @@
     <script src="/admin-asset/js/main.js" type="text/javascript"></script>
     <script src="/admin-asset/js/custom-chart.js" type="text/javascript"></script>
 
+
+
+
+
+    <script>
+        document.getElementById("editProductForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent form submission
+    
+            const isValid = nameValidation() &&
+                descriptionValidation() &&
+                imageValidation() &&
+                priceValidation() &&
+                categoryValidation() &&
+                statusValidation() &&
+                countInStockValidation();
+    
+            if (isValid) {
+                // Form is valid, submit the form
+                this.submit();
+            }
+        });
+    
+        function nameValidation() {
+            const nameValue = document.getElementById("name").value.trim();
+            const nameError = document.getElementById("nameError");
+    
+            if (nameValue === '') {
+                nameError.textContent = 'Name is required';
+                nameError.style.color = 'red';
+                document.getElementById("name").style.border = "solid 2px red";
+                return false;
+            }
+    
+            nameError.textContent = '';
+            document.getElementById("name").style.border = "solid 2px green";
+            return true;
+        }
+    
+        function descriptionValidation() {
+            const descriptionValue = document.getElementById("description").value.trim();
+            const descriptionError = document.getElementById("descriptionError");
+    
+            if (descriptionValue === '') {
+                descriptionError.textContent = 'Description is required';
+                descriptionError.style.color = 'red';
+                document.getElementById("description").style.border = "solid 2px red";
+                return false;
+            }
+    
+            descriptionError.textContent = '';
+            document.getElementById("description").style.border = "solid 2px green";
+            return true;
+        }
+    
+        function imageValidation() {
+            const imageValue = document.getElementById("newImages").value.trim();
+            const imageError = document.getElementById("imageError");
+    
+            if (imageValue === '') {
+                imageError.textContent = '';
+                document.getElementById("newImages").style.border = "solid 2px green";
+                return true; // Allow no new images
+            }
+    
+            const imageFiles = document.getElementById("newImages").files;
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    
+            for (const imageFile of imageFiles) {
+                const imageType = imageFile.type;
+                if (!allowedTypes.includes(imageType)) {
+                    imageError.textContent = 'Invalid image type. Allowed types are jpg, jpeg, png, and webp';
+                    imageError.style.color = 'red';
+                    document.getElementById("newImages").style.border = "solid 2px red";
+                    return false;
+                }
+            }
+    
+            imageError.textContent = '';
+            document.getElementById("newImages").style.border = "solid 2px green";
+            return true;
+        }
+    
+        function priceValidation() {
+            const priceValue = document.getElementById("price").value.trim();
+            const priceError = document.getElementById("priceError");
+    
+            if (priceValue === '') {
+                priceError.textContent = 'Price is required';
+                priceError.style.color = 'red';
+                document.getElementById("price").style.border = "solid 2px red";
+                return false;
+            }
+    
+            if (isNaN(priceValue)) {
+                priceError.textContent = 'Price must be a number';
+                priceError.style.color = 'red';
+                document.getElementById("price").style.border = "solid 2px red";
+                return false;
+            }
+    
+    
+            if (priceValue < 1) {
+               priceError.textContent = 'Price must be greater than or equal to 1';
+               priceError.style.color = 'red';
+               document.getElementById("price").style.border = "solid 2px red";
+               return false;
+               }
+    
+                priceError.textContent = '';
+                document.getElementById("price").style.border = "solid 2px green";
+                return true;
+                }
+    
+    function categoryValidation() {
+        const categoryValue = document.getElementById("category").value.trim();
+        const categoryError = document.getElementById("categoryError");
+    
+        if (categoryValue === '') {
+            categoryError.textContent = 'Category is required';
+            categoryError.style.color = 'red';
+            document.getElementById("category").style.border = "solid 2px red";
+            return false;
+        }
+    
+        categoryError.textContent = '';
+        document.getElementById("category").style.border = "solid 2px green";
+        return true;
+    }
+    
+    function statusValidation() {
+        const statusValue = document.getElementById("status").value.trim();
+        const statusError = document.getElementById("statusError");
+    
+        if (statusValue === '') {
+            statusError.textContent = 'Status is required';
+            statusError.style.color = 'red';
+            document.getElementById("status").style.border = "solid 2px red";
+            return false;
+        }
+    
+        statusError.textContent = '';
+        document.getElementById("status").style.border = "solid 2px green";
+        return true;
+    }
+    
+    function countInStockValidation() {
+        const countInStockValue = document.getElementById("countInStock").value.trim();
+        const countInStockError = document.getElementById("countInStockError");
+    
+        if (countInStockValue === '') {
+            countInStockError.textContent = 'Count In Stock is required';
+            countInStockError.style.color = 'red';
+            document.getElementById("countInStock").style.border = "solid 2px red";
+            return false;
+        }
+    
+        if (isNaN(countInStockValue)) {
+            countInStockError.textContent = 'Count In Stock must be a number';
+            countInStockError.style.color = 'red';
+            document.getElementById("countInStock").style.border = "solid 2px red";
+            return false;
+        }
+    
+        if (countInStockValue < 0) {
+            countInStockError.textContent = 'Count In Stock must be greater than or equal to 0';
+            countInStockError.style.color = 'red';
+            document.getElementById("countInStock").style.border = "solid 2px red";
+            return false;
+        }
+    
+        countInStockError.textContent = '';
+        document.getElementById("countInStock").style.border = "solid 2px green";
+        return true;
+    }
+    </script>
+    
+    
 
     
 </body>
