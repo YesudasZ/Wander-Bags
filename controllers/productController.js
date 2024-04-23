@@ -151,7 +151,7 @@ const editProduct = async (req, res) => {
         brand: req.body.brand,
         status: req.body.status,
         countInStock: req.body.countInStock,
-        discountPrice: req.body.discountPrice
+        //discountPrice: req.body.discountPrice
       }, { new: true });
 
 

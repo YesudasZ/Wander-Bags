@@ -179,8 +179,8 @@
                   <% coupons.forEach(coupon => { %>
                     <tr>
                       <td><%= coupon.name %></td>
-                      <td><%= coupon.startDate.toDateString() %></td>
-                      <td><%= coupon.endDate.toDateString() %></td>
+                      <td><%= coupon.startDate.toLocaleDateString('en-IN') %></td>
+                    <td><%= coupon.endDate.toLocaleDateString('en-IN') %></td>
                       <td><%= coupon.minimumAmount %></td>
                       <td><%= coupon.maximumAmount %></td>
                       <td><%= coupon.discount %></td>
@@ -206,55 +206,62 @@
     </div>
   </div>
         
-        <!-- Add Coupon Modal -->
-        <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="addCouponForm">
-                  <div class="form-group">
-                    <label for="couponName">Coupon Name</label>
-                    <input type="text" class="form-control" id="couponName" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="startDate">Start Date</label>
-                    <input type="date" class="form-control" id="startDate" required min="<%= new Date().toISOString().split('T')[0] %>">
-                  </div>
-                  <div class="form-group">
-                    <label for="endDate">End Date</label>
-                    <input type="date" class="form-control" id="endDate" required min="<%= new Date().toISOString().split('T')[0] %>">
-                  </div>
-                  <div class="form-group">
-                    <label for="minAmount">Minimum Purchase Amount</label>
-                    <input type="number" class="form-control" id="minAmount" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="maxAmount">Maximum Discount Amount</label>
-                    <input type="number" class="form-control" id="maxAmount" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="discount">Discount</label>
-                    <input type="number" class="form-control" id="discount" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="couponCode">Coupon Code</label>
-                    <input type="text" class="form-control" id="couponCode" required>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveCouponBtn">Save</button>
-              </div>
-            </div>
+<!-- Add Coupon Modal -->
+<div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addCouponForm">
+          <div class="form-group">
+            <label for="couponName">Coupon Name</label>
+            <input type="text" class="form-control" id="couponName" required onkeyup="couponNameValidation()">
+            <small id="couponNameError" class="error"></small>
           </div>
-        </div>
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" class="form-control" id="startDate" required min="<%= new Date().toISOString().split('T')[0] %>" onchange="startDateValidation()">
+            <small id="startDateError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" class="form-control" id="endDate" required min="<%= new Date().toISOString().split('T')[0] %>" onchange="endDateValidation()">
+            <small id="endDateError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="minAmount">Minimum Purchase Amount</label>
+            <input type="number" class="form-control" id="minAmount" required min="1" onkeyup="minAmountValidation()">
+            <small id="minAmountError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="maxAmount">Maximum Discount Amount</label>
+            <input type="number" class="form-control" id="maxAmount" required min="1" onkeyup="maxAmountValidation()">
+            <small id="maxAmountError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="discount">Discount</label>
+            <input type="number" class="form-control" id="discount" required min="0.1" max="100" step="0.1" onkeyup="discountValidation()">
+            <small id="discountError" class="error"></small>
+          </div>
+          <div class="form-group">
+            <label for="couponCode">Coupon Code</label>
+            <input type="text" class="form-control" id="couponCode" required onkeyup="couponCodeValidation()">
+            <small id="couponCodeError" class="error"></small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveCouponBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
         <div class="pagination-area pl-50 mt-30 pb-30">
@@ -324,9 +331,15 @@
     <script>
 document.getElementById('saveCouponBtn').addEventListener('click', async () => {
   // Frontend form validation
-  const form = document.getElementById('addCouponForm');
-  if (form.checkValidity() === false) {
-    form.classList.add('was-validated');
+  const isValid = couponNameValidation() &&
+    startDateValidation() &&
+    endDateValidation() &&
+    minAmountValidation() &&
+    maxAmountValidation() &&
+    discountValidation() &&
+    couponCodeValidation();
+
+  if (!isValid) {
     return;
   }
 
@@ -344,13 +357,13 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
 
   // Fetch request to add coupon
   const couponData = {
-    name: document.getElementById('couponName').value,
+    name: document.getElementById('couponName').value.trim(),
     startDate: startDate.toISOString(),
     endDate: endDate.toISOString(),
     minimumAmount: parseFloat(document.getElementById('minAmount').value),
     maximumAmount: parseFloat(document.getElementById('maxAmount').value),
     discount: parseFloat(document.getElementById('discount').value),
-    couponCode: document.getElementById('couponCode').value
+    couponCode: document.getElementById('couponCode').value.trim()
   };
 
   try {
@@ -369,7 +382,7 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
         title: 'Success',
         text: 'Coupon added successfully!'
       });
-     window.location.reload();
+      window.location.reload();
     } else {
       Swal.fire({
         icon: 'error',
@@ -386,6 +399,134 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
     });
   }
 });
+
+function couponNameValidation() {
+  const couponNameValue = document.getElementById("couponName").value.trim();
+  const couponNameError = document.getElementById("couponNameError");
+
+  if (couponNameValue === '') {
+    couponNameError.textContent = 'Coupon Name is required';
+    couponNameError.style.color = 'red';
+    document.getElementById("couponName").style.border = "solid 2px red";
+    return false;
+  }
+
+  couponNameError.textContent = '';
+  document.getElementById("couponName").style.border = "solid 2px green";
+  return true;
+}
+
+function startDateValidation() {
+  const startDateValue = document.getElementById("startDate").value;
+  const startDateError = document.getElementById("startDateError");
+
+  if (startDateValue === '') {
+    startDateError.textContent = 'Start Date is required';
+    startDateError.style.color = 'red';
+    document.getElementById("startDate").style.border = "solid 2px red";
+    return false;
+  }
+
+  startDateError.textContent = '';
+  document.getElementById("startDate").style.border = "solid 2px green";
+  return true;
+}
+
+function endDateValidation() {
+  const endDateValue = document.getElementById("endDate").value;
+  const endDateError = document.getElementById("endDateError");
+
+  if (endDateValue === '') {
+    endDateError.textContent = 'End Date is required';
+    endDateError.style.color = 'red';
+    document.getElementById("endDate").style.border = "solid 2px red";
+    return false;
+  }
+
+  endDateError.textContent = '';
+  document.getElementById("endDate").style.border = "solid 2px green";
+  return true;
+}
+
+function minAmountValidation() {
+const minAmountValue = document.getElementById("minAmount").value;
+const minAmountError = document.getElementById("minAmountError");
+const minAmountRegex = /^[1-9]\d*$/;
+
+if (minAmountValue === '') {
+minAmountError.textContent = 'Minimum Purchase Amount is required';
+minAmountError.style.color = 'red';
+document.getElementById("minAmount").style.border = "solid 2px red";
+return false;
+}
+
+if (!minAmountRegex.test(minAmountValue)) {
+minAmountError.textContent = 'Minimum Purchase Amount should be a positive number starting from 1';
+minAmountError.style.color = 'red';
+document.getElementById("minAmount").style.border = "solid 2px red";
+return false;
+}
+minAmountError.textContent = '';
+document.getElementById("minAmount").style.border = "solid 2px green";
+return true;
+}
+
+function maxAmountValidation() {
+const maxAmountValue = document.getElementById("maxAmount").value;
+const maxAmountError = document.getElementById("maxAmountError");
+const maxAmountRegex = /^[1-9]\d*$/;
+
+if (maxAmountValue === '') {
+maxAmountError.textContent = 'Maximum Discount Amount is required';
+maxAmountError.style.color = 'red';
+document.getElementById("maxAmount").style.border = "solid 2px red";
+return false;
+}
+if (!maxAmountRegex.test(maxAmountValue)) {
+maxAmountError.textContent = 'Maximum Discount Amount should be a positive number starting from 1';
+maxAmountError.style.color = 'red';
+document.getElementById("maxAmount").style.border = "solid 2px red";
+return false;
+}
+maxAmountError.textContent = '';
+document.getElementById("maxAmount").style.border = "solid 2px green";
+return true;
+}
+
+function discountValidation() {
+const discountValue = document.getElementById("discount").value;
+const discountError = document.getElementById("discountError");
+if (discountValue === '') {
+discountError.textContent = 'Discount is required';
+discountError.style.color = 'red';
+document.getElementById("discount").style.border = "solid 2px red";
+return false;
+}
+if (discountValue < 0.1 || discountValue > 100 || !isFinite(discountValue)) {
+discountError.textContent = 'Discount should be a number between 0.1 and 100';
+discountError.style.color = 'red';
+document.getElementById("discount").style.border = "solid 2px red";
+return false;
+}
+discountError.textContent = '';
+document.getElementById("discount").style.border = "solid 2px green";
+return true;
+}
+
+
+function couponCodeValidation() {
+const couponCodeValue = document.getElementById("couponCode").value.trim();
+const couponCodeError = document.getElementById("couponCodeError");
+if (couponCodeValue === '') {
+couponCodeError.textContent = 'Coupon Code is required';
+couponCodeError.style.color = 'red';
+document.getElementById("couponCode").style.border = "solid 2px red";
+return false;
+}
+couponCodeError.textContent = '';
+document.getElementById("couponCode").style.border = "solid 2px green";
+return true;
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {

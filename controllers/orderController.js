@@ -14,24 +14,34 @@ require('dotenv').config();
 
 const loadCheckout = async (req, res) => {
   try {
-    const user_id = req.session.user_id
+    const user_id = req.session.user_id;
     const userData = await User.findById({ _id: user_id }).populate('address');
-  
+    const currentDate = new Date();
     const coupons = await Coupon.find({
       status: 'Active',
-      // endDate: { $gte: currentDate }
+      startDate: { $lte: currentDate }, 
+      endDate: { $gte: currentDate } 
     });
+
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
+
     if (!cart || cart.items.length === 0) {
       return res.redirect('/cart');
     }
+
     const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
-    res.render('checkOut', { cart: cart, user: userData, coupons:coupons ,   cartCount: cart?.items?.length || 0,
-      wishlistCount: wishlist?.items?.length || 0,});
+
+    res.render('checkOut', {
+      cart: cart,
+      user: userData,
+      coupons: coupons,
+      cartCount: cart?.items?.length || 0,
+      wishlistCount: wishlist?.items?.length || 0
+    });
   } catch (error) {
-    return res.redirect('/pagenotfound')
+    return res.redirect('/pagenotfound');
   }
-}
+};
 
 
 const placeOrder = async (req, res) => {

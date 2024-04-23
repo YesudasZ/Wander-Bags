@@ -79,11 +79,17 @@ admin_route.get('/salesReport',auth.isAdminLogin,adminController.SaleReport)
 
 admin_route.get('/offers',auth.isAdminLogin,adminController.loadOffers)
 
+admin_route.put('/categories/offers/:id',adminController.updateCategoryOffer)
+
+admin_route.delete('/categories/offers/:id',adminController.deleteCategoryOffer)
+
 admin_route.post('/applyReferralOffer', auth.isAdminLogin, adminController.applyReferralOffer);
 
 admin_route.post('/offers',auth.isAdminLogin,adminController.createCategoryOffer)
 
-admin_route.post('/productOffers',auth.isAdminLogin,adminController.createProducOffer)
+admin_route.post('/productOffers',auth.isAdminLogin,adminController.createProductOffer)
+
+admin_route.delete('/offers/:productId',adminController.removeProductOffer)
 
 admin_route.get('/logout',auth.isAdminLogin,adminController.logout)
 

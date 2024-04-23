@@ -534,7 +534,6 @@ const applyReferralOffer = async (req, res) => {
 
 
 const createCategoryOffer = async (req, res) => {
-
   try {
     const { startDate, endDate, category, discountPercentage } = req.body;
     const categore = await Category.findById({ _id: category });
@@ -542,50 +541,120 @@ const createCategoryOffer = async (req, res) => {
     categore.offerStart = startDate;
     categore.offerEnd = endDate;
     await categore.save();
-    const products = await Product.find({ category: categore.name });
-
+    const products = await Product.find({ category: categore.name});
     products.forEach((product) => {
-
-      product.afterDiscount = product.discountPrice;
-      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
+      product.discountPrice = product.price - (product.price * (discountPercentage / 100));
+      product.afterDiscount = product.price - product.discountPrice ;
       product.save();
     });
-
-    res.status(200).json({ message: 'Category offer created successfully' });
+    const categories = await Category.find({ status: "active" });
+    res.status(200).json({ message: 'Category offer created successfully', categories: categories });
   } catch (error) {
     res.status(500).json({ message: 'Error creating category offer' });
   }
 };
 
-const createProducOffer = async (req, res) => {
+
+
+
+
+const updateCategoryOffer = async (req, res) => {
   try {
+    const category = await Category.findById(req.params.id);
+    if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
+
+    const { startDate, endDate, discount } = req.body;
+    category.offerStart = startDate;
+    category.offerEnd = endDate;
+    category.offer = discount;
+
+    await category.save();
+
+    const products = await Product.find({ category: category.name });
+    products.forEach(product => {
+      product.discountPrice = product.price - (product.price * (discount / 100));
+      product.afterDiscount = product.price - product.discountPrice;
+      product.save();
+    });
+
+    res.status(200).json({ success: true, message: 'Category offer updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const deleteCategoryOffer =async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
+
+    category.offer = 0;
+    category.offerStart = null;
+    category.offerEnd = null;
+
+    await category.save();
+
+    const products = await Product.find({ category: category.name });
+    products.forEach(product => {
+      product.discountPrice = 0;
+      product.afterDiscount = 0;
+      product.save();
+    });
+
+    res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+
+
+const createProductOffer = async (req, res) => {
+   try {
     const { productId, discountPercentage } = req.body;
-    console.log("ok", discountPercentage);
-    const product = await Product.findById({ _id: productId });
+    const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    console.log("test-1", product.discountPrice - (product.discountPrice * (discountPercentage / 100)));
-    console.log("test-2", (product.afterDiscount * (discountPercentage / 100)), "test-2.1", product.afterDiscount - product.discountPrice);
-    if (product.discountPrice > product.afterDiscount) {
-      product.afterDiscount = product.discountPrice;
-      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
-      product.save();
-    } else if (product.afterDiscount - product.discountPrice < (product.afterDiscount * (discountPercentage / 100))) {
-      product.discountPrice = product.discountPrice - (product.discountPrice * (discountPercentage / 100));
-      product.save();
-    } else {
-      return res.status(404).json({ message: "The product has a better offer with the category offer." });
+    const category = await Category.findOne({ name: product.category });
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
     }
-
-    const discountAmount = product.afterDiscount - product.discountPrice;
-
-    res.status(200).json({ message: 'Discount applied', discountAmount });
+    if (discountPercentage <= category.offer) {
+      return res.status(200).json({
+        message: `This product has a better offer with the category offer (${category.offer}%)`,
+        type: 'info',
+      });
+    }
+    product.discountPrice = product.price - (product.price * (discountPercentage / 100));
+    product.afterDiscount = product.price - product.discountPrice;
+    await product.save();
+    return res.status(200).json({ message: 'Offer applied successfully', type: 'success',product:product });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error applying discount' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+const removeProductOffer = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    product.discountPrice = 0;
+    product.afterDiscount = 0;
+    await product.save();
+    return res.status(200).json({ message: 'Offer removed successfully', type: 'success' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 
 
 module.exports = {
@@ -603,7 +672,10 @@ module.exports = {
   SaleReport,
   loadOffers,
   createCategoryOffer,
-  createProducOffer,
+  createProductOffer,
   getSalesData,
-  applyReferralOffer
+  applyReferralOffer,
+  deleteCategoryOffer,
+  updateCategoryOffer,
+  removeProductOffer
 }

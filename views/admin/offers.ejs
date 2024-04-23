@@ -170,20 +170,22 @@
             <h1 class="mb-4 text-info fw-bold text-center">Offers</h1>
             <div class="row">
               <div class="col-md-4">
-                <div class=" p-5 bg-white rounded mt-20">
+                <div class="p-5 bg-white rounded mt-60">
                   <div class="referral-offer text-center justify-content-center">
                     <h3 class="mb-4 text-secondary fw-bold">Referral Offer</h3>
                     <div class="rewards">
                       <div class="referred-user-reward">
                         <p class="fw-bold">Referred User Reward:</p>
-                        <input type="number" id="referredUserReward" value="<%= referredUserReward %>">
+                        <input type="number" id="referredUserReward" value="<%= referredUserReward %>" min="1" onkeyup="referredUserRewardValidation()">
+                        <small id="referredUserRewardError" class="error"></small>
                       </div>
                       <div class="referring-user-reward mt-3">
                         <p class="fw-bold">Referring User Reward:</p>
-                        <input type="number" id="referringUserReward" value="<%= referringUserReward %>">
+                        <input type="number" id="referringUserReward" value="<%= referringUserReward %>" min="1" onkeyup="referringUserRewardValidation()">
+                        <small id="referringUserRewardError" class="error"></small>
                       </div>
                       <div class="apply-offer m-2">
-                        <button id="applyOffer" class="btn btn-primary">Apply Offer</button>
+                        <button id="applyOffer" class="btn btn-success" disabled>Apply Offer</button>
                       </div>
                     </div>
                   </div>
@@ -199,22 +201,31 @@
                     <div class="row justify-content-center">
                       <div class="col-md-12" style="max-height: 400px; overflow-y: auto;">
                         <table class="table table-bordered border-primary" id="categoryOffersTable">
-                          <thead  class="text-center">
+                          <thead class="text-center">
                             <tr>
                               <th>Category Name</th>
                               <th>Start Date</th>
                               <th>End Date</th>
                               <th>Discount Percentage</th>
+                              <th>Modify</th>
+                              <th>Action</th>
                             </tr>
                           </thead>
-                          <tbody  class="text-center">
+                          <tbody class="text-center">
                             <% categories.forEach(function(category) { %>
                               <% if (category.offer > 0) { %>
                                 <tr>
                                   <td><%= category.name %></td>
-                                  <td><%= new Date(category.offerStart).toLocaleDateString() %></td>
-                                  <td><%= new Date(category.offerEnd).toLocaleDateString() %></td>
+                                  <td><%= new Date(category.offerStart).toLocaleDateString('en-IN') %></td>
+                                  <td><%= new Date(category.offerEnd).toLocaleDateString('en-IN') %></td>
                                   <td><%= category.offer %>%</td>
+                                  <td>
+                                    <button type="button" class="btn btn-primary edit-category-offer-btn" data-category-id="<%= category._id %>" data-category-name="<%= category.name %>" data-start-date="<%= new Date(category.offerStart) %>" data-end-date="<%= new Date(category.offerEnd) %>" data-discount="<%= category.offer %>">Edit</button>
+                                  
+                                  </td>
+                                  <td>
+                                    <button type="button" class="btn btn-danger delete-category-offer-btn" data-category-id="<%= category._id %>">Delete</button>
+                                  </td>
                                 </tr>
                               <% } %>
                             <% }); %>
@@ -242,6 +253,7 @@
                               <th>Offer Price</th>
                               <th>Discount</th>
                               <th>Action</th>
+                              <th>Remove Offer</th>
                             </tr>
                           </thead>
                           <tbody class="text-center">
@@ -255,6 +267,11 @@
                                 <td>
                                   <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
                                     Apply
+                                  </button>
+                                </td>
+                                <td>
+                                  <button type="button" class="btn btn-danger remove-offer" data-product-id="<%= product._id %>">
+                                    Remove
                                   </button>
                                 </td>
                               </tr>
@@ -311,6 +328,49 @@
 
 
 
+
+
+
+
+    <!-- Edit Category Offer Modal -->
+<div class="modal fade" id="editCategoryOfferModal" tabindex="-1" aria-labelledby="editCategoryOfferModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryOfferModalLabel">Edit Category Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editCategoryOfferForm">
+          <input type="hidden" id="editCategoryId">
+          <div class="mb-3">
+            <label for="editCategoryName" class="form-label">Category Name</label>
+            <input type="text" class="form-control" id="editCategoryName" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="editStartDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="editStartDate">
+          </div>
+          <div class="mb-3">
+            <label for="editEndDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="editEndDate">
+          </div>
+          <div class="mb-3">
+            <label for="editDiscount" class="form-label">Discount Percentage</label>
+            <input type="number" class="form-control" id="editDiscount" min="0" max="100">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveEditChangesBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
         <footer class="main-footer  font-xs ">
             <div class="row pb-30 pt-15 mt-5 ">
                 <div class="col-sm-6">
@@ -350,9 +410,213 @@
 
     <script>
 
-// Handle form submission
+
+// Remove product offer
+const removeProductOffer = async (productId) => {
+  try {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to remove the offer for this product?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!'
+    });
+
+    if (result.isConfirmed) {
+      const response = await fetch(`/admin/offers/${productId}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Swal.fire('Success', data.message, 'success').then(() => {
+          location.reload();
+      });
+    
+        fetchProductOffers();
+      } else {
+        Swal.fire('Error', data.message, 'error');
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Handle remove offer button click
+const handleRemoveOfferClick = (event) => {
+  event.preventDefault();
+  const productId = event.target.dataset.productId;
+  removeProductOffer(productId);
+};
+
+// Initialize
+document.querySelectorAll('.remove-offer').forEach((button) => {
+  button.addEventListener('click', handleRemoveOfferClick);
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const editCategoryOfferBtns = document.querySelectorAll('.edit-category-offer-btn');
+    editCategoryOfferBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const categoryId = this.getAttribute('data-category-id');
+        const categoryName = this.getAttribute('data-category-name');
+        const startDate = this.getAttribute('data-start-date');
+        const endDate = this.getAttribute('data-end-date');
+        const discount = this.getAttribute('data-discount');
+
+        document.getElementById('editCategoryId').value = categoryId;
+        document.getElementById('editCategoryName').value = categoryName;
+        document.getElementById('editStartDate').value = new Date(startDate).toISOString().split('T')[0];
+        document.getElementById('editEndDate').value = new Date(endDate).toISOString().split('T')[0];
+        document.getElementById('editDiscount').value = discount;
+
+        $('#editCategoryOfferModal').modal('show');
+      });
+    });
+
+    document.getElementById('saveEditChangesBtn').addEventListener('click', function() {
+      const categoryId = document.getElementById('editCategoryId').value;
+      const startDate = document.getElementById('editStartDate').value;
+      const endDate = document.getElementById('editEndDate').value;
+      const discount = document.getElementById('editDiscount').value;
+
+      if (startDate >= endDate) {
+      Swal.fire({
+        icon: 'info',
+        title: 'End date must be greater than start date',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      return;
+    }
+
+    if (isNaN(discount) || discount < 0.1 || discount > 100 || discount % 1 !== 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid discount percentage',
+        text: 'Discount percentage should be a number between 0.1 and 100 with one decimal place',
+        showConfirmButton: true
+      });
+      return;
+    }
+
+
+      fetch(`/admin/categories/offers/${categoryId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ startDate, endDate, discount })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Category Offer Updated Successfully',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          $('#editCategoryOfferModal').modal('hide');
+          location.reload();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error Updating Category Offer',
+            text: data.message,
+            showConfirmButton: true
+          });
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error Updating Category Offer',
+          text: error.message,
+          showConfirmButton: true
+        });
+      });
+    });
+
+    const deleteCategoryOfferBtns = document.querySelectorAll('.delete-category-offer-btn');
+    deleteCategoryOfferBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const categoryId = this.getAttribute('data-category-id');
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You will not be able to recover this category offer!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/admin/categories/offers/${categoryId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Category Offer Deleted Successfully',
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                location.reload();
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error Deleting Category Offer',
+                  text: data.message,
+                  showConfirmButton: true
+                });
+              }
+            })
+            .catch(error => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error Deleting Category Offer',
+                text: error.message,
+                showConfirmButton: true
+              });
+            });
+          }
+        });
+      });
+    });
+  });
+
+
+
+
+
+
+
+
 const handleFormSubmission = (event) => {
   event.preventDefault();
+  const startDate = new Date(event.target.startDate.value);
+  const endDate = new Date(event.target.endDate.value);
+
+  
+  if (endDate < startDate) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'End date must be greater than start date.',
+    });
+    return;
+  }
   const data = {
     startDate: event.target.startDate.value,
     endDate: event.target.endDate.value,
@@ -364,7 +628,6 @@ const handleFormSubmission = (event) => {
 
 
 
-      // Fetch category offers
       const fetchCategoryOffers = async () => {
   try {
     const response = await fetch('/admin/offers');
@@ -375,7 +638,6 @@ const handleFormSubmission = (event) => {
   }
 };
 
-// Initialize
 document.getElementById('createCategoryOfferForm').addEventListener('submit', handleFormSubmission);
 fetchCategoryOffers();
 
@@ -385,8 +647,7 @@ fetchCategoryOffers();
 
 
 
-// Render category offers
-// Render category offers
+
 const renderCategoryOffers = (offers) => {
   const tableBody = document.getElementById('categoryOffersTable').querySelector('tbody');
   tableBody.innerHTML = '';
@@ -405,8 +666,7 @@ const renderCategoryOffers = (offers) => {
   });
 };
 
-// Create category offer
-// Create category offer
+
 const createCategoryOffer = async (data) => {
   try {
     const response = await fetch('/admin/offers', {
@@ -421,6 +681,7 @@ const createCategoryOffer = async (data) => {
       Swal.fire('Success', result.message, 'success').then(() => {
         document.getElementById('createCategoryOfferModal').modal('hide');
       });
+      location.reload();
       fetchCategoryOffers();
     } else {
       Swal.fire('Error', result.message, 'error');
@@ -444,8 +705,18 @@ const applyDiscount = async (productId, discountPercentage) => {
     });
     const result = await response.json();
     if (response.ok) {
-      Swal.fire('Success', result.message, 'success');
+      if (result.type === 'info') {
+        Swal.fire('info', result.message, 'info').then(() => {
+          location.reload();
+      });
+      } else {
+        Swal.fire('success', result.message, 'success').then(() => {
+          location.reload();
+      });
+      }
+ 
       fetchProductOffers();
+   
     } else {
       Swal.fire('Error', result.message, 'error');
     }
@@ -459,34 +730,91 @@ const applyDiscount = async (productId, discountPercentage) => {
 
 const applyOfferBtn = document.getElementById('applyOffer');
 
+function referredUserRewardValidation() {
+  const referredUserRewardValue = document.getElementById('referredUserReward').value.trim();
+  const referredUserRewardError = document.getElementById('referredUserRewardError');
+  const referredUserRewardRegex = /^[1-9]\d*$/;
+
+  if (referredUserRewardValue === '') {
+    referredUserRewardError.textContent = 'Referred User Reward is required';
+    referredUserRewardError.style.color = 'red';
+    document.getElementById('referredUserReward').style.border = "solid 2px red";
+    applyOfferBtn.disabled = true;
+    return false;
+  }
+
+  if (!referredUserRewardRegex.test(referredUserRewardValue)) {
+    referredUserRewardError.textContent = 'Referred User Reward should be a positive number';
+    referredUserRewardError.style.color = 'red';
+    document.getElementById('referredUserReward').style.border = "solid 2px red";
+    applyOfferBtn.disabled = true;
+    return false;
+  }
+
+  referredUserRewardError.textContent = '';
+  document.getElementById('referredUserReward').style.border = "solid 2px green";
+  applyOfferBtn.disabled = false;
+  return true;
+}
+
+function referringUserRewardValidation() {
+  const referringUserRewardValue = document.getElementById('referringUserReward').value.trim();
+  const referringUserRewardError = document.getElementById('referringUserRewardError');
+  const referringUserRewardRegex = /^[1-9]\d*$/;
+
+  if (referringUserRewardValue === '') {
+    referringUserRewardError.textContent = 'Referring User Reward is required';
+    referringUserRewardError.style.color = 'red';
+    document.getElementById('referringUserReward').style.border = "solid 2px red";
+    applyOfferBtn.disabled = true;
+    return false;
+  }
+
+  if (!referringUserRewardRegex.test(referringUserRewardValue)) {
+    referringUserRewardError.textContent = 'Referring User Reward should be a positive number';
+    referringUserRewardError.style.color = 'red';
+    document.getElementById('referringUserReward').style.border = "solid 2px red";
+    applyOfferBtn.disabled = true;
+    return false;
+  }
+
+  referringUserRewardError.textContent = '';
+  document.getElementById('referringUserReward').style.border = "solid 2px green";
+  applyOfferBtn.disabled = false;
+  return true;
+}
+
 applyOfferBtn.addEventListener('click', async () => {
-  const referredUserReward = document.getElementById('referredUserReward').value;
-  const referringUserReward = document.getElementById('referringUserReward').value;
+  const isValid = referredUserRewardValidation() && referringUserRewardValidation();
 
-  try {
-    const response = await fetch('/admin/applyReferralOffer', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ referredUserReward, referringUserReward })
-    });
+  if (isValid) {
+    const referredUserReward = document.getElementById('referredUserReward').value;
+    const referringUserReward = document.getElementById('referringUserReward').value;
 
-    if (response.ok) {
-      const data = await response.json();
-      Swal.fire('Success', data.message, 'success');
-      document.getElementById('referredUserReward').value = data.referredUserReward;
-      document.getElementById('referringUserReward').value = data.referringUserReward;
-    } else {
-      const error = await response.json();
-      Swal.fire('Error', error.message, 'error');
+    try {
+      const response = await fetch('/admin/applyReferralOffer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ referredUserReward, referringUserReward })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        Swal.fire('Success', data.message, 'success');
+        document.getElementById('referredUserReward').value = data.referredUserReward;
+        document.getElementById('referringUserReward').value = data.referringUserReward;
+      } else {
+        const error = await response.json();
+        Swal.fire('Error', error.message, 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire('Error', 'An error occurred while applying the offer.', 'error');
     }
-  } catch (error) {
-    console.error(error);
-    Swal.fire('Error', 'An error occurred while applying the offer.', 'error');
   }
 });
-
 
 // Handle apply discount button click
 const handleApplyDiscountClick = (event) => {
@@ -500,25 +828,10 @@ const handleApplyDiscountClick = (event) => {
 document.querySelectorAll('.apply-discount').forEach((button) => {
   button.addEventListener('click', handleApplyDiscountClick);
 });
+
 fetchProductOffers();
 
-// Handle apply discount button click
-// const handleApplyDiscountClick = (event) => {
-//   event.preventDefault();
-//   const productId = event.target.dataset.productId;
-//   const discountPercentage = document.getElementById('discountPercentagee').value;
-//   applyDiscount(productId, discountPercentage);
-//   console.log("test",discountPercentage);
-// };
 
-// Initialize
-// document.querySelectorAll('.apply-discount').forEach((button) => {
-//   button.addEventListener('click', handleApplyDiscountClick);
-// });
-// fetchProductOffers();
-
-
-// Fetch product offers
 const fetchProductOffers = async () => {
   try {
     const response = await fetch('/admin/offers');
