@@ -254,8 +254,8 @@
                     </div>
                 </div>
 
- <!-- Modal for Adding Category -->
- <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<!-- Modal for Adding Category -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -266,7 +266,7 @@
                 <form id="add-category-form">
                     <div class="form-group">
                         <label for="categoryName">Category Name</label>
-                        <input type="text" class="form-control" id="categoryName" placeholder="Enter category name">
+                        <input type="text" class="form-control" id="categoryName" placeholder="Enter category name" onkeyup="categoryNameValidation()">
                         <div id="categoryNameError" class="invalid-feedback"></div>
                     </div>
                     <!-- Add status selecting option here if needed -->
@@ -279,7 +279,6 @@
         </div>
     </div>
 </div>
-
            
 
 
@@ -340,15 +339,37 @@
 
     <script>
 
-         // Function to handle category addition
-    document.getElementById('saveCategoryBtn').addEventListener('click', async () => {
+
+// Function to handle category name validation
+function categoryNameValidation() {
+    const categoryName = document.getElementById('categoryName').value.trim();
+    const categoryNameError = document.getElementById('categoryNameError');
+    const regex = /^[a-zA-Z\s]+$/; // Regex to allow only letters and spaces
+
+    if (categoryName === '') {
+        categoryNameError.textContent = 'Category name is required';
+        categoryNameError.style.display = 'block';
+        document.getElementById('categoryName').style.border = '1px solid red';
+        return false;
+    } else if (!regex.test(categoryName)) {
+        categoryNameError.textContent = 'Category name should contain only letters and spaces';
+        categoryNameError.style.display = 'block';
+        document.getElementById('categoryName').style.border = '1px solid red';
+        return false;
+    } else {
+        categoryNameError.textContent = '';
+        categoryNameError.style.display = 'none';
+        document.getElementById('categoryName').style.border = '1px solid green';
+        return true;
+    }
+}
+
+// Function to handle category addition
+document.getElementById('saveCategoryBtn').addEventListener('click', async () => {
+    const isValid = categoryNameValidation();
+
+    if (isValid) {
         const categoryName = document.getElementById('categoryName').value.trim();
-        const categoryNameError = document.getElementById('categoryNameError');
-        if (!categoryName) {
-            document.getElementById('categoryNameError').textContent = 'Category name is required';
-            categoryNameError.style.display = 'block'; // Show the error message
-            return;
-        }
 
         try {
             const response = await fetch('/admin/categories', {
@@ -361,17 +382,32 @@
 
             if (!response.ok) {
                 const errorMessage = await response.json();
-                categoryNameError.textContent = errorMessage.message;
-                categoryNameError.style.display = 'block'; 
+                document.getElementById('categoryNameError').textContent = errorMessage.message;
+                document.getElementById('categoryNameError').style.display = 'block';
             } else {
                 // Category added successfully, refresh categories list or update DOM accordingly
                 // Example: you can reload the page to display the updated list
-                window.location.reload();
+                Swal.fire({
+                title: 'Success',
+                text: 'Category added successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
+            
             }
         } catch (error) {
             console.error('Error:', error);
         }
-    });
+    }
+});
+
+
+
+
+
+
+
                function restoreCategory(categoryId) {
             // Submit the restore form when "Restore" is clicked
             document.getElementById('restoreCategoryForm_' + categoryId).submit();
@@ -425,7 +461,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => {
                 if (response.ok) {
                     // Reload the page after restoration
-                    window.location.reload();
+                    Swal.fire({
+                title: 'Success',
+                text: 'Category restored successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
+                   
                 } else {
                     console.error('Category restoration failed');
                 }

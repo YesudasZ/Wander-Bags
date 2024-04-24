@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -1212,7 +1213,14 @@ document.getElementById('changePasswordBtn').addEventListener('click', async () 
     if (response.ok) {
       // Password changed successfully
       $('#changePasswordModal').modal('hide');
-      window.location.reload();
+      Swal.fire({
+                title: 'Success',
+                text: 'Password changed successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
+
     } else {
       // Handle error if any
       alert('Failed to change password. Please check your current password.');
@@ -1546,7 +1554,13 @@ document.getElementById('saveNameBtn').addEventListener('click', async () => {
         // Update the name in the profile section without refreshing
         document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
         $('#editNameModal').modal('hide');
-        window.location.href = '/profile';
+        Swal.fire({
+                title: 'Success',
+                text: 'Name changed successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
       } else {
         // Handle error if any
         console.error('Error updating name');
@@ -1605,8 +1619,15 @@ document.getElementById('saveNameBtn').addEventListener('click', async () => {
             modalBackdrop.remove();
           }
 
-          // Reload the page
-          window.location.reload();
+          Swal.fire({
+                title: 'Success',
+                text: 'Address updated successfully ',
+                icon: 'success',
+              }).then(() => {
+                window.location.hash = 'address';
+            window.location.reload()
+              });
+        
         } catch (err) {
           console.error(err);
           alert(err.message);
@@ -1852,10 +1873,10 @@ function editpostalCodeValidation(index) {
               icon: 'success',
               title: 'Address Deleted',
               text: 'Address successfully deleted'
-            });
-            setTimeout(() => {
-        window.location.reload();
-      },1000);
+            }).then(() => {
+            window.location.reload()
+              });
+           
           } else {
             Swal.fire({
               icon: 'error',

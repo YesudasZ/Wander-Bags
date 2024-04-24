@@ -381,8 +381,9 @@ document.getElementById('saveCouponBtn').addEventListener('click', async () => {
         icon: 'success',
         title: 'Success',
         text: 'Coupon added successfully!'
-      });
-      window.location.reload();
+      }).then(() => {
+            window.location.reload()
+              });
     } else {
       Swal.fire({
         icon: 'error',

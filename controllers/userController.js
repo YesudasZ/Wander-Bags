@@ -162,6 +162,7 @@ const regenerateOTP = (email) => {
     sendotp(email, otp);
     return otp;
   } catch (error) {
+    console.error(error);
     res.redirect('/pagenotfound')
   }
 }
@@ -179,7 +180,7 @@ const resendotp = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -307,7 +308,7 @@ const otpverify = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -323,23 +324,22 @@ const loadshop = async (req, res) => {
 
     if (req.query.searchQuery) {
       const searchRegex = new RegExp(req.query.searchQuery, 'i');
-      products = await Product.find({ name: { $regex: searchRegex } })
-        .skip((currentPage - 1) * perPage)
-        .limit(perPage);
-      totalProducts = await Product.countDocuments({ name: { $regex: searchRegex } });
+      products = await Product.find({ name: { $regex: searchRegex }, status: { $ne: "deleted", $ne: "inactive" } })
+       .skip((currentPage - 1) * perPage)
+       .limit(perPage);
+      totalProducts = await Product.countDocuments({ name: { $regex: searchRegex }, status: { $ne: "deleted", $ne: "inactive" } });
     } else {
-      products = await Product.find()
-        .skip((currentPage - 1) * perPage)
-        .limit(perPage);
-      totalProducts = await Product.countDocuments();
+      products = await Product.find({ status: { $ne: "deleted", $ne: "inactive" } })
+       .skip((currentPage - 1) * perPage)
+       .limit(perPage);
+      totalProducts = await Product.countDocuments({ status: { $ne: "deleted", $ne: "inactive" } });
     }
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
     const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
 
     const totalPages = Math.ceil(totalProducts / perPage);
 
-    res.render('shop', { categories,products, user: userData, currentPage, totalPages,   cartCount: cart?.items?.length || 0,
-      wishlistCount: wishlist?.items?.length || 0, });
+    res.render('shop', { categories, products, user: userData, currentPage, totalPages, cartCount: cart?.items?.length || 0, wishlistCount: wishlist?.items?.length || 0 });
   } catch (error) {
     console.log(error.message);
     res.redirect('/pagenotfound');
@@ -350,7 +350,7 @@ const loadshop = async (req, res) => {
 const loadHome = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.user_id });
-    const products = await Product.find();
+    const products = await Product.find({ status: { $ne: 'deleted', $ne: 'inactive' } })
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
     const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
 
@@ -401,16 +401,20 @@ const sortProducts = async (req, res) => {
     res.json(sortedProducts);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Server error' });
+    res.redirect('/pagenotfound');
   }
 };
+
+
+
+
 
 const loadforgetpassword = async (req, res) => {
   try {
     res.render('forgetpassword')
   } catch (error) {
     console.log(error.message);
-    res.redirect('/pagenotfound')
+    
   }
 }
 
@@ -454,13 +458,22 @@ const filterProducts = async (req, res) => {
     }
 
     const filteredProducts = await Product.find({ ...searchRegex, ...categoryFilter }).sort(sortQuery);
+    const totalProducts = await Product.countDocuments({ ...searchRegex, ...categoryFilter });
  
-    res.json(filteredProducts);
+      res.json({ products: filteredProducts, totalProducts });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: 'Server error' });
+    res.redirect('/pagenotfound');
   }
 };
+
+
+
+
+
+
+
+
 
 
 const loadforgetpasswordotp = async (req, res) => {
@@ -468,6 +481,7 @@ const loadforgetpasswordotp = async (req, res) => {
     res.render('forgetpasswordotp')
   } catch (error) {
     console.log(error.message);
+    
   }
 }
 
@@ -494,7 +508,7 @@ const verifyEmail = async (req, res) => {
     res.redirect('/forgetpasswordotp');
   } catch (error) {
     console.error('Error verifying email:', error);
-    res.redirect('/pagenotfound');
+    
   }
 };
 
@@ -503,38 +517,39 @@ const verifyForgetPasswordOTP = async (req, res) => {
   try {
     const { otp } = req.body;
     if (req.session.otp !== parseInt(otp)) {
-      return res.render('otpverify', { message: 'Invalid OTP' });
+      return res.render('forgetpasswordotp', { message: 'Invalid OTP' });
     }
     if (req.session.otpExpiration < Date.now()) {
-      return res.render('otpverify', { message: 'OTP has expired' });
+      return res.render('forgetpasswordotp', { message: 'OTP has expired' });
     }
     res.redirect('/resetpassword');
   } catch (error) {
     console.error('Error verifying forget password OTP:', error);
-    res.redirect('/pagenotfound');
+    
   }
 };
 
 
 const resetPassword = async (req, res) => {
   try {
-    const { newPassword, confirmPassword } = req.body;
-    if (newPassword !== confirmPassword) {
-      return res.render('resetpassword', { message: 'Passwords do not match' });
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const user = await User.findOneAndUpdate(
-      { email: req.session.userEmail },
-      { password: hashedPassword },
-      { new: true }
-    );
-    if (!user) {
-      return res.render('resetpassword', { message: 'User not found' });
-    }
-    res.render('login', { message: 'Password reset successfully. Please login with your new password.' });
+      const { newPassword, confirmPassword } = req.body;
+     
+      if (newPassword !== confirmPassword) {
+          return res.render('passwordreset', { message: 'Passwords do not match' });
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const user = await User.findOneAndUpdate(
+          { email: req.session.userEmail },
+          { password: hashedPassword },
+          { new: true }
+      );
+      if (!user) {
+          return res.render('passwordreset', { message: 'User not found' });
+      }
+      res.redirect('/login');
   } catch (error) {
-    console.error('Error resetting password:', error);
-    res.redirect('/pagenotfound');
+      console.error('Error resetting password:', error);
+      
   }
 };
 
@@ -544,7 +559,7 @@ const loadresetpassword = async (req, res) => {
     res.render('passwordreset')
   } catch (error) {
     console.log(error.message);
-    res.redirect('/pagenotfound')
+    
   }
 }
 
@@ -616,7 +631,7 @@ const updateName = async (req, res) => {
     res.status(200).send('Name updated successfully');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -635,7 +650,7 @@ const changePassword = async (req, res) => {
     res.status(200).send('Password changed successfully');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -650,7 +665,7 @@ const addAddress = async (req, res) => {
     res.status(200).send('Address added successfully');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal Server Error');
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -677,7 +692,7 @@ const updateAddress = async (req, res) => {
     return res.json({ success: true });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ success: false, error: 'Server Error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -693,7 +708,7 @@ const deleteAddress = async (req, res) => {
     return res.status(200).json({ success: true, message: 'Address deleted successfully' });
   } catch (error) {
     console.error('Error deleting address:', error);
-    return res.status(500).json({ success: false, message: 'An error occurred while deleting the address' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -764,7 +779,7 @@ const addToWishlist = async (req, res) => {
     return res.status(200).json({success: true ,message: 'Product added to wishlist successfully'});
   } catch (error) {
       console.error(error);
-      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+      res.redirect('/pagenotfound');
   }
 };
 
@@ -793,7 +808,7 @@ const removeFromWishlist= async (req, res) => {
       return res.status(200).json({ success: true, message: 'Product removed from Wishlist' });
   } catch (error) {
       console.error(error);
-      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+      res.redirect('/pagenotfound');
   }
 };
 
@@ -819,7 +834,7 @@ const getOrderDetails = async (req, res) => {
     res.json(order);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -876,7 +891,7 @@ const downloadInvoice = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/pagenotfound');
   }
 };
 

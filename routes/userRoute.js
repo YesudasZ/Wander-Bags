@@ -58,9 +58,9 @@ user_route.get('/home',auth.isLogin,userController.loadHome)
 
 user_route.get('/shop',auth.isLogin,userController.loadshop)
 
-user_route.post('/sort-products',auth.isLogin, userController.sortProducts);
+user_route.post('/sort-products', userController.sortProducts);
 
-user_route.post('/filter-products', auth.isLogin, userController.filterProducts);
+user_route.post('/filter-products', userController.filterProducts);
 
 user_route.get('/productdetails/:productId',auth.isLogin,userController.getProductDetails);
 

@@ -78,7 +78,7 @@ const addToCart = async (req, res) => {
         res.status(200).json({ success: true, message: 'Product added to cart successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 
@@ -133,7 +133,7 @@ const updateCartItemQuantity = async (req, res) => {
         res.status(200).json({ success: true, message: 'Cart item quantity updated successfully', newPrice: cartItem.price, cartSubtotal });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 
@@ -167,7 +167,7 @@ const removeCartItem = async (req, res) => {
         res.status(200).json({ success: true, message: 'Item removed from cart successfully', itemIndex: itemIndex + 1 ,cartSubtotal});
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 
@@ -217,7 +217,7 @@ const updateCart = async (req, res) => {
         res.status(200).json({ success: true, message: 'Cart updated successfully', updatedItems });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 
@@ -237,7 +237,7 @@ const clearCart = async (req, res) => {
         res.status(200).json({ success: true, message: 'Cart cleared successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 
@@ -253,7 +253,7 @@ const getCartTotals = async (req, res) => {
         res.status(200).json({ success: true, billTotal: userCart.billTotal });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.redirect('/pagenotfound');
     }
 };
 

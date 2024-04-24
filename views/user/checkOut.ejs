@@ -815,8 +815,15 @@
                     modalBackdrop.remove();
                   }
 
-                  // Reload the page
-                  window.location.reload();
+                  Swal.fire({
+                title: 'Success',
+                text: 'Address updated successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
+
+                  
                 } catch (err) {
                   console.error(err);
                   alert(err.message);
@@ -1312,9 +1319,14 @@
 
 
               fetchAndDisplayAddress();
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
+              Swal.fire({
+                title: 'Success',
+                text: 'Address updated successfully ',
+                icon: 'success',
+              }).then(() => {
+            window.location.reload()
+              });
+             
 
             })
             .catch(error => {

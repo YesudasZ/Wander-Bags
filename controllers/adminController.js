@@ -188,7 +188,7 @@ const getSalesData = async (req, res) => {
     res.json(salesData);
   } catch (error) {
     console.error('Error fetching sales data:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -335,6 +335,7 @@ const logout = async (req, res) => {
     res.redirect('/admin');
 
   } catch (error) {
+    console.error(error);
     res.redirect('/admin/errorpage')
   }
 
@@ -388,7 +389,7 @@ const getOrderDetails = async (req, res) => {
     res.json(order);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -424,7 +425,7 @@ const updateOrderStatus = async (req, res) => {
     res.json(updatedOrder);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -528,7 +529,7 @@ const applyReferralOffer = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'An error occurred while applying the offer.' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -550,7 +551,8 @@ const createCategoryOffer = async (req, res) => {
     const categories = await Category.find({ status: "active" });
     res.status(200).json({ message: 'Category offer created successfully', categories: categories });
   } catch (error) {
-    res.status(500).json({ message: 'Error creating category offer' });
+    console.error(error);
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -579,7 +581,8 @@ const updateCategoryOffer = async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Category offer updated successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error(error);
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -603,7 +606,8 @@ const deleteCategoryOffer =async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error(error);
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -633,7 +637,7 @@ const createProductOffer = async (req, res) => {
     return res.status(200).json({ message: 'Offer applied successfully', type: 'success',product:product });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -651,7 +655,7 @@ const removeProductOffer = async (req, res) => {
     return res.status(200).json({ message: 'Offer removed successfully', type: 'success' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    res.redirect('/admin/errorpage')
   }
 };
 

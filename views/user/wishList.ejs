@@ -207,9 +207,14 @@
                                 <td class="product-des product-name align-middle">
                                     <h5 class="product-name"><a href="/product/<%= item.productId._id %>"  style="color: #000000;"><%= item.productId.name %></a></h5>
                                 </td>
-                                <td class="price align-middle" data-title="Price"><span>₹.<%= item.productId.discountPrice %></span></td>
+                                <td class="price align-middle" data-title="Price"> <% if (item.productId.discountPrice) { %>
+                                  <span class=" discount-price">₹.<%=item.productId.discountPrice %></span>
+                                
+                              <% } else { %>
+                                  <span class="discount-price">₹.<%= item.productId.price %></span>
+                              <% } %></td>
                                 <td class="text-center align-middle" data-title="Stock">
-                                  <span class="font-weight-bold" style="color:<%= item.productId.countInStock > 0 ? 'green' : 'red' %>;"><%= item.productId.countInStock > 0 ? 'In Stock' : 'Out of Stock' %></span>
+                                  <span class="font-weight-bold" style="color:<%= item.productId.countInStock > 0 ? 'green' : 'red' %>"><%= item.productId.countInStock > 0 ? 'In Stock' : 'Out of Stock' %></span>
                               </td>
                                 <td class="text-right align-middle" data-title="Cart">
                                   <button class="btn btn-success btn-sm trendy-btn mr-2 addToCartBtn" data-productid="<%= item.productId._id %>"><i class="fi-rs-shopping-bag mr-2"></i>Add to Cart</button>

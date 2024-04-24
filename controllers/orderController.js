@@ -39,6 +39,7 @@ const loadCheckout = async (req, res) => {
       wishlistCount: wishlist?.items?.length || 0
     });
   } catch (error) {
+    console.error(error);
     return res.redirect('/pagenotfound');
   }
 };
@@ -139,7 +140,7 @@ const placeOrder = async (req, res) => {
     return res.status(200).json({ success: true, message: 'Proceeded to checkout page successfully' });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -154,7 +155,8 @@ const loadOderplaced = async (req, res) => {
     res.render('orderPlaced', { user: userData, orders: order ,   cartCount: cart?.items?.length || 0,
       wishlistCount: wishlist?.items?.length || 0,});
   } catch (error) {
-    return res.redirect('/admin/errorpage')
+    console.error(error);
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -168,7 +170,8 @@ const loadOderfailed = async (req, res) => {
     res.render('orderFailed', { user: userData, orders: order ,   cartCount: cart?.items?.length || 0,
       wishlistCount: wishlist?.items?.length || 0,});
   } catch (error) {
-    return res.redirect('/admin/errorpage')
+    console.error(error);
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -184,6 +187,7 @@ const loadOrders = async (req, res) => {
     res.render('orders', { user: userData, orders: order });
   } catch (error) {
     console.error('Error cancelling order:', error);
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -244,7 +248,7 @@ const cancelOrder = async (req, res) => {
     res.json({ success: true, message: 'Order cancelled successfully', updatedOrder });
   } catch (error) {
     console.error('Error cancelling order:', error);
-    res.status(500).json({ success: false, message: 'An error occurred while cancelling the order' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -293,7 +297,7 @@ const manageRazorpayOrder =  async (req,res)=> {
     res.status(200).json(orderData);
   } catch (error) {
     console.error('Error creating RazorPay order:', error);
-    res.status(500).json({success:false,message:'Internal Server Error'});
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -319,7 +323,7 @@ const retryRazorpayOrder =  async (req,res)=> {
     res.status(200).json(orderData);
   } catch (error) {
     console.error('Error creating RazorPay order:', error);
-    res.status(500).json({success:false,message:'Internal Server Error'});
+    res.redirect('/pagenotfound');
   }
 }
 
@@ -370,7 +374,7 @@ const returnOrderAndRefund = async (req, res) => {
     return res.status(200).json({ success: true, message: "Order returned successfully and refund processed to wallet" });
   } catch (error) {
     console.error("Error returning order and refunding amount:", error);
-    return res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -387,7 +391,7 @@ const getWalletBalance = async (req, res) => {
     return res.status(200).json({ success: true, walletBalance: wallet.walletBalance });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -420,7 +424,7 @@ const updatePaymentStatus = async (req, res) => {
     res.status(200).json({ success: true, order: updatedOrder });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -455,7 +459,7 @@ const checkQuantity = async (req, res) => {
     res.status(200).json({ items: cartItems });
   } catch (error) {
     console.error('Error retrieving cart items:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 };
 

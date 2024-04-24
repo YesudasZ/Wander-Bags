@@ -18,6 +18,7 @@ const loadCoupon = async(req,res)=>{
 
     res.render('coupons', { coupons, page, limit, total });
   } catch (error) {
+    console.error(error);
     return res.redirect('/admin/errorpage')
   }
 }
@@ -51,7 +52,7 @@ const addCoupon = async (req, res) => {
     res.status(200).json({ message: 'Coupon added successfully' });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -71,7 +72,7 @@ const changeCouponStatus = async (req, res) => {
     res.status(200).json({success:true, message: 'Coupon status updated successfully', updatedCoupon });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -117,7 +118,7 @@ const couponDiscount = cart.billTotal- updatedTotalAmount
     res.status(200).json({ success: true, message: 'Coupon applied successfully', couponDiscount, updatedTotalAmount });
   } catch (error) {
     console.error('Error applying coupon:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -137,7 +138,7 @@ console.log("test-3",cart.couponDiscount);
     res.status(200).json({ success: true, message: 'Coupon removed successfully', updatedTotalAmount: cart.billTotal });
   } catch (error) {
     console.error('Error removing coupon:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 };
 
@@ -151,7 +152,7 @@ const deleteCoupon = async (req, res) => {
     res.status(200).json({ message: 'Coupon successfully deleted' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Something went wrong' });
+    res.redirect('/admin/errorpage')
   }
 };
 
@@ -166,7 +167,7 @@ const getCoupons = async (req, res) => {
     res.json(coupon);
   } catch (error) {
     console.error('Error fetching coupon:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.redirect('/pagenotfound');
   }
 };
 

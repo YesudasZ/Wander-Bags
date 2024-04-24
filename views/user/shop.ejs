@@ -233,7 +233,7 @@
         <div class="widget-category mb-30">
           <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
           <ul class="categories">
-            <li><a href="#" class="category-filter" data-category="">All</a></li>
+            <!-- <li><a href="#" class="category-filter" data-category="">All</a></li> -->
             <% categories.forEach(function(category) { %>
               <li><a href="#" class="category-filter" data-category="<%= category._id %>"><%= category.name %></a></li>
             <% }); %>
@@ -259,7 +259,7 @@
                 <li><a class="sort-option" href="#" data-sort-option="releaseDate">Release Date</a></li>
                 <li><a class="sort-option" href="#" data-sort-option="aAtoZZ">aA-zZ</a></li>
                 <li><a class="sort-option" href="#" data-sort-option="zZtoaA">zZ-aA</a></li>
-                <li><a class="sort-option" href="#" data-sort-option="avgRating">Avg. Rating</a></li>
+                <!-- <li><a class="sort-option" href="#" data-sort-option="avgRating">Avg. Rating</a></li> -->
               </ul>
             </div>
           </div>
@@ -287,7 +287,7 @@
                   <p class="product-discount-price text-danger fw-bold mb-0">INR <%= product.discountPrice %>
                   </p>
               <% } else { %>
-                  <span class="discount-price  text-danger fw-bold">INR <%= product.price %></span>
+                  <span class="discount-price  text-danger  fw-bold">INR <%= product.price %></span>
               <% } %>
               </div>
             </div>
@@ -474,99 +474,171 @@
   <script src="./user-assets/js/shop.js?v=3.4"></script>
  
 
+  
+
+
   <script>
-   const sortByDropdown = document.querySelector('.sort-by-dropdown ul');
-const productContainer = document.querySelector('.product-category .row');
-const searchQuery = new URLSearchParams(window.location.search).get('searchQuery') || '';
+    const sortByDropdown = document.querySelector('.sort-by-dropdown ul');
+ const productContainer = document.querySelector('.product-category .row');
+ const searchQuery = new URLSearchParams(window.location.search).get('searchQuery') || '';
+ 
+ sortByDropdown.addEventListener('click', async (e) => {
+   const sortOption = e.target.closest('.sort-option')?.dataset.sortOption;
+   if (sortOption) {
+     try {
+       const response = await fetch('/sort-products', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ sortOption, searchQuery }),
+       });
+ 
+       if (response.ok) {
+         const sortedProducts = await response.json();
+         renderProducts(sortedProducts);
+       } else {
+         console.error('Error sorting products:', response.status);
+       }
+     } catch (error) {
+       console.error('Error sorting products:', error);
+     }
+   }
+ });
+ 
+ function renderProducts(products) {
+   productContainer.innerHTML = '';
+   products.forEach((product) => {
+     const productElement = `
+       <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+         <div class="product-item shadow rounded border">
+           <a href="/productdetails/${product._id}" class="product-link">
+             <div class="product-thumb position-relative">
+               <img src="/productimages/${product.images[0]}" alt="${product.name}" class="img-fluid rounded">
+               <div class="product-overlay"></div>
+             </div>
+           </a>
+           <div class="product-content py-3">
+             <h4 class="product-title text-black fw-bold mb-1">${product.name}</h4>
+             <p class="product-price text-muted mb-1"><del>INR ${product.price}</del></p>
+             <p class="product-discount-price text-danger fw-bold mb-0">INR ${product.discountPrice}</p>
+           </div>
+         </div>
+       </div>
+     `;
+     productContainer.insertAdjacentHTML('beforeend', productElement);
+   });
+ }
+ 
+ 
+ 
+ const categoryFilters = document.querySelectorAll('.category-filter');
+ console.log("test",categoryFilters);
+ let selectedCategory = '';
+ 
+ categoryFilters.forEach(filter => {
+   filter.addEventListener('click', async (e) => {
+     e.preventDefault();
+     selectedCategory = e.target.dataset.category;
+     await fetchAndRenderProducts();
+   });
+ });
+ 
+ sortByDropdown.addEventListener('click', async (e) => {
+   const sortOption = e.target.closest('.sort-option')?.dataset.sortOption;
+   if (sortOption) {
+     await fetchAndRenderProducts(sortOption);
+   }
+ });
+ 
+ async function fetchAndRenderProducts(sortOption) {
+   try {
+     const response = await fetch('/filter-products', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({ sortOption, searchQuery, selectedCategory }),
+     });
+ 
+     if (response.ok) {
+      //  const products = await response.json();
+      //  renderProducts(products);
 
-sortByDropdown.addEventListener('click', async (e) => {
-  const sortOption = e.target.closest('.sort-option')?.dataset.sortOption;
-  if (sortOption) {
-    try {
-      const response = await fetch('/sort-products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ sortOption, searchQuery }),
-      });
-
-      if (response.ok) {
-        const sortedProducts = await response.json();
-        renderProducts(sortedProducts);
-      } else {
-        console.error('Error sorting products:', response.status);
-      }
-    } catch (error) {
-      console.error('Error sorting products:', error);
-    }
-  }
-});
-
-function renderProducts(products) {
-  productContainer.innerHTML = '';
-  products.forEach((product) => {
-    const productElement = `
-      <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-        <div class="product-item shadow rounded border">
-          <a href="/productdetails/${product._id}" class="product-link">
-            <div class="product-thumb position-relative">
-              <img src="/productimages/${product.images[0]}" alt="${product.name}" class="img-fluid rounded">
-              <div class="product-overlay"></div>
-            </div>
-          </a>
-          <div class="product-content py-3">
-            <h4 class="product-title text-black fw-bold mb-1">${product.name}</h4>
-            <p class="product-price text-muted mb-1"><del>INR ${product.price}</del></p>
-            <p class="product-discount-price text-danger fw-bold mb-0">INR ${product.discountPrice}</p>
-          </div>
-        </div>
-      </div>
-    `;
-    productContainer.insertAdjacentHTML('beforeend', productElement);
-  });
-}
-
-
-
-const categoryFilters = document.querySelectorAll('.category-filter');
-console.log("test",categoryFilters);
-let selectedCategory = '';
-
-categoryFilters.forEach(filter => {
-  filter.addEventListener('click', async (e) => {
-    e.preventDefault();
-    selectedCategory = e.target.dataset.category;
-    await fetchAndRenderProducts();
-  });
-});
-
-sortByDropdown.addEventListener('click', async (e) => {
-  const sortOption = e.target.closest('.sort-option')?.dataset.sortOption;
-  if (sortOption) {
-    await fetchAndRenderProducts(sortOption);
-  }
-});
-
-async function fetchAndRenderProducts(sortOption) {
-  try {
-    const response = await fetch('/filter-products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ sortOption, searchQuery, selectedCategory }),
-    });
-
-    if (response.ok) {
-      const products = await response.json();
+      const { products, totalProducts } = await response.json();
       renderProducts(products);
-    } else {
-      console.error('Error filtering products:', response.status);
-    }
-  } catch (error) {
-    console.error('Error filtering products:', error);
+      updatePagination(totalProducts);
+
+     } else {
+       console.error('Error filtering products:', response.status);
+     }
+   } catch (error) {
+     console.error('Error filtering products:', error);
+   }
+ }
+ 
+
+
+
+
+ function updatePagination(totalProducts) {
+  const perPage = 9; // Number of products per page
+  const totalPages = Math.ceil(totalProducts / perPage);
+  const paginationContainer = document.querySelector('.pagination-area');
+  const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+
+  // Update the pagination container with the new pagination links
+  paginationContainer.innerHTML = `
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        ${generatePaginationLinks(currentPage, totalPages)}
+      </ul>
+    </nav>
+  `;
+}
+
+function generatePaginationLinks(currentPage, totalPages) {
+  let links = '';
+
+  if (currentPage > 1) {
+    links += `
+      <li class="page-item">
+        <a class="page-link" href="?page=1" aria-label="First">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+          <span aria-hidden="true">&lt;</span>
+        </a>
+      </li>
+    `;
   }
+
+  for (let i = 1; i <= totalPages; i++) {
+    links += `
+      <li class="page-item ${currentPage === i ? 'active' : ''}">
+        <a class="page-link" href="?page=${i}">${i}</a>
+      </li>
+    `;
+  }
+
+  if (currentPage < totalPages) {
+    links += `
+      <li class="page-item">
+        <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+          <span aria-hidden="true">&gt;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page=${totalPages}" aria-label="Last">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    `;
+  }
+
+  return links;
 }
 
 
@@ -576,8 +648,11 @@ async function fetchAndRenderProducts(sortOption) {
 
 
 
-  </script>
 
+
+ 
+   </script>
+ 
 </body>
 
 </html>
