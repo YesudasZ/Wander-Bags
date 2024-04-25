@@ -11,6 +11,7 @@ const errorload = async (req, res) => {
   res.render('errorpage')
 }
 
+
 const loadLogin = async (req, res) => {
   try {
     res.render('login')
@@ -20,20 +21,15 @@ const loadLogin = async (req, res) => {
   }
 }
 
+
 const verifyLogin = async (req, res) => {
   try {
-
     const email = req.body.email;
     const password = req.body.password;
-
     const userData = await User.findOne({ email: email });
-
     if (userData) {
-
       const passwordMatch = await bcrypt.compare(password, userData.password)
-
       if (passwordMatch) {
-
         if (userData.is_admin === 0) {
           res.render('login', { message: "Unauthorized" });
         }
@@ -44,20 +40,18 @@ const verifyLogin = async (req, res) => {
         }
       }
       else {
-
         res.render('login', { message: "Password is incorrect" });
       }
-
     }
     else {
       res.render('login', { message: "Email and Password is incorrect" });
     }
-
   } catch (error) {
     console.log(error.message);
     res.redirect('/admin/errorpage')
   }
 }
+
 
 const loadadminpanel = async (req, res) => {
   try {
@@ -76,7 +70,6 @@ const loadadminpanel = async (req, res) => {
         }
       }
     ]);
-
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     const totalRevenueMonthly = await Order.aggregate([
@@ -98,57 +91,62 @@ const loadadminpanel = async (req, res) => {
         }
       }
     ]);
-
     const totalProducts = await Product.countDocuments({});
     const totalOrders = await Order.countDocuments({});
-
     // Get top 10 products based on total sales
     const topProducts = await Order.aggregate([
       { $unwind: '$items' },
-      { $group: {
-        _id: '$items.productId',
-        totalSales: { $sum: '$items.quantity' },
-        productDetails: { $first: '$$ROOT.items' }
-      }},
-      { $lookup: {
-        from: 'products',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'product'
-      }},
+      {
+        $group: {
+          _id: '$items.productId',
+          totalSales: { $sum: '$items.quantity' },
+          productDetails: { $first: '$$ROOT.items' }
+        }
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
       { $unwind: '$product' },
-      { $project: {
-        _id: 0,
-        name: '$product.name',
-        images: '$product.images',
-        discountPrice: '$product.discountPrice',
-        status: '$product.status',
-        category: '$product.category',
-        totalSales: 1
-      }},
+      {
+        $project: {
+          _id: 0,
+          name: '$product.name',
+          images: '$product.images',
+          discountPrice: '$product.discountPrice',
+          status: '$product.status',
+          category: '$product.category',
+          totalSales: 1
+        }
+      },
       { $sort: { totalSales: -1 } },
       { $limit: 10 }
     ]);
-
     // Get top categories based on total sales
     const topCategories = await Order.aggregate([
       { $unwind: '$items' },
-      { $lookup: {
-        from: 'products',
-        localField: 'items.productId',
-        foreignField: '_id',
-        as: 'product'
-      }},
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'items.productId',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
       { $unwind: '$product' },
-      { $group: {
-        _id: '$product.category',
-        totalSales: { $sum: '$items.quantity' }
-      }},
+      {
+        $group: {
+          _id: '$product.category',
+          totalSales: { $sum: '$items.quantity' }
+        }
+      },
       { $sort: { totalSales: -1 } }
     ]);
-
     const maxCategorySales = topCategories.length > 0 ? topCategories[0].totalSales : 1;
-
     res.render('adminpanel', {
       totalOrders: totalOrders,
       totalProducts: totalProducts,
@@ -165,12 +163,10 @@ const loadadminpanel = async (req, res) => {
 }
 
 
-
 const getSalesData = async (req, res) => {
   try {
     const period = req.query.period;
     let salesData;
-
     switch (period) {
       case 'weekly':
         salesData = await getWeeklySalesData();
@@ -184,7 +180,6 @@ const getSalesData = async (req, res) => {
       default:
         return res.status(400).json({ error: 'Invalid period' });
     }
-
     res.json(salesData);
   } catch (error) {
     console.error('Error fetching sales data:', error);
@@ -192,102 +187,77 @@ const getSalesData = async (req, res) => {
   }
 };
 
+
 // Helper function to fetch weekly sales data
 async function getWeeklySalesData() {
   const currentDate = moment().startOf('week');
   const labels = [];
   const data = [];
-
-
   for (let i = 0; i < 7; i++) {
     const day = currentDate.clone().add(i, 'days').format('MM/DD/YYYY');
     labels.push(day);
-
     const orderCount = await Order.countDocuments({
       orderDate: {
         $gte: currentDate.clone().add(i, 'days').startOf('day').toDate(),
         $lt: currentDate.clone().add(i, 'days').endOf('day').toDate(),
       }
-      // ,
-      // orderStatus: 'Delivered',
-      // paymentStatus: 'Success',
     });
-
     data.push(orderCount);
   }
-
   return { labels, data };
 }
+
 
 // Helper function to fetch monthly sales data
 async function getMonthlySalesData() {
   const currentDate = moment().startOf('month');
   const labels = [];
   const data = [];
-
   const daysInMonth = currentDate.daysInMonth();
-
   for (let i = 1; i <= daysInMonth; i++) {
     const day = currentDate.clone().date(i).format('MM/DD/YYYY');
     labels.push(day);
-
     const orderCount = await Order.countDocuments({
       orderDate: {
         $gte: currentDate.clone().date(i).startOf('day').toDate(),
         $lt: currentDate.clone().date(i).endOf('day').toDate(),
       }
-      // ,
-      // orderStatus: 'Delivered',
-      // paymentStatus: 'Success',
     });
- 
     data.push(orderCount);
   }
-
   return { labels, data };
 }
+
 
 // Helper function to fetch yearly sales data
 async function getYearlySalesData() {
   const currentDate = moment().startOf('year');
   const labels = [];
   const data = [];
-
   for (let i = 0; i < 12; i++) {
     const month = currentDate.clone().add(i, 'months').format('MMM');
     labels.push(month);
-
     const orderCount = await Order.countDocuments({
       orderDate: {
         $gte: currentDate.clone().add(i, 'months').startOf('month').toDate(),
         $lt: currentDate.clone().add(i, 'months').endOf('month').toDate(),
       }
-      // ,
-      // orderStatus: 'Delivered',
-      // paymentStatus: 'Success',
     });
-  
     data.push(orderCount);
   }
-
   return { labels, data };
 }
-
-
 
 
 const loadcustomers = async (req, res) => {
   try {
     const perPage = 10;
     const page = req.query.page || 1;
-
     const users = await User.find({ is_admin: 0 })
       .skip((page - 1) * perPage)
       .limit(perPage);
-
     const totalUsers = await User.countDocuments({ is_admin: 0 });
     const totalPages = Math.ceil(totalUsers / perPage);
-
     const actionType = 'block';
     res.render('customers', { users, actionType, currentPage: page, totalPages });
   } catch (error) {
@@ -297,11 +267,9 @@ const loadcustomers = async (req, res) => {
 }
 
 
-
 loadblockUser = async (req, res) => {
   try {
     const userId = req.query.id;
-
     await User.findByIdAndUpdate(userId, { is_verified: 0 });
     if (req.session.user_id === userId) {
       req.session.user = false;
@@ -313,10 +281,10 @@ loadblockUser = async (req, res) => {
   }
 };
 
+
 loadunblockUser = async (req, res) => {
   try {
     const userId = req.query.id;
-
     await User.findByIdAndUpdate(userId, { is_verified: 1 });
     res.status(200).json({ message: 'User unblocked successfully' });
   } catch (error) {
@@ -326,6 +294,21 @@ loadunblockUser = async (req, res) => {
 };
 
 
+const toggleStatus = async (req, res) => {
+  try {
+    const userId = req.query.id;
+    const user = await User.findById(userId);
+    if (user.is_verified == 1) {
+      await User.findByIdAndUpdate(userId, { is_verified: 0 });
+    } else {
+      await User.findByIdAndUpdate(userId, { is_verified: 1 });
+    }
+    res.status(200).json({ message: 'User status updated successfully' });
+  } catch (error) {
+    console.error('Error unblocking user:', error);
+    res.redirect('/admin/errorpage')
+  }
+}
 
 
 const logout = async (req, res) => {
@@ -333,7 +316,6 @@ const logout = async (req, res) => {
     req.session.admin_id = "";
     req.session.admin = false;
     res.redirect('/admin');
-
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage')
@@ -341,12 +323,12 @@ const logout = async (req, res) => {
 
 }
 
+
 const loadOrders = async (req, res) => {
   try {
-    const limit = 5; // Number of orders per page
-    const page = parseInt(req.query.page) || 1; // Current page number
+    const limit = 5; 
+    const page = parseInt(req.query.page) || 1; 
     const startIndex = (page - 1) * limit;
-
     const orders = await Order.find({})
       .populate('user', 'name')
       .populate('cart')
@@ -358,9 +340,7 @@ const loadOrders = async (req, res) => {
       .sort({ orderDate: -1 })
       .skip(startIndex)
       .limit(limit);
-
     const totalOrders = await Order.countDocuments({});
-
     res.render('orders', { orders, page, limit, totalOrders });
   } catch (error) {
     console.error(error);
@@ -369,11 +349,8 @@ const loadOrders = async (req, res) => {
 };
 
 
-
-
 const getOrderDetails = async (req, res) => {
   try {
-
     const orderId = req.params.id;
     const order = await Order.findById(orderId)
       .populate('user', 'name')
@@ -381,11 +358,9 @@ const getOrderDetails = async (req, res) => {
         path: 'items.productId',
         select: 'title image productPrice'
       });
-
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
-
     res.json(order);
   } catch (error) {
     console.error(error);
@@ -393,17 +368,15 @@ const getOrderDetails = async (req, res) => {
   }
 };
 
+
 const updateOrderStatus = async (req, res) => {
   try {
     const orderId = req.params.id;
     const { orderStatus } = req.body;
-
     const order = await Order.findById(orderId);
-
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
-
     // Check if the payment method is "Cash On Delivery" and the order status is being set to "Delivered"
     if (order.paymentMethod === 'Cash On Delivery' && orderStatus === 'Delivered') {
       // Update the order with the new orderStatus and set paymentStatus to "Success"
@@ -414,14 +387,12 @@ const updateOrderStatus = async (req, res) => {
       );
       return res.json(updatedOrder);
     }
-
     // If the conditions are not met, only update the orderStatus
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       { orderStatus },
       { new: true }
     );
-
     res.json(updatedOrder);
   } catch (error) {
     console.error(error);
@@ -435,15 +406,12 @@ const SaleReport = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const startIndex = (page - 1) * limit;
-
     let filter = req.query.filter;
     let startDate = req.query.startDate;
     let endDate = req.query.endDate;
-
     let query = {
       orderStatus: 'Delivered'
     };
-
     if (filter === 'day') {
       query.orderDate = {
         $gte: new Date(new Date().setHours(0, 0, 0)),
@@ -479,7 +447,6 @@ const SaleReport = async (req, res) => {
         $lte: new Date(endDate)
       };
     }
-
     const orders = await Order.find(query)
       .populate('user', 'name')
       .populate('cart')
@@ -490,7 +457,6 @@ const SaleReport = async (req, res) => {
       })
       .skip(startIndex)
       .limit(limit);
-
     res.render('salesReport', { orders, page, limit, totalOrders: orders.length });
   } catch (error) {
     console.error(error);
@@ -504,7 +470,7 @@ const loadOffers = async (req, res) => {
     const products = await Product.find({ status: "active" });
     const categories = await Category.find({ status: "active" });
     const user = await User.findById(req.session.admin_id);
-    res.render('offers', { products: products, categories: categories ,referredUserReward: user.referredUserReward, referringUserReward: user.referringUserReward});
+    res.render('offers', { products: products, categories: categories, referredUserReward: user.referredUserReward, referringUserReward: user.referringUserReward });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage');
@@ -513,15 +479,10 @@ const loadOffers = async (req, res) => {
 
 
 const applyReferralOffer = async (req, res) => {
-  try {console.log("test-0");
+  try {
     const { referredUserReward, referringUserReward } = req.body;
-    console.log("test-1",referredUserReward+"ed"+referringUserReward+'ing');
-  
     await User.updateMany({}, { referredUserReward, referringUserReward });
-    console.log("test-2");
     const user = await User.findById(req.session.admin_id);
-
-    console.log("test-3" ,user.referredUserReward,user.referringUserReward);
     res.json({
       message: 'Offer successfully applied',
       referredUserReward: user.referredUserReward,
@@ -542,10 +503,10 @@ const createCategoryOffer = async (req, res) => {
     categore.offerStart = startDate;
     categore.offerEnd = endDate;
     await categore.save();
-    const products = await Product.find({ category: categore.name});
+    const products = await Product.find({ category: categore.name });
     products.forEach((product) => {
       product.discountPrice = product.price - (product.price * (discountPercentage / 100));
-      product.afterDiscount = product.price - product.discountPrice ;
+      product.afterDiscount = product.price - product.discountPrice;
       product.save();
     });
     const categories = await Category.find({ status: "active" });
@@ -557,28 +518,21 @@ const createCategoryOffer = async (req, res) => {
 };
 
 
-
-
-
 const updateCategoryOffer = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
-
     const { startDate, endDate, discount } = req.body;
     category.offerStart = startDate;
     category.offerEnd = endDate;
     category.offer = discount;
-
     await category.save();
-
     const products = await Product.find({ category: category.name });
     products.forEach(product => {
       product.discountPrice = product.price - (product.price * (discount / 100));
       product.afterDiscount = product.price - product.discountPrice;
       product.save();
     });
-
     res.status(200).json({ success: true, message: 'Category offer updated successfully' });
   } catch (error) {
     console.error(error);
@@ -586,24 +540,21 @@ const updateCategoryOffer = async (req, res) => {
   }
 };
 
-const deleteCategoryOffer =async (req, res) => {
+
+const deleteCategoryOffer = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
-
     category.offer = 0;
     category.offerStart = null;
     category.offerEnd = null;
-
     await category.save();
-
     const products = await Product.find({ category: category.name });
     products.forEach(product => {
       product.discountPrice = 0;
       product.afterDiscount = 0;
       product.save();
     });
-
     res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
   } catch (error) {
     console.error(error);
@@ -612,10 +563,8 @@ const deleteCategoryOffer =async (req, res) => {
 };
 
 
-
-
 const createProductOffer = async (req, res) => {
-   try {
+  try {
     const { productId, discountPercentage } = req.body;
     const product = await Product.findById(productId);
     if (!product) {
@@ -634,7 +583,7 @@ const createProductOffer = async (req, res) => {
     product.discountPrice = product.price - (product.price * (discountPercentage / 100));
     product.afterDiscount = product.price - product.discountPrice;
     await product.save();
-    return res.status(200).json({ message: 'Offer applied successfully', type: 'success',product:product });
+    return res.status(200).json({ message: 'Offer applied successfully', type: 'success', product: product });
   } catch (error) {
     console.error(error);
     res.redirect('/admin/errorpage')
@@ -681,5 +630,6 @@ module.exports = {
   applyReferralOffer,
   deleteCategoryOffer,
   updateCategoryOffer,
-  removeProductOffer
+  removeProductOffer,
+  toggleStatus
 }

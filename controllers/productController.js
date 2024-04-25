@@ -1,4 +1,3 @@
-const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
 const Product = require('../models/productModel');
 const multer = require('multer');
@@ -17,19 +16,18 @@ const loadproducts = async (req, res) => {
     res.redirect('/admin/errorpage')
   }
 }
+
+
 const getProducts = async (req, res) => {
   try {
-    const limit = 5; // Number of products per page
-    const page = parseInt(req.query.page) || 1; // Current page number
-
+    const limit = 5;
+    const page = parseInt(req.query.page) || 1;
     const products = await Product.find({})
-    //  .sort({ productAddDate: -1 }) // Sort by productAddDate in descending order
-     .skip((page - 1) * limit)
-     .limit(limit);
-
+      //  .sort({ productAddDate: -1 }) // Sort by productAddDate in descending order
+      .skip((page - 1) * limit)
+      .limit(limit);
     const removedProducts = await Product.find({ status: 'delete' });
     const total = await Product.countDocuments({});
-
     res.render('products', { products, page, total, limit, removedProducts });
   } catch (err) {
     console.error(err);
@@ -37,9 +35,10 @@ const getProducts = async (req, res) => {
   }
 };
 
+
 const addloadProducts = async (req, res) => {
   try {
-    const categories = await Category.find({status:'active'});
+    const categories = await Category.find({ status: 'active' });
     res.render('addproduct', { categories });
   } catch (err) {
     console.error(err);
@@ -57,11 +56,10 @@ const storage = multer.diskStorage({
   }
 });
 
+
 const upload = multer({
   storage: storage
 }).array('images', 10);
-
-
 
 
 const addProduct = async (req, res) => {
@@ -72,23 +70,15 @@ const addProduct = async (req, res) => {
         res.redirect('/admin/errorpage')
       }
       const images = [];
-
-
       for (const file of req.files) {
-
         const resizedImageBuffer = await sharp(file.path)
           .resize({ width: 1500, height: 1500 })
           .toBuffer();
-
-
         const resizedFilename = Date.now() + '-' + file.originalname;
         const imagePath = path.join(__dirname, '../public/productimages', resizedFilename);
         fs.writeFileSync(imagePath, resizedImageBuffer);
-
         images.push(resizedFilename);
       }
-
-
       const product = new Product({
         name: req.body.name,
         description: req.body.description,
@@ -100,8 +90,6 @@ const addProduct = async (req, res) => {
         countInStock: req.body.countInStock,
         discountPrice: req.body.discountPrice
       });
-
-
       await product.save();
       res.redirect('/admin/products')
     });
@@ -115,13 +103,8 @@ const addProduct = async (req, res) => {
 const editProductPage = async (req, res) => {
   const productId = req.params.productId;
   try {
-
-    const categories = await Category.find({status:'active'});
-
-
+    const categories = await Category.find({ status: 'active' });
     const product = await Product.findById(productId);
-
-
     res.render('editproducts', { product, categories });
   } catch (err) {
     console.error(err.message);
@@ -130,19 +113,17 @@ const editProductPage = async (req, res) => {
 };
 
 
-
 const uploadForEditProduct = multer({ storage: storage }).array('newImages[]', 10);
+
 
 const editProduct = async (req, res) => {
   const productId = req.params.productId;
-
   try {
     uploadForEditProduct(req, res, async function (err) {
       if (err) {
         console.error(err);
         return res.status(400).send('File upload error.');
       }
-      console.log("categ");
       const updatedProduct = await Product.findByIdAndUpdate(productId, {
         name: req.body.name,
         description: req.body.description,
@@ -151,24 +132,17 @@ const editProduct = async (req, res) => {
         brand: req.body.brand,
         status: req.body.status,
         countInStock: req.body.countInStock,
-        //discountPrice: req.body.discountPrice
       }, { new: true });
-
-
       if (req.body.deleteImages && req.body.deleteImages.length > 0) {
         for (const image of req.body.deleteImages) {
-
         }
-
         updatedProduct.images = updatedProduct.images.filter(image => !req.body.deleteImages.includes(image));
       }
       if (req.files && req.files.length > 0) {
         const newImages = req.files.map(file => file.filename);
         updatedProduct.images = updatedProduct.images.concat(newImages);
       }
-
       await updatedProduct.save();
-
       res.redirect('/admin/products');
     });
   } catch (err) {
@@ -181,20 +155,13 @@ const editProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const productId = req.params.productId;
   try {
-
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).send('Invalid product ID');
     }
-
-
     const product = await Product.findByIdAndUpdate(productId, { status: 'delete' });
-
-
     if (!product) {
       return res.status(404).send('Product not found');
     }
-
-
     res.redirect('/admin/products');
   } catch (err) {
     console.error(err);
@@ -202,17 +169,14 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+
 const restoreProduct = async (req, res) => {
   const productId = req.params.productId;
-
   try {
-
     const restoredProduct = await Product.findByIdAndUpdate(productId, { status: 'active' }, { new: true });
-
     if (!restoredProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
-
     return res.status(200).json({ message: 'Product restored successfully', product: restoredProduct });
   } catch (error) {
     console.error('Error restoring product:', error);

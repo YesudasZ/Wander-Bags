@@ -255,12 +255,12 @@
             return true
         }
 
-        const passwordRegex = /^[A-Za-z]+(?=.*\d).{4,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
         function passwordValidation() {
             const passwordValue = password.value
             if (!passwordValue.match(passwordRegex)) {
-                passwordError.innerHTML = 'Password should contain atleast 4 characters 1 number and a special character'
+                passwordError.innerHTML = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character'
                 passwordError.style.color = 'red'
                 password.style.border = "solid 2px red";
                 return false;

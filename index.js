@@ -1,47 +1,47 @@
 const express = require("express");
 const app = express();
-const session = require("express-session");
-const nocache = require("nocache");
-const path = require("path");
-const dbConnection = require('./config/dbconnect')
+
+// Load environment variables
 require('dotenv').config();
-dbConnection()
 
+// Database connection
+const dbConnection = require('./config/dbconnect');
+dbConnection();
 
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
+// Session management
+const session = require("express-session");
 app.use(
   session({
-    secret:process.env.SESSION_SECRET ,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
 );
-app.use(nocache())
-app.use(express.static(path.join(__dirname,'views')))
-app.use(express.static(path.join(__dirname,'public')))
-app.use(express.static(path.join(__dirname,'views/admin')))
-app.use(express.static(path.join(__dirname,'views/user')))
 
+// Middleware
+const nocache = require("nocache");
+app.use(nocache()); // Disable caching
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
+// Static files
+const path = require("path");
+app.use(express.static(path.join(__dirname, 'views'))); // Serve static files from 'views' directory
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from 'public' directory
+app.use(express.static(path.join(__dirname, 'views/admin'))); // Serve static files from 'views/admin' directory
+app.use(express.static(path.join(__dirname, 'views/user'))); // Serve static files from 'views/user' directory
 
-//user route
-const userRoute = require ('./routes/userRoute');
+// Routes
+const userRoute = require('./routes/userRoute');
+app.use('/', userRoute); // User routes
 
-app.use('/',userRoute)
-
-//admin route
 const adminRoute = require('./routes/adminRoute');
+app.use('/admin', adminRoute); // Admin routes
 
-app.use('/admin',adminRoute)
+// Fallback route
+app.use('/*', async (req, res) => {
+  res.redirect('/pageNotfound'); // Redirect to 'pageNotfound' for any other route
+});
 
-
-
-app.use('/*',async(req,res)=>{
-  res.redirect('/pageNotfound')
-})
-
-app.listen(4000,()=>console.log("Click here to go to the login page: http://localhost:4000"))
+// Start the server
+app.listen(4000, () => console.log("Click here to go to the login page: http://localhost:4000"));

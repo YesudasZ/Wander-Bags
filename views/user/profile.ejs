@@ -608,7 +608,7 @@
           </div>
          
 
-            <% if ( order.paymentStatus !== 'Failed' ||order.orderStatus !== 'Cancelled' ||order.orderStatus !== 'Returned') { %>
+            <% if ( order.paymentStatus !== 'Failed' ) { %>
           
             <div>
             <a href="/orders/<%= order._id %>/invoice" target="_blank" class="btn btn-primary">Download Invoice</a>
