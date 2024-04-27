@@ -536,8 +536,7 @@
                                   </button>
                                   <% } else if (order.orderStatus.toLowerCase()==='pending' ||
                                 order.orderStatus.toLowerCase()==='confirmed' ) { %>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                  data-target="#cancelOrderModal" data-order-id="<%= order._id %>">Cancel Order</button>
+                                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelItemModal" data-order-id="<%= order._id %>" data-item-index="<%= index %>">Cancel Item</button>
                                 <% } else if (order.orderStatus.toLowerCase()==='delivered' ) { %>
                                   <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                     data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return
@@ -711,32 +710,31 @@
 
 
 
-              <!-- Cancel Order Modal -->
-              <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog"
-                aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <form id="cancelOrderForm">
-                        <div class="form-group">
-                          <label for="cancellationReason">Reason for Cancellation</label>
-                          <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-danger" id="confirmCancelOrder">Confirm Cancel</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<!-- Cancel Item Modal -->
+<div class="modal fade" id="cancelItemModal" tabindex="-1" role="dialog" aria-labelledby="cancelItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelItemModalLabel">Cancel Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="cancelItemForm">
+          <div class="form-group">
+            <label for="cancellationReason">Reason for Cancellation</label>
+            <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="confirmCancelItem">Confirm Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -1898,67 +1896,68 @@ function editpostalCodeValidation(index) {
 
 
     $(document).ready(function () {
-      let selectedOrderId;
+  let selectedOrderId;
+  let selectedItemIndex;
 
-      // Listen for the 'show.bs.modal' event on the returnOrderModal
-      $('#returnOrderModal').on('show.bs.modal', function (event) {
-        // Get the button that triggered the modal
-        const button = $(event.relatedTarget);
+  // Listen for the 'show.bs.modal' event on the cancelItemModal
+  $('#cancelItemModal').on('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    const button = $(event.relatedTarget);
 
-        // Get the order ID from the button's data attribute
-        selectedOrderId = button.data('order-id');
-        console.log('Modal is being shown for orderId:', selectedOrderId);
-      });
+    // Get the order ID and item index from the button's data attributes
+    selectedOrderId = button.data('order-id');
+    selectedItemIndex = button.data('item-index');
+    console.log('Modal is being shown for orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
+  });
 
-      // Handle click on the confirmReturnOrder button
-      $('#confirmReturnOrder').click(function () {
-        const returnReason = $('#returnReason').val();
-        console.log('Returning order with orderId:', selectedOrderId);
-        returnOrder(selectedOrderId, returnReason);
-      });
+  // Handle click on the confirmCancelItem button
+  $('#confirmCancelItem').click(function () {
+    const cancellationReason = $('#cancellationReason').val();
+    console.log('Canceling item with orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
+    cancelItem(selectedOrderId, selectedItemIndex, cancellationReason);
+  });
 
-      function returnOrder(orderId, returnReason) {
-        console.log('Returning order with orderId:', orderId);
-        fetch(`/orders/${orderId}/return`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            returnReason
-          })
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log("data test", data);
-            if (data.success) {
-              $('#returnOrderModal').modal('hide');
-              Swal.fire({
-                title: 'Success',
-                text: data.message,
-                icon: 'success',
-              }).then(() => {
-                updateOrderStatus(orderId, 'Returned');
-              });
-
-                        setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to return product'
-              });
-            }
-          })
-          .catch(error => {
-            console.error('Error returning order:', error);
-            showToast('An error occurred while returning the order', 'error');
+  function cancelItem(orderId, itemIndex, cancellationReason) {
+    console.log('Canceling item with orderId:', orderId, 'itemIndex:', itemIndex);
+    fetch(`/orders/${orderId}/items/${itemIndex}/cancel`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cancellationReason
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("data test", data);
+        if (data.success) {
+          $('#cancelItemModal').modal('hide');
+          Swal.fire({
+            title: 'Success',
+            text: data.message,
+            icon: 'success',
+          }).then(() => {
+            updateOrderStatus(orderId, data.updatedOrder.orderStatus);
           });
-      }
-    });
 
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to cancel item'
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error canceling item:', error);
+        showToast('An error occurred while canceling the item', 'error');
+      });
+  }
+});
 
 
 

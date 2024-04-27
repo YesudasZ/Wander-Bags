@@ -176,20 +176,19 @@ const loadOrders = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
-    const orderId = req.params.id;
+    const orderId = req.params.orderId;
+    const itemIndex = req.params.itemIndex;
     const { cancellationReason } = req.body;
     const order = await Order.findById(orderId).populate('items.productId');
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
-    // Update the countInStock of each product in the order
-    for (const item of order.items) {
-      const product = item.productId;
-      const updatedCountInStock = product.countInStock + item.quantity;
-      await Product.findByIdAndUpdate(product._id, { countInStock: updatedCountInStock });
-    }
+    const item = order.items[itemIndex];
+    const product = item.productId;
+    const updatedCountInStock = product.countInStock + item.quantity;
+    await Product.findByIdAndUpdate(product._id, { countInStock: updatedCountInStock });
     if (order.paymentStatus === 'Success') {
-      const refundAmount = order.billTotal;
+      const refundAmount = item.price;
       let wallet = await Wallet.findOne({ user: req.session.user_id });
       if (!wallet) {
         wallet = new Wallet({
@@ -198,28 +197,33 @@ const cancelOrder = async (req, res) => {
           transactions: []
         });
       }
-      wallet.walletBalance += refundAmount;
-      wallet.refundAmount += refundAmount;
+      let couponAmount = 0;
+      console.log("od amt",order);
+      if (order.couponAmount > 0) {
+        couponAmount = order.couponAmount * (item.price / order.billTotal);
+      }
+      wallet.walletBalance += refundAmount - couponAmount;
+      wallet.refundAmount += refundAmount - couponAmount;
       // Add transaction details
       wallet.transactions.push({
-        amount: refundAmount,
-        description: `Refund for order #${order.oId}`,
+        amount: refundAmount - couponAmount,
+        description: `Refund for item #${item.title} in order #${order.oId}`,
         type: 'Refund',
         transactionDate: new Date()
       });
       await wallet.save();
     }
-    const updatedOrder = await Order.findByIdAndUpdate(
-      orderId,
-      {
-        orderStatus: 'Cancelled',
-        cancellationReason
-      },
-      { new: true }
-    );
-    res.json({ success: true, message: 'Order cancelled successfully', updatedOrder });
+    order.items.splice(itemIndex, 1);
+    order.billTotal -= item.price-order.couponAmount;
+    order.billTotal -= order.couponAmount;
+    if (order.items.length === 0) {
+      order.orderStatus = 'Cancelled';
+    }
+
+    await order.save();
+    res.json({ success: true, message: 'Item cancelled successfully', updatedOrder: order });
   } catch (error) {
-    console.error('Error cancelling order:', error);
+    console.error('Error canceling order item:', error);
     res.redirect('/pagenotfound');
   }
 };

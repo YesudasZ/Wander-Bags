@@ -263,7 +263,10 @@
                                 <td><img src="/productimages/<%=product.images[0]%>" alt="<%= product.name %>" style="width: 100px; height: 100px;"></td>
                                 <td><%= product.price %></td>
                                 <td><%= product.discountPrice %></td>
-                                <td style="max-width: 20px"><input type="number" class="form-control discount-percentage" id="discountPercentage" min="1" max="100" required></td>
+                                <td style="max-width: 20px"><input type="number" class="form-control discount-percentage" id="discountPercentage" min="1" max="100" required>
+                                  <small id="discountPercentageError_<%= product._id %>" class="error"></small>
+                                  <small id="discountError" class="error"></small>
+                                </td>
                                 <td>
                                   <button type="button" class="btn btn-primary apply-discount" data-product-id="<%= product._id %>">
                                     Apply
@@ -816,12 +819,58 @@ applyOfferBtn.addEventListener('click', async () => {
   }
 });
 
-// Handle apply discount button click
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Function to validate discount input
+function discountValidation() {
+  const discountValue = document.getElementById("discountPercentage").value.trim();
+  const discountError = document.getElementById("discountError");
+
+  if (discountValue === '') {
+    discountError.textContent = 'Discount percentage is required';
+    discountError.style.color = 'red';
+    document.getElementById("discountPercentage").style.border = "solid 2px red";
+    return false;
+  }
+
+  if (isNaN(discountValue) || discountValue < 1 || discountValue > 100) {
+    discountError.textContent = 'Discount percentage must be a number between 1 and 100';
+    discountError.style.color = 'red';
+    document.getElementById("discountPercentage").style.border = "solid 2px red";
+    return false;
+  }
+
+  discountError.textContent = '';
+  document.getElementById("discountPercentage").style.border = "solid 2px green";
+  return true;
+}
+
+
+
+// Function to handle apply discount button click with validation
 const handleApplyDiscountClick = (event) => {
   event.preventDefault();
-  const productId = event.target.dataset.productId;
-  const discountPercentage = event.target.parentElement.previousElementSibling.firstElementChild.value;
-  applyDiscount(productId, discountPercentage);
+  const isValidDiscount = discountValidation(); // Validate discount input
+  if (isValidDiscount) {
+    const productId = event.target.dataset.productId;
+    const discountPercentage = event.target.parentElement.previousElementSibling.firstElementChild.value;
+    applyDiscount(productId, discountPercentage);
+  }
 };
 
 // Initialize

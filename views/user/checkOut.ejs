@@ -272,20 +272,21 @@
               <div class="address-list">
                 <!-- Display existing addresses dynamically -->
                 <form id="placeOrderForm">
+                  <% let isDefault = true; %>
                   <% user.address.forEach((address, index)=> { %>
                     <div class="address-card mb-3">
                       <div class="card">
                         <div class="card-body">
                           <div class="form-check">
                             <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>"
-                              class="form-check-input" required>
+                              class="form-check-input" required <% if (isDefault) { %> checked <% } %>>
                             <label for="<%= address._id %>" class="form-check-label">
                               <%= address.houseName %> <br>
-                                <%= address.street %><br>
-                                  <%= address.city %><br>
-                                    <%= address.state %><br>
-                                      <%= address.country %><br>
-                                        <%= address.postalCode %>
+                              <%= address.street %><br>
+                              <%= address.city %><br>
+                              <%= address.state %><br>
+                              <%= address.country %><br>
+                              <%= address.postalCode %>
                             </label>
                           </div>
                           <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -293,7 +294,8 @@
                         </div>
                       </div>
                     </div>
-                    <% }); %>
+                    <% isDefault = false; %>
+                  <% }); %>
                 </form>
               </div>
             </div>
@@ -1391,7 +1393,8 @@
             return;
           }
 
-
+try {
+  
 
           const selectedCouponId = document.querySelector('input[name="selectedCoupon"]:checked')?.value;
           if (!selectedCouponId) {
@@ -1404,6 +1407,16 @@
             // Coupon not found
             return;
           }
+
+          if (selectedCoupon.status!== 'Active') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Coupon Not Active',
+              text: 'This coupon is not active. Please try another one.',
+            });
+            return;
+          }
+
 
           const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('₹', ''));
           const minimumAmount = selectedCoupon.minimumAmount;
@@ -1432,11 +1445,20 @@
 
           // Close the modal
           $('#applyCouponModal').modal('hide');
-        });
+        } catch (error) {
+          if (error.message === 'Coupon is not active or has expired') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Coupon Inactive or Expired',
+        text: 'The selected coupon is not active or has expired.',
+      });
+    } else {
+      console.error('Error fetching coupon details:', error);
+    }
+  }
+}
 
-
-
-
+        );
 
 
         document.getElementById('removeCouponBtn').addEventListener('click', () => {
@@ -1468,10 +1490,17 @@
             const coupon = await response.json();
             return coupon;
           } catch (error) {
-            console.error('Error fetching coupon details:', error);
-            return null;
-          }
-        }
+            if (error.message === 'Coupon is not active or has expired') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Coupon Inactive or Expired',
+        text: 'The selected coupon is not active or has expired.',
+      });
+    } else {
+      console.error('Error fetching coupon details:', error);
+    }
+  }
+}
 
 
 

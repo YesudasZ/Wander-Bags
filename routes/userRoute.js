@@ -72,7 +72,7 @@ user_route.post('/checkout', auth.isLogin, orderController.placeOrder); // Place
 user_route.get('/cart/items', orderController.checkQuantity); // Check item quantity
 user_route.get('/orderPlaced', auth.isLogin, orderController.loadOderplaced); // Load order placed page
 user_route.get('/orderFailed', auth.isLogin, orderController.loadOderfailed); // Load order failed page
-user_route.put('/orders/:id/cancel', auth.isLogin, orderController.cancelOrder); // Cancel order
+user_route.put('/orders/:orderId/items/:itemIndex/cancel', auth.isLogin, orderController.cancelOrder); // Cancel order
 user_route.put('/orders/:id/return', auth.isLogin, orderController.returnOrderAndRefund); // Return order and refund
 user_route.post('/create/razorpayOrder', auth.isLogin, orderController.manageRazorpayOrder); // Manage Razorpay order
 user_route.post('/retry/razorpayOrder', auth.isLogin, orderController.retryRazorpayOrder); // Retry Razorpay order

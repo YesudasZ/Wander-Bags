@@ -130,11 +130,20 @@ const deleteCoupon = async (req, res) => {
 
 const getCoupons = async (req, res) => {
   try {
-    console.log("coupons");
-    const coupon = await Coupon.findById(req.params.id);
+    const couponId = req.params.id;
+    const coupon = await Coupon.findById(couponId);
+
     if (!coupon) {
       return res.status(404).json({ error: 'Coupon not found' });
     }
+
+    const currentDate = new Date();
+    const { startDate, endDate, status } = coupon;
+
+    if (status !== 'Active' || currentDate < startDate || currentDate > endDate) {
+      return res.status(400).json({ error: 'Coupon is not active or has expired' });
+    }
+
     res.json(coupon);
   } catch (error) {
     console.error('Error fetching coupon:', error);
