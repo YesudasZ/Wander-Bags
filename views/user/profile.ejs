@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -28,71 +27,69 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-..." crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css"
+    integrity="sha512-..." crossorigin="anonymous" />
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
+    /* Invoice Styles */
+    .invoice {
+      font-family: Arial, sans-serif;
+      border: 1px solid #ccc;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
+    .invoice-logo img {
+      max-width: 150px;
+    }
 
-  /* Invoice Styles */
-  .invoice {
-    font-family: Arial, sans-serif;
-    border: 1px solid #ccc;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
+    .invoice-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+    }
 
-  .invoice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+    .invoice-info {
+      margin-bottom: 20px;
+    }
 
-  .invoice-logo img {
-    max-width: 150px;
-  }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-  .invoice-title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-  }
+    .invoice-table th,
+    .invoice-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
 
-  .invoice-info {
-    margin-bottom: 20px;
-  }
+    .invoice-table th {
+      background-color: #f2f2f2;
+    }
 
-  .invoice-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .invoice-table th,
-  .invoice-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-  }
-
-  .invoice-table th {
-    background-color: #f2f2f2;
-  }
-
-  .invoice-total {
-    text-align: right;
-    margin-top: 20px;
-    font-weight: bold;
-  }
+    .invoice-total {
+      text-align: right;
+      margin-top: 20px;
+      font-weight: bold;
+    }
 
 
 
 
 
 
-.invoice-box {
+    .invoice-box {
       max-width: 800px;
       margin: auto;
       padding: 30px;
@@ -159,22 +156,22 @@
 
 
 
-.table-header th {
-  font-weight: bold;
-}
+    .table-header th {
+      font-weight: bold;
+    }
 
-.table-header th,
-.table-header td {
-  text-align: center;
-}
+    .table-header th,
+    .table-header td {
+      text-align: center;
+    }
 
-.table .text-warning {
-  color: orange;
-}
+    .table .text-warning {
+      color: orange;
+    }
 
-.table .text-success {
-  color: green;
-}
+    .table .text-success {
+      color: green;
+    }
 
 
 
@@ -332,85 +329,94 @@
 
   <header class="header-area header-style-4 header-height-2">
     <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
-        <div class="container">
-            <div class="header-wrap d-flex justify-content-between align-items-center">
-                <div class="logo logo-width-1">
-                    <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
-                </div>
-                <div class="header-right d-flex align-items-center">
-                    <div class="search-style-2">
-                        <form action="#">
-                            <select class="select-active">
-                                <option>All Categories</option>
-                            </select>
-                            <input type="text" placeholder="Search for items...">
-                        </form>
-                    </div>
-                    <div class="header-action-right d-flex align-items-center">
-                        <div class="header-action-2">
-                            <div class="header-action-icon-2">
-                              <a href="/wishList">
-                                <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
-                                <% if (wishlistCount > 0) { %>
-                                  <span class="pro-count blue"><%= wishlistCount %></span>
-                                <% } %>
-                              </a>
-                            </div>
-                            <div class="header-action-icon-2">
-                              <a class="mini-cart-icon" href="/cart">
-                                <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
-                                <% if (cartCount > 0) { %>
-                                  <span class="pro-count blue"><%= cartCount %></span>
-                                <% } %>
-                              </a>
-                            </div>
-                          </div>
-                        <div class="header-info header-info-right text-end">
-                            <ul class="list-inline mb-0">
-                           
-                                <li class="dropdown nav-item m-5">
-                                    <a class="dropdown-toggle text-black" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fi-rs-user"></i> <%= user.name %>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                        <a class="dropdown-item" href="/profile"><i class="material-icons md-perm_identity"></i>Profile</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Orders</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="header-wrap d-flex justify-content-between align-items-center">
+          <div class="logo logo-width-1">
+            <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
+          </div>
+          <div class="header-right d-flex align-items-center">
+            <div class="search-style-2">
+              <form action="#">
+                <select class="select-active">
+                  <option>All Categories</option>
+                </select>
+                <input type="text" placeholder="Search for items...">
+              </form>
             </div>
+            <div class="header-action-right d-flex align-items-center">
+              <div class="header-action-2">
+                <div class="header-action-icon-2">
+                  <a href="/wishList">
+                    <img class="svgInject" alt="Wander" src="user-assets/imgs/theme/icons/icon-heart.svg">
+                    <% if (wishlistCount> 0) { %>
+                      <span class="pro-count blue">
+                        <%= wishlistCount %>
+                      </span>
+                      <% } %>
+                  </a>
+                </div>
+                <div class="header-action-icon-2">
+                  <a class="mini-cart-icon" href="/cart">
+                    <img alt="Wander" src="user-assets/imgs/theme/icons/icon-cart.svg">
+                    <% if (cartCount> 0) { %>
+                      <span class="pro-count blue">
+                        <%= cartCount %>
+                      </span>
+                      <% } %>
+                  </a>
+                </div>
+              </div>
+              <div class="header-info header-info-right text-end">
+                <ul class="list-inline mb-0">
+
+                  <li class="dropdown nav-item m-5">
+                    <a class="dropdown-toggle text-black" href="#" role="button" id="userDropdown"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fi-rs-user"></i>
+                      <%= user.name %>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                      <a class="dropdown-item" href="/profile"><i
+                          class="material-icons md-perm_identity"></i>Profile</a>
+                      <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Orders</a>
+                      <a class="dropdown-item" href="#"><i
+                          class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-danger" href="/logout"><i
+                          class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="header-bottom header-bottom-bg-color sticky-bar">
-        <div class="container">
-            <div class="header-wrap header-space-between position-relative">
-                <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
-                </div>
-                <div class="header-nav d-none d-lg-flex">
-                    <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
-                        <nav>
-                            <ul>
-                                <li><a class="active" href="/home">Home</a></li>
-                                <li><a href="/shop">Shop</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="header-wrap header-space-between position-relative">
+          <div class="logo logo-width-1 d-block d-lg-none">
+            <a href="index.html"><img src="user-assets/imgs/theme/logo.svg" alt="logo"></a>
+          </div>
+          <div class="header-nav d-none d-lg-flex">
+            <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
+              <nav>
+                <ul>
+                  <li><a class="active" href="/home">Home</a></li>
+                  <li><a href="/shop">Shop</a></li>
+                </ul>
+              </nav>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
   <main class="main">
     <section class="pt-20 pb-50">
-      <div class="content p-5 m-5" >
+      <div class="content p-5 m-5">
         <div class="row">
           <div class="col-md-3">
             <div class="dashboard-menu">
@@ -485,157 +491,207 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                <div class="card" >
-                  
-                    <h5 class="mb-4 text-black fw-bold text-center pt-2">My Orders</h5>
-                 
-                  <div style="max-height: 500px; overflow-y: auto;" >
-                  <table class="table table-hover" >
-                    <thead class="text-center">
-                      <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                        <th>Details</th>
-                      </tr>
-                    </thead>
-                    <tbody class="text-center">
-                      <% orders.forEach(order=> { %>
-                        <% order.items.forEach((item, index)=> { %>
-                          <tr class="order-row" data-order-id="<%= order._id %>">
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <img src="/productimages/<%= item.image[0] %>" alt="<%= item.title %>" class="mr-3"
-                                  style="width: 100px; height: 100px;">
-                                <span>
-                                  <%= item.title %>
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <%= item.quantity %>
-                            </td>
-                            <td><span
-                                class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
-                                <%= order.orderStatus %>
-                              </span></td>
+                <div class="card">
+
+                  <h5 class="mb-4 text-black fw-bold text-center pt-2">My Orders</h5>
+
+                  <div style="max-height: 500px; overflow-y: auto;">
+                    <table class="table table-hover">
+                      <thead class="text-center">
+                        <tr>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Status</th>
+                          <th>Amount</th>
+                          <th>Action</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center">
+                        <% orders.forEach(order=> { %>
+                          <% order.items.forEach((item, index)=> { %>
+                            <tr class="order-row" data-order-id="<%= order._id %>">
                               <td>
-                                <!-- <span
-                                class="badge order-status badge-<%= order.paymentStatus === 'Pending' ? 'info' : order.paymentStatus === 'Success' ? 'success' : order.paymentStatus === 'Refunded' ? 'secondary' : order.paymentStatus === 'Failed' ? 'danger' : 'danger' %>">
-                                <%= order.paymentStatus %>
-                              </span> -->
-                         <strong><%= order.billTotal %></strong>
-                            </td>
-                        
-                             
-                            <td>
-                              <%   if (order.paymentStatus === 'Failed') { %>
-                                <button type="button" class="btn btn-warning col-10" onclick="initiateFailureRazorPayPayment('<%= order._id %>','<%= order.billTotal %>')">Retry
-                                  </button>
-                                  <% } else if (order.orderStatus.toLowerCase()==='pending' ||
-                                order.orderStatus.toLowerCase()==='confirmed' ) { %>
-                                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelItemModal" data-order-id="<%= order._id %>" data-item-index="<%= index %>">Cancel Item</button>
-                                <% } else if (order.orderStatus.toLowerCase()==='delivered' ) { %>
-                                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return
-                                    Order</button>
+                                <div class="d-flex align-items-center">
+                                  <img src="/productimages/<%= item.image[0] %>" alt="<%= item.title %>" class="mr-3"
+                                    style="width: 100px; height: 100px;">
+                                  <span>
+                                    <%= item.title %>
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                <%= item.quantity %>
+                              </td>
+                              <td>
+                                <% if (order.items.length==1 ) { %>
+                                  <span
+                                    class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
+                                    <%= order.orderStatus %>
+                                  </span>
+                                  <% }  else if (order.items.filter(item=> item.status !== 'Cancelled').length ==1) { %>
+                                    <span
+                                      class="badge order-status badge-<%= order.orderStatus.toLowerCase() === 'pending' ? 'warning' : order.orderStatus.toLowerCase() === 'confirmed' ? 'info' : order.orderStatus.toLowerCase() === 'shipped' ? 'primary' : order.orderStatus.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
+                                      <%= order.orderStatus %>
+                                    </span>
+                                    <% } else { %>
+                                    <span
+                                      class="badge order-status badge-<%= item.status.toLowerCase() === 'pending' ? 'warning' : item.status.toLowerCase() === 'confirmed' ? 'info' : item.status.toLowerCase() === 'shipped' ? 'primary' : item.status.toLowerCase() === 'delivered' ? 'success' : 'danger' %>">
+                                      <%=item.status %>
+                                        <% } %>
+                              </td>
+                              <td>
+                                <% if (order.items.length==1) { %>
+                                  <strong>
+                                    <%= order.billTotal %>
+                                  </strong>
                                   <% } else { %>
+                                    <strong>
+                                    <%=item.price %>
+                                  </strong>
+                                      <% } %>
+                              </td>
+
+
+                              <td>
+                                <% if (order.paymentStatus==='Failed' ) { %>
+                                  <button type="button" class="btn btn-warning col-10"
+                                    onclick="initiateFailureRazorPayPayment('<%= order._id %>','<%= order.billTotal %>')">Retry
+                                  </button>
+                                  <% } else if (item.status==='Cancelled' ) { %>
                                     <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
-                                    <% } %>
-                            </td>
-                            <td>
-                              
-            <button type="button" class="btn  btn-outline-secondary" data-toggle="modal" data-target="#orderDetailsModal<%= order._id %>">
-              View Details
-            </button>
+                                    <% } else if (order.orderStatus.toLowerCase()==='pending' ||
+                                      order.orderStatus.toLowerCase()==='confirmed' ) { %>
+                                      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#cancelItemModal" data-order-id="<%= order._id %>"
+                                        data-item-index="<%= index %>">Cancel Item</button>
+                                      <% } else if (order.orderStatus.toLowerCase()==='delivered' ) { %>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                          data-target="#returnOrderModal" data-order-id="<%= order._id %>">Return
+                                          Order</button>
+                                        <% } else { %>
+                                          <button class="btn btn-secondary btn-sm" disabled>Cancel Order</button>
+                                          <% } %>
+                              </td>
+                              <td>
+
+                                <button type="button" class="btn  btn-outline-secondary" data-toggle="modal"
+                                  data-target="#orderDetailsModal<%= order._id %>">
+                                  View Details
+                                </button>
 
 
 
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal<%= order._id %>" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-        
-            <% if ( order.paymentStatus === 'Failed') { %>
-            <h1 class="mb-4 text-danger fw-bold text-center">Payment Failed</h1>
-            <% } else { %>
-              <h1 class="modal-title mb-4 text-info fw-bold text-center" id="orderDetailsModalLabel">Order Details</h1>
-              <% } %>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h6>Order Information</h6>
-            
+                                <!-- Order Details Modal -->
+                                <div class="modal fade" id="orderDetailsModal<%= order._id %>" tabindex="-1"
+                                  aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
 
-                <p><strong>Order ID:</strong> <%= order.oId %></p>
-                <p><strong>Customer:</strong> <%= order.user.name %></p>
-                <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleString() %></p>
-                <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
-                <p><strong>Payment Status:</strong> <%= order.paymentStatus %></p>
-                <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
-                <p><strong>Shipping Address:</strong> <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.country %>, <%= order.shippingAddress.postalCode %></p>
-                <p><strong>Order Notes:</strong> <%= order.orderNotes %></p>
-                <p><strong>Cancellation Reason:</strong> <%= order.cancellationReason %></p>
-                
-              </div>
-              <div class="col-md-6">
-                <h6>Order Items</h6>
-                <ul class="list-group">
-                  <% order.items.forEach(item => { %>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                      <% if (item.image && item.image.length > 0) { %>
-                      <img src="/productimages/<%=item.image[0] %>" alt="<%= item.title %>" class="img-fluid mr-3" style="max-width: 50px;">
-                      <% } %>
-                      <%= item.title %>
-                    </div>
-                    <span class="badge badge-primary badge-pill"><%= item.productPrice %> x <%= item.quantity %> = <%= item.price %></span>
-                  </li>
-                  <% }) %>
-                </ul>
-                <p><strong>Coupon Discount:</strong> <%= order.couponAmount %></p>
-                <p class="mt-3"><strong>Bill Total:</strong> <%= order.billTotal %></p>
-              </div>
-            </div>
-          </div>
-         
-
-            <% if ( order.paymentStatus !== 'Failed' ) { %>
-          
-            <div>
-            <a href="/orders/<%= order._id %>/invoice" target="_blank" class="btn btn-primary">Download Invoice</a>
-          </div>
-          <% } %>
-   
-          
+                                        <% if ( order.paymentStatus==='Failed' ) { %>
+                                          <h1 class="mb-4 text-danger fw-bold text-center">Payment Failed</h1>
+                                          <% } else { %>
+                                            <h1 class="modal-title mb-4 text-info fw-bold text-center"
+                                              id="orderDetailsModalLabel">Order Details</h1>
+                                            <% } %>
+                                              <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <div class="row">
+                                          <div class="col-md-6">
+                                            <h6>Order Information</h6>
 
 
+                                            <p><strong>Order ID:</strong>
+                                              <%= order.oId %>
+                                            </p>
+                                            <p><strong>Customer:</strong>
+                                              <%= order.user.name %>
+                                            </p>
+                                            <p><strong>Order Date:</strong>
+                                              <%= new Date(order.orderDate).toLocaleString() %>
+                                            </p>
+                                            <p><strong>Payment Method:</strong>
+                                              <%= order.paymentMethod %>
+                                            </p>
+                                            <p><strong>Payment Status:</strong>
+                                              <%= order.paymentStatus %>
+                                            </p>
+                                            <p><strong>Order Status:</strong>
+                                              <%= order.orderStatus %>
+                                            </p>
+                                            <p><strong>Shipping Address:</strong>
+                                              <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>,
+                                                  <%= order.shippingAddress.state %>, <%= order.shippingAddress.country
+                                                      %>, <%= order.shippingAddress.postalCode %>
+                                            </p>
+                                            <p><strong>Order Notes:</strong>
+                                              <%= order.orderNotes %>
+                                            </p>
+                                            <p><strong>Cancellation Reason:</strong>
+                                              <%= order.cancellationReason %>
+                                            </p>
+
+                                          </div>
+                                          <div class="col-md-6">
+                                            <h6>Order Items</h6>
+                                            <ul class="list-group">
+                                              <% order.items.filter(item=> item.status !== 'Cancelled').forEach((item)=> { %>
+                                                <li
+                                                  class="list-group-item d-flex justify-content-between align-items-center">
+                                                  <div class="d-flex align-items-center">
+                                                    <% if (item.image && item.image.length> 0) { %>
+                                                      <img src="/productimages/<%=item.image[0] %>"
+                                                        alt="<%= item.title %>" class="img-fluid mr-3"
+                                                        style="max-width: 50px;">
+                                                      <% } %>
+                                                        <%= item.title %>
+                                                  </div>
+                                                  <span class="badge badge-primary badge-pill">
+                                                    <%= item.productPrice %> x <%= item.quantity %> = <%= item.price %>
+                                                  </span>
+                                                </li>
+                                                <% }) %>
+                                            </ul>
+                                            <p><strong>Coupon Discount:</strong>
+                                              <%= order.couponAmount %>
+                                            </p>
+                                            <p class="mt-3"><strong>Bill Total:</strong>
+                                              <%= order.billTotal %>
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
 
 
+                                      <% if ( order.paymentStatus !=='Failed'  ) { %>
+                                        <% if ( order.orderStatus !=='Cancelled'  ) { %>
+                                        <div>
+                                          <a href="/orders/<%= order._id %>/invoice" target="_blank"
+                                            class="btn btn-primary">Download Invoice</a>
+                                        </div>
+                                        <% } %>
+                                        <% } %>
 
-  
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                              data-dismiss="modal">Close</button>
+                                          </div>
+                                    </div>
+                                  </div>
+                                </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-                            </td>
-                          </tr>
-                          <% }) %>
+                              </td>
+                            </tr>
                             <% }) %>
-                    </tbody>
-                  </table>
-                </div>
+                              <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 
@@ -670,9 +726,11 @@
               <div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
                 <h5 class="mb-4 text-info fw-bold text-center pt-2">My Wallet</h5>
                 <div class="wallet-info " style="width: fit-content;">
-                  <h6 class="wallet-balance fw-bold text-success">Wallet Balance: <%= wallet ? wallet.walletBalance.toFixed(2) : '0.00' %></h6>
+                  <h6 class="wallet-balance fw-bold text-success">Wallet Balance: <%= wallet ?
+                      wallet.walletBalance.toFixed(2) : '0.00' %>
+                  </h6>
                 </div>
-                <div class="card-body"  style="max-height: 500px; overflow-y: auto;" >
+                <div class="card-body" style="max-height: 500px; overflow-y: auto;">
                   <div class="table-responsive">
                     <table class="table table-hover">
                       <thead>
@@ -684,57 +742,67 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% if (wallet && wallet.transactions.length > 0) { %>
-                          <% wallet.transactions.forEach(transaction => { %>
-                            <tr class="<%= transaction.type === 'Refund' || transaction.type === 'Credit' ? 'table-success' : 'table-danger' %>">
-                              <td><%= new Date(transaction.transactionDate).toLocaleDateString() %></td>
-                              <td><%= transaction.description %></td>
-                              <td><%= transaction.type %></td>
-                              <td><%= transaction.amount.toFixed(2) %></td>
+                        <% if (wallet && wallet.transactions.length> 0) { %>
+                          <% wallet.transactions.forEach(transaction=> { %>
+                            <tr
+                              class="<%= transaction.type === 'Refund' || transaction.type === 'Credit' ? 'table-success' : 'table-danger' %>">
+                              <td>
+                                <%= new Date(transaction.transactionDate).toLocaleDateString('en-IN') %>
+                              </td>
+                              <td>
+                                <%= transaction.description %>
+                              </td>
+                              <td>
+                                <%= transaction.type %>
+                              </td>
+                              <td>
+                                <%= transaction.amount.toFixed(2) %>
+                              </td>
                             </tr>
-                          <% }) %>
-                        <% } else { %>
-                          <tr>
-                            <td colspan="4">No transactions found.</td>
-                          </tr>
-                        <% } %>
+                            <% }) %>
+                              <% } else { %>
+                                <tr>
+                                  <td colspan="4">No transactions found.</td>
+                                </tr>
+                                <% } %>
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
-              
-
-              
-              
 
 
 
-<!-- Cancel Item Modal -->
-<div class="modal fade" id="cancelItemModal" tabindex="-1" role="dialog" aria-labelledby="cancelItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelItemModalLabel">Cancel Item</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="cancelItemForm">
-          <div class="form-group">
-            <label for="cancellationReason">Reason for Cancellation</label>
-            <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id="confirmCancelItem">Confirm Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+
+
+              <!-- Cancel Item Modal -->
+              <div class="modal fade" id="cancelItemModal" tabindex="-1" role="dialog"
+                aria-labelledby="cancelItemModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="cancelItemModalLabel">Cancel Item</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="cancelItemForm">
+                        <div class="form-group">
+                          <label for="cancellationReason">Reason for Cancellation</label>
+                          <textarea class="form-control" id="cancellationReason" rows="3" required></textarea>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-danger" id="confirmCancelItem">Confirm Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
 
@@ -749,37 +817,44 @@
                       <div class="row">
                         <div class="form-group col-md-6">
                           <label>House Name / Flat No.<span class="required">*</span></label>
-                          <input class="form-control square" name="houseName" id="houseName" type="text" onkeyup="houseNameValidation()">
+                          <input class="form-control square" name="houseName" id="houseName" type="text"
+                            onkeyup="houseNameValidation()">
                           <small id="houseNameError" class="error"></small>
                         </div>
                         <div class="form-group col-md-6">
                           <label>Street<span class="required">*</span></label>
-                          <input class="form-control square" name="street" id="street" type="text" onkeyup="streetValidation()">
+                          <input class="form-control square" name="street" id="street" type="text"
+                            onkeyup="streetValidation()">
                           <small id="streetError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>City <span class="required">*</span></label>
-                          <input class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="cityValidation()">
+                          <input class="form-control square" name="city" id="city" type="text" pattern="^[a-zA-Z\s]+$"
+                            onkeyup="cityValidation()">
                           <small id="cityError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>State <span class="required">*</span></label>
-                          <input class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="stateValidation()">
+                          <input class="form-control square" name="state" id="state" type="text" pattern="^[a-zA-Z\s]+$"
+                            onkeyup="stateValidation()">
                           <small id="stateError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Country <span class="required">*</span></label>
-                          <input class="form-control square" name="country" id="country" type="text" pattern="^[a-zA-Z\s]+$" onkeyup="countryValidation()">
+                          <input class="form-control square" name="country" id="country" type="text"
+                            pattern="^[a-zA-Z\s]+$" onkeyup="countryValidation()">
                           <small id="countryError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Postalcode <span class="required">*</span></label>
-                          <input class="form-control square" name="postalCode" id="postalCode" type="text" pattern="^[0-9]{6}$" onkeyup="postalCodeValidation()">
+                          <input class="form-control square" name="postalCode" id="postalCode" type="text"
+                            pattern="^[0-9]{6}$" onkeyup="postalCodeValidation()">
                           <small id="postalCodeError" class="error"></small>
                         </div>
                         <div class="form-group col-md-12">
                           <label>Type <span class="required">*</span></label>
-                          <select class="form-control" id="addressType" name="addressType" onchange="addressTypeValidation()">
+                          <select class="form-control" id="addressType" name="addressType"
+                            onchange="addressTypeValidation()">
                             <option value="">Select Address Type</option>
                             <option value="home">Home</option>
                             <option value="office">Office</option>
@@ -787,7 +862,8 @@
                           <small id="addressTypeError" class="error"></small>
                         </div>
                         <div class="col-md-12">
-                          <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                          <button type="submit" class="btn btn-fill-out submit" name="submit"
+                            value="Submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -841,60 +917,69 @@
                 </div>
               </div>
 
-             <!-- Edit Address Modal -->
-<% user.address.forEach((address, index)=> { %>
-  <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- Form for editing address -->
-          <form id="editAddressForm<%= index %>" class="edit-address-form" data-address-id="<%= address._id %>">
-            <div class="form-group">
-              <label for="houseName<%= index %>">House Name / Flat No.<span class="required">*</span></label>
-              <input type="text" class="form-control" id="edithouseName<%= index %>" name="houseName" value="<%= address.houseName %>" required>
-              <small id="edithouseNameError<%= index %>" class="error"></small>
-            </div>
-            <div class="form-group">
-              <label for="street<%= index %>">Street<span class="required">*</span></label>
-              <input type="text" class="form-control" id="editstreet<%= index %>" name="street" value="<%= address.street %>" required>
-              <small id="editstreetError<%= index %>" class="error"></small>
-            </div>
-            <div class="form-group">
-              <label for="city<%= index %>">City <span class="required">*</span></label>
-              <input type="text" class="form-control" id="editcity<%= index %>" name="city" value="<%= address.city %>" pattern="^[a-zA-Z\s]+$" required>
-              <small id="editcityError<%= index %>" class="error"></small>
-            </div>
-            <div class="form-group">
-              <label for="state<%= index %>">State <span class="required">*</span></label>
-              <input type="text" class="form-control" id="editstate<%= index %>" name="state" value="<%= address.state %>" pattern="^[a-zA-Z\s]+$" required>
-              <small id="editstateError<%= index %>" class="error"></small>
-            </div>
-            <div class="form-group">
-              <label for="country<%= index %>">Country <span class="required">*</span></label>
-              <input type="text" class="form-control" id="editcountry<%= index %>" name="country" value="<%= address.country %>" pattern="^[a-zA-Z\s]+$"  required>
-              <small id="editcountryError<%= index %>" class="error"></small>
-            </div>
-            <div class="form-group">
-              <label for="postalCode<%= index %>">Postal Code<span class="required">*</span></label>
-              <input type="text" class="form-control" id="editpostalCode<%= index %>" name="postalCode" value="<%= address.postalCode %>" pattern="^[0-9]{6}$" required>
-              <small id="editpostalCodeError<%= index %>" class="error"></small>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Update</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <% }) %>
+              <!-- Edit Address Modal -->
+              <% user.address.forEach((address, index)=> { %>
+                <div class="modal fade" id="editAddressModal<%= index %>" tabindex="-1" role="dialog"
+                  aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <!-- Form for editing address -->
+                        <form id="editAddressForm<%= index %>" class="edit-address-form"
+                          data-address-id="<%= address._id %>">
+                          <div class="form-group">
+                            <label for="houseName<%= index %>">House Name / Flat No.<span
+                                class="required">*</span></label>
+                            <input type="text" class="form-control" id="edithouseName<%= index %>" name="houseName"
+                              value="<%= address.houseName %>" required>
+                            <small id="edithouseNameError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="form-group">
+                            <label for="street<%= index %>">Street<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="editstreet<%= index %>" name="street"
+                              value="<%= address.street %>" required>
+                            <small id="editstreetError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="form-group">
+                            <label for="city<%= index %>">City <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="editcity<%= index %>" name="city"
+                              value="<%= address.city %>" pattern="^[a-zA-Z\s]+$" required>
+                            <small id="editcityError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="form-group">
+                            <label for="state<%= index %>">State <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="editstate<%= index %>" name="state"
+                              value="<%= address.state %>" pattern="^[a-zA-Z\s]+$" required>
+                            <small id="editstateError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="form-group">
+                            <label for="country<%= index %>">Country <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="editcountry<%= index %>" name="country"
+                              value="<%= address.country %>" pattern="^[a-zA-Z\s]+$" required>
+                            <small id="editcountryError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="form-group">
+                            <label for="postalCode<%= index %>">Postal Code<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="editpostalCode<%= index %>" name="postalCode"
+                              value="<%= address.postalCode %>" pattern="^[0-9]{6}$" required>
+                            <small id="editpostalCodeError<%= index %>" class="error"></small>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
 
 
                   <!-- Delete Address Modal -->
@@ -930,64 +1015,69 @@
     </section>
   </main>
 
-<!-- Edit Name Modal -->
-<div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="editNameForm">
-          <div class="form-group">
-            <label for="newName">New Name</label>
-            <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name" onkeyup="validateName()" required>
-            <small id="newNameError" class="error"></small>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+  <!-- Edit Name Modal -->
+  <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editNameForm">
+            <div class="form-group">
+              <label for="newName">New Name</label>
+              <input type="text" class="form-control" id="newName" name="newName" placeholder="Enter new name"
+                onkeyup="validateName()" required>
+              <small id="newNameError" class="error"></small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Change Password Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="changePasswordForm">
-          <div class="form-group">
-            <label for="currentPassword">Current Password</label>
-            <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Enter current password">
-          </div>
-          <div class="form-group">
-            <label for="newPassword">New Password</label>
-            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password" onkeyup="newPasswordValidation()">
-            <small id="newPasswordError" class="error"></small>
-          </div>
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" onkeyup="confirmPasswordValidation()">
-            <small id="confirmPasswordError" class="error"></small>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
+  <!-- Change Password Modal -->
+  <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="changePasswordForm">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+                placeholder="Enter current password">
+            </div>
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input type="password" class="form-control" id="newPassword" name="newPassword"
+                placeholder="Enter new password" onkeyup="newPasswordValidation()">
+              <small id="newPasswordError" class="error"></small>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                placeholder="Confirm new password" onkeyup="confirmPasswordValidation()">
+              <small id="confirmPasswordError" class="error"></small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">Save Changes</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Toast notification HTML for password mismatch -->
   <div class="toast" id="passwordMismatchToast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1187,94 +1277,94 @@
   <script>
 
 
-// Function to handle changing the password
-document.getElementById('changePasswordBtn').addEventListener('click', async () => {
-  const currentPassword = document.getElementById('currentPassword').value.trim();
-  const newPassword = document.getElementById('newPassword').value.trim();
-  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    // Function to handle changing the password
+    document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+      const currentPassword = document.getElementById('currentPassword').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-  const isNewPasswordValid = newPasswordValidation();
-  const isConfirmPasswordValid = confirmPasswordValidation();
+      const isNewPasswordValid = newPasswordValidation();
+      const isConfirmPasswordValid = confirmPasswordValidation();
 
-  if (!isNewPasswordValid || !isConfirmPasswordValid || newPassword !== confirmPassword) {
-    return;
-  }
+      if (!isNewPasswordValid || !isConfirmPasswordValid || newPassword !== confirmPassword) {
+        return;
+      }
 
-  try {
-    const response = await fetch('/profile/changePassword', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ currentPassword, newPassword })
-    });
-    if (response.ok) {
-      // Password changed successfully
-      $('#changePasswordModal').modal('hide');
-      Swal.fire({
-                title: 'Success',
-                text: 'Password changed successfully ',
-                icon: 'success',
-              }).then(() => {
+      try {
+        const response = await fetch('/profile/changePassword', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        if (response.ok) {
+          // Password changed successfully
+          $('#changePasswordModal').modal('hide');
+          Swal.fire({
+            title: 'Success',
+            text: 'Password changed successfully ',
+            icon: 'success',
+          }).then(() => {
             window.location.reload()
-              });
+          });
 
-    } else {
-      // Handle error if any
-      alert('Failed to change password. Please check your current password.');
+        } else {
+          // Handle error if any
+          alert('Failed to change password. Please check your current password.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+    function newPasswordValidation() {
+      const newPasswordValue = document.getElementById("newPassword").value.trim();
+      const newPasswordError = document.getElementById("newPasswordError");
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+      if (newPasswordValue === '') {
+        newPasswordError.textContent = 'New Password is required';
+        newPasswordError.style.color = 'red';
+        document.getElementById("newPassword").style.border = "solid 2px red";
+        return false;
+      }
+
+      if (!passwordRegex.test(newPasswordValue)) {
+        newPasswordError.textContent = 'New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+        newPasswordError.style.color = 'red';
+        document.getElementById("newPassword").style.border = "solid 2px red";
+        return false;
+      }
+
+      newPasswordError.textContent = '';
+      document.getElementById("newPassword").style.border = "solid 2px green";
+      return true;
     }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-});
 
-function newPasswordValidation() {
-  const newPasswordValue = document.getElementById("newPassword").value.trim();
-  const newPasswordError = document.getElementById("newPasswordError");
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    function confirmPasswordValidation() {
+      const confirmPasswordValue = document.getElementById("confirmPassword").value.trim();
+      const newPasswordValue = document.getElementById("newPassword").value.trim();
+      const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-  if (newPasswordValue === '') {
-    newPasswordError.textContent = 'New Password is required';
-    newPasswordError.style.color = 'red';
-    document.getElementById("newPassword").style.border = "solid 2px red";
-    return false;
-  }
+      if (confirmPasswordValue === '') {
+        confirmPasswordError.textContent = 'Confirm Password is required';
+        confirmPasswordError.style.color = 'red';
+        document.getElementById("confirmPassword").style.border = "solid 2px red";
+        return false;
+      }
 
-  if (!passwordRegex.test(newPasswordValue)) {
-    newPasswordError.textContent = 'New Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character';
-    newPasswordError.style.color = 'red';
-    document.getElementById("newPassword").style.border = "solid 2px red";
-    return false;
-  }
+      if (confirmPasswordValue !== newPasswordValue) {
+        confirmPasswordError.textContent = 'Confirm Password does not match New Password';
+        confirmPasswordError.style.color = 'red';
+        document.getElementById("confirmPassword").style.border = "solid 2px red";
+        return false;
+      }
 
-  newPasswordError.textContent = '';
-  document.getElementById("newPassword").style.border = "solid 2px green";
-  return true;
-}
-
-function confirmPasswordValidation() {
-  const confirmPasswordValue = document.getElementById("confirmPassword").value.trim();
-  const newPasswordValue = document.getElementById("newPassword").value.trim();
-  const confirmPasswordError = document.getElementById("confirmPasswordError");
-
-  if (confirmPasswordValue === '') {
-    confirmPasswordError.textContent = 'Confirm Password is required';
-    confirmPasswordError.style.color = 'red';
-    document.getElementById("confirmPassword").style.border = "solid 2px red";
-    return false;
-  }
-
-  if (confirmPasswordValue !== newPasswordValue) {
-    confirmPasswordError.textContent = 'Confirm Password does not match New Password';
-    confirmPasswordError.style.color = 'red';
-    document.getElementById("confirmPassword").style.border = "solid 2px red";
-    return false;
-  }
-
-  confirmPasswordError.textContent = '';
-  document.getElementById("confirmPassword").style.border = "solid 2px green";
-  return true;
-}
+      confirmPasswordError.textContent = '';
+      document.getElementById("confirmPassword").style.border = "solid 2px green";
+      return true;
+    }
 
 
 
@@ -1282,487 +1372,487 @@ function confirmPasswordValidation() {
 
 
     document.getElementById("addAddressForm").addEventListener("submit", async function (event) {
-  event.preventDefault(); // Prevent form submission
+      event.preventDefault(); // Prevent form submission
 
-  const isValid = houseNameValidation() &&
-    streetValidation() &&
-    cityValidation() &&
-    stateValidation() &&
-    countryValidation() &&
-    postalCodeValidation() &&
-    addressTypeValidation();
-
-  if (isValid) {
-    const houseName = document.getElementById("houseName").value.trim();
-    const street = document.getElementById("street").value.trim();
-    const city = document.getElementById("city").value.trim();
-    const state = document.getElementById("state").value.trim();
-    const country = document.getElementById("country").value.trim();
-    const postalCode = document.getElementById("postalCode").value.trim();
-    const addressType = document.getElementById("addressType").value;
-
-    try {
-      const response = await fetch('/profile/addAddress', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          houseName,
-          street,
-          city,
-          state,
-          country,
-          postalCode,
-          addressType
-        })
-      });
-      if (response.ok) {
-        document.getElementById("addAddressForm").reset();
-        Toastify({
-          text: "Address added successfully",
-          duration: 3000,
-          gravity: "top",
-          position: 'right',
-          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-        }).showToast();
-      } else {
-        Toastify({
-          text: "Failed to add address",
-          duration: 3000,
-          gravity: "top",
-          position: 'right',
-          backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-        }).showToast();
-      }
-    } catch (error) {
-      console.error(error);
-      Toastify({
-        text: "An error occurred",
-        duration: 3000,
-        gravity: "top",
-        position: 'right',
-        backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
-      }).showToast();
-    }
-  }
-});
-
-function houseNameValidation() {
-  const houseNameValue = document.getElementById("houseName").value.trim();
-  const houseNameError = document.getElementById("houseNameError");
-
-  if (houseNameValue === '') {
-    houseNameError.textContent = 'House Name / Flat No. is required';
-    houseNameError.style.color = 'red'
-    document.getElementById("houseName").style.border = "solid 2px red";
-    return false;
-  }
-
-  houseNameError.textContent = '';
-  document.getElementById("houseName").style.border = "solid 2px green";
-  return true;
-}
-
-function streetValidation() {
-  const streetValue = document.getElementById("street").value.trim();
-  const streetError = document.getElementById("streetError");
-
-  if (streetValue === '') {
-    streetError.textContent = 'Street is required';
-    streetError.style.color = 'red'
-    document.getElementById("street").style.border = "solid 2px red";
-    return false;
-  }
-
-  streetError.textContent = '';
-  document.getElementById("street").style.border = "solid 2px green";
-  return true;
-}
-
-function cityValidation() {
-  const cityValue = document.getElementById("city").value.trim();
-  const cityError = document.getElementById("cityError");
-  const cityRegex = /^[a-zA-Z\s]+$/;
-
-  if (cityValue === '') {
-    cityError.textContent = 'City is required';
-    cityError.style.color = 'red'
-    document.getElementById("city").style.border = "solid 2px red";
-    return false;
-  }
-
-  if (!cityRegex.test(cityValue)) {
-    cityError.textContent = 'City should contain only letters and spaces';
-    cityError.style.color = 'red'
-    document.getElementById("city").style.border = "solid 2px red";
-    return false;
-  }
-
-  cityError.textContent = '';
-  document.getElementById("city").style.border = "solid 2px green";
-  return true;
-}
-
-function stateValidation() {
-  const stateValue = document.getElementById("state").value.trim();
-  const stateError = document.getElementById("stateError");
-  const stateRegex = /^[a-zA-Z\s]+$/;
-
-  if (stateValue === '') {
-    stateError.textContent = 'State is required';
-    stateError.style.color = 'red'
-    document.getElementById("state").style.border = "solid 2px red";
-    return false;
-  }
-
-  if (!stateRegex.test(stateValue)) {
-    stateError.textContent = 'State should contain only letters and spaces';
-    stateError.style.color = 'red'
-    document.getElementById("state").style.border = "solid 2px red";
-    return false;
-  }
-
-  stateError.textContent = '';
-  document.getElementById("state").style.border = "solid 2px green";
-  return true;
-}
-
-function countryValidation() {
-  const countryValue = document.getElementById("country").value.trim();
-  const countryError = document.getElementById("countryError");
-  const countryRegex = /^[a-zA-Z\s]+$/;
-
-  if (countryValue === '') {
-    countryError.textContent = 'Country is required';
-    countryError.style.color = 'red'
-    document.getElementById("country").style.border = "solid 2px red";
-    return false;
-  }
-
-  if (!countryRegex.test(countryValue)) {
-    countryError.textContent = 'Country should contain only letters and spaces';
-    countryError.style.color = 'red'
-    document.getElementById("country").style.border = "solid 2px red";
-    return false;
-  }
-
-  countryError.textContent = '';
-  document.getElementById("country").style.border = "solid 2px green";
-  return true;
-}
-
-function postalCodeValidation() {
-  const postalCodeValue = document.getElementById("postalCode").value.trim();
-  const postalCodeError = document.getElementById("postalCodeError");
-  const postalCodeRegex = /^[0-9]{6}$/;
-
-  if (postalCodeValue === '') {
-    postalCodeError.textContent = 'Postal Code is required';
-    postalCodeError.style.color = 'red'
-    document.getElementById("postalCode").style.border = "solid 2px red";
-    return false;
-  }
-
-  if (!postalCodeRegex.test(postalCodeValue)) {
-    postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
-    postalCodeError.style.color = 'red'
-    document.getElementById("postalCode").style.border = "solid 2px red";
-    return false;
-  }
-
-  postalCodeError.textContent = '';
-  document.getElementById("postalCode").style.border = "solid 2px green";
-  return true;
-}
-
-function addressTypeValidation() {
-  const addressTypeValue = document.getElementById("addressType").value;
-  const addressTypeError = document.getElementById("addressTypeError");
-
-  if (addressTypeValue === '') {
-    addressTypeError.textContent = 'Address Type is required';
-    addressTypeError.style.color = 'red'
-    document.getElementById("addressType").style.border = "solid 2px red";
-    return false;
-  }
-
-  addressTypeError.textContent = '';
-  document.getElementById("addressType").style.border = "solid 2px green";
-  return true;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Function to validate the name field
-function validateName() {
-  const nameValue = document.getElementById('newName').value.trim();
-  const nameError = document.getElementById('newNameError');
-  const nameRegex = /^(?!\s*$)[a-zA-Z\s]{4,}$/;
-
-  if (nameValue === '') {
-    nameError.textContent = 'Name is required';
-    nameError.style.color = 'red';
-    document.getElementById('newName').style.border = '2px solid red';
-    return false;
-  }
-
-  if (!nameRegex.test(nameValue)) {
-    nameError.textContent = 'Name must be at least 4 characters long and contain only letters and spaces (no single spaces allowed)';
-    nameError.style.color = 'red';
-    document.getElementById('newName').style.border = '2px solid red';
-    return false;
-  }
-
-  nameError.textContent = '';
-  document.getElementById('newName').style.border = '2px solid green';
-  return true;
-}
-
-// Function to handle editing the name
-document.getElementById('saveNameBtn').addEventListener('click', async () => {
-  const isValid = validateName();
-
-  if (isValid) {
-    const newName = document.getElementById('newName').value.trim();
-
-    try {
-      const response = await fetch('/profile/updateName', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ newName })
-      });
-
-      if (response.ok) {
-        // Update the name in the profile section without refreshing
-        document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
-        $('#editNameModal').modal('hide');
-        Swal.fire({
-                title: 'Success',
-                text: 'Name changed successfully ',
-                icon: 'success',
-              }).then(() => {
-            window.location.reload()
-              });
-      } else {
-        // Handle error if any
-        console.error('Error updating name');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-});
-
-  
-    document.addEventListener('DOMContentLoaded', () => {
-  const editAddressForms = document.querySelectorAll('.edit-address-form');
-
-  editAddressForms.forEach((form,index) => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const isValid = edithouseNameValidation(index) &&
-      editstreetValidation(index) &&
-      editcityValidation(index) &&
-      editstateValidation(index) &&
-      editcountryValidation(index) &&
-      editpostalCodeValidation(index);
+      const isValid = houseNameValidation() &&
+        streetValidation() &&
+        cityValidation() &&
+        stateValidation() &&
+        countryValidation() &&
+        postalCodeValidation() &&
+        addressTypeValidation();
 
       if (isValid) {
-        const addressId = form.dataset.addressId;
-        const formData = new FormData(form);
-        const addressData = {};
-
-        for (const [key, value] of formData.entries()) {
-          addressData[key] = value;
-        }
+        const houseName = document.getElementById("houseName").value.trim();
+        const street = document.getElementById("street").value.trim();
+        const city = document.getElementById("city").value.trim();
+        const state = document.getElementById("state").value.trim();
+        const country = document.getElementById("country").value.trim();
+        const postalCode = document.getElementById("postalCode").value.trim();
+        const addressType = document.getElementById("addressType").value;
 
         try {
-          const response = await fetch(`/profile/update-address/${addressId}`, {
-            method: 'PUT',
+          const response = await fetch('/profile/addAddress', {
+            method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify(addressData),
+            body: JSON.stringify({
+              houseName,
+              street,
+              city,
+              state,
+              country,
+              postalCode,
+              addressType
+            })
+          });
+          if (response.ok) {
+            document.getElementById("addAddressForm").reset();
+            Toastify({
+              text: "Address added successfully",
+              duration: 3000,
+              gravity: "top",
+              position: 'right',
+              backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            }).showToast();
+          } else {
+            Toastify({
+              text: "Failed to add address",
+              duration: 3000,
+              gravity: "top",
+              position: 'right',
+              backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+            }).showToast();
+          }
+        } catch (error) {
+          console.error(error);
+          Toastify({
+            text: "An error occurred",
+            duration: 3000,
+            gravity: "top",
+            position: 'right',
+            backgroundColor: "linear-gradient(to right, #ff416c, #ff4b2b)",
+          }).showToast();
+        }
+      }
+    });
+
+    function houseNameValidation() {
+      const houseNameValue = document.getElementById("houseName").value.trim();
+      const houseNameError = document.getElementById("houseNameError");
+
+      if (houseNameValue === '') {
+        houseNameError.textContent = 'House Name / Flat No. is required';
+        houseNameError.style.color = 'red'
+        document.getElementById("houseName").style.border = "solid 2px red";
+        return false;
+      }
+
+      houseNameError.textContent = '';
+      document.getElementById("houseName").style.border = "solid 2px green";
+      return true;
+    }
+
+    function streetValidation() {
+      const streetValue = document.getElementById("street").value.trim();
+      const streetError = document.getElementById("streetError");
+
+      if (streetValue === '') {
+        streetError.textContent = 'Street is required';
+        streetError.style.color = 'red'
+        document.getElementById("street").style.border = "solid 2px red";
+        return false;
+      }
+
+      streetError.textContent = '';
+      document.getElementById("street").style.border = "solid 2px green";
+      return true;
+    }
+
+    function cityValidation() {
+      const cityValue = document.getElementById("city").value.trim();
+      const cityError = document.getElementById("cityError");
+      const cityRegex = /^[a-zA-Z\s]+$/;
+
+      if (cityValue === '') {
+        cityError.textContent = 'City is required';
+        cityError.style.color = 'red'
+        document.getElementById("city").style.border = "solid 2px red";
+        return false;
+      }
+
+      if (!cityRegex.test(cityValue)) {
+        cityError.textContent = 'City should contain only letters and spaces';
+        cityError.style.color = 'red'
+        document.getElementById("city").style.border = "solid 2px red";
+        return false;
+      }
+
+      cityError.textContent = '';
+      document.getElementById("city").style.border = "solid 2px green";
+      return true;
+    }
+
+    function stateValidation() {
+      const stateValue = document.getElementById("state").value.trim();
+      const stateError = document.getElementById("stateError");
+      const stateRegex = /^[a-zA-Z\s]+$/;
+
+      if (stateValue === '') {
+        stateError.textContent = 'State is required';
+        stateError.style.color = 'red'
+        document.getElementById("state").style.border = "solid 2px red";
+        return false;
+      }
+
+      if (!stateRegex.test(stateValue)) {
+        stateError.textContent = 'State should contain only letters and spaces';
+        stateError.style.color = 'red'
+        document.getElementById("state").style.border = "solid 2px red";
+        return false;
+      }
+
+      stateError.textContent = '';
+      document.getElementById("state").style.border = "solid 2px green";
+      return true;
+    }
+
+    function countryValidation() {
+      const countryValue = document.getElementById("country").value.trim();
+      const countryError = document.getElementById("countryError");
+      const countryRegex = /^[a-zA-Z\s]+$/;
+
+      if (countryValue === '') {
+        countryError.textContent = 'Country is required';
+        countryError.style.color = 'red'
+        document.getElementById("country").style.border = "solid 2px red";
+        return false;
+      }
+
+      if (!countryRegex.test(countryValue)) {
+        countryError.textContent = 'Country should contain only letters and spaces';
+        countryError.style.color = 'red'
+        document.getElementById("country").style.border = "solid 2px red";
+        return false;
+      }
+
+      countryError.textContent = '';
+      document.getElementById("country").style.border = "solid 2px green";
+      return true;
+    }
+
+    function postalCodeValidation() {
+      const postalCodeValue = document.getElementById("postalCode").value.trim();
+      const postalCodeError = document.getElementById("postalCodeError");
+      const postalCodeRegex = /^[0-9]{6}$/;
+
+      if (postalCodeValue === '') {
+        postalCodeError.textContent = 'Postal Code is required';
+        postalCodeError.style.color = 'red'
+        document.getElementById("postalCode").style.border = "solid 2px red";
+        return false;
+      }
+
+      if (!postalCodeRegex.test(postalCodeValue)) {
+        postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
+        postalCodeError.style.color = 'red'
+        document.getElementById("postalCode").style.border = "solid 2px red";
+        return false;
+      }
+
+      postalCodeError.textContent = '';
+      document.getElementById("postalCode").style.border = "solid 2px green";
+      return true;
+    }
+
+    function addressTypeValidation() {
+      const addressTypeValue = document.getElementById("addressType").value;
+      const addressTypeError = document.getElementById("addressTypeError");
+
+      if (addressTypeValue === '') {
+        addressTypeError.textContent = 'Address Type is required';
+        addressTypeError.style.color = 'red'
+        document.getElementById("addressType").style.border = "solid 2px red";
+        return false;
+      }
+
+      addressTypeError.textContent = '';
+      document.getElementById("addressType").style.border = "solid 2px green";
+      return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Function to validate the name field
+    function validateName() {
+      const nameValue = document.getElementById('newName').value.trim();
+      const nameError = document.getElementById('newNameError');
+      const nameRegex = /^(?!\s*$)[a-zA-Z\s]{4,}$/;
+
+      if (nameValue === '') {
+        nameError.textContent = 'Name is required';
+        nameError.style.color = 'red';
+        document.getElementById('newName').style.border = '2px solid red';
+        return false;
+      }
+
+      if (!nameRegex.test(nameValue)) {
+        nameError.textContent = 'Name must be at least 4 characters long and contain only letters and spaces (no single spaces allowed)';
+        nameError.style.color = 'red';
+        document.getElementById('newName').style.border = '2px solid red';
+        return false;
+      }
+
+      nameError.textContent = '';
+      document.getElementById('newName').style.border = '2px solid green';
+      return true;
+    }
+
+    // Function to handle editing the name
+    document.getElementById('saveNameBtn').addEventListener('click', async () => {
+      const isValid = validateName();
+
+      if (isValid) {
+        const newName = document.getElementById('newName').value.trim();
+
+        try {
+          const response = await fetch('/profile/updateName', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ newName })
           });
 
-          if (!response.ok) {
-            throw new Error('Error updating address');
+          if (response.ok) {
+            // Update the name in the profile section without refreshing
+            document.querySelector('.form-group.col-md-6 input[name="name"]').value = newName;
+            $('#editNameModal').modal('hide');
+            Swal.fire({
+              title: 'Success',
+              text: 'Name changed successfully ',
+              icon: 'success',
+            }).then(() => {
+              window.location.reload()
+            });
+          } else {
+            // Handle error if any
+            console.error('Error updating name');
           }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    });
 
-          // Close the modal
-          const modal = document.querySelector(`#editAddressModal${index}`);
-          const modalBackdrop = document.querySelector('.modal-backdrop');
 
-          modal.classList.remove('show');
-          modal.style.display = 'none';
+    document.addEventListener('DOMContentLoaded', () => {
+      const editAddressForms = document.querySelectorAll('.edit-address-form');
 
-          if (modalBackdrop) {
-            modalBackdrop.remove();
-          }
+      editAddressForms.forEach((form, index) => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
 
-          Swal.fire({
+          const isValid = edithouseNameValidation(index) &&
+            editstreetValidation(index) &&
+            editcityValidation(index) &&
+            editstateValidation(index) &&
+            editcountryValidation(index) &&
+            editpostalCodeValidation(index);
+
+          if (isValid) {
+            const addressId = form.dataset.addressId;
+            const formData = new FormData(form);
+            const addressData = {};
+
+            for (const [key, value] of formData.entries()) {
+              addressData[key] = value;
+            }
+
+            try {
+              const response = await fetch(`/profile/update-address/${addressId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(addressData),
+              });
+
+              if (!response.ok) {
+                throw new Error('Error updating address');
+              }
+
+              // Close the modal
+              const modal = document.querySelector(`#editAddressModal${index}`);
+              const modalBackdrop = document.querySelector('.modal-backdrop');
+
+              modal.classList.remove('show');
+              modal.style.display = 'none';
+
+              if (modalBackdrop) {
+                modalBackdrop.remove();
+              }
+
+              Swal.fire({
                 title: 'Success',
                 text: 'Address updated successfully ',
                 icon: 'success',
               }).then(() => {
                 window.location.hash = 'address';
-            window.location.reload()
+                window.location.reload()
               });
-        
-        } catch (err) {
-          console.error(err);
-          alert(err.message);
-        }
-      }
+
+            } catch (err) {
+              console.error(err);
+              alert(err.message);
+            }
+          }
+        });
+      });
     });
-  });
-});
 
 
-function edithouseNameValidation(index) {
-  const houseNameValue = document.getElementById(`edithouseName${index}`).value.trim();
-  const houseNameError = document.getElementById(`edithouseNameError${index}`);
+    function edithouseNameValidation(index) {
+      const houseNameValue = document.getElementById(`edithouseName${index}`).value.trim();
+      const houseNameError = document.getElementById(`edithouseNameError${index}`);
 
-  if (houseNameValue === '') {
-    houseNameError.textContent = 'House Name / Flat No. is required';
-    houseNameError.style.color = 'red'
-    document.getElementById(`edithouseName${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (houseNameValue === '') {
+        houseNameError.textContent = 'House Name / Flat No. is required';
+        houseNameError.style.color = 'red'
+        document.getElementById(`edithouseName${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  houseNameError.textContent = '';
-  document.getElementById(`edithouseName${index}`).style.border = "solid 2px green";
-  return true;
-}
+      houseNameError.textContent = '';
+      document.getElementById(`edithouseName${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
-function editstreetValidation(index) {
-  const streetValue = document.getElementById(`editstreet${index}`).value.trim();
-  const streetError = document.getElementById(`editstreetError${index}`);
+    function editstreetValidation(index) {
+      const streetValue = document.getElementById(`editstreet${index}`).value.trim();
+      const streetError = document.getElementById(`editstreetError${index}`);
 
-  if (streetValue === '') {
-    streetError.textContent = 'Street is required';
-    streetError.style.color = 'red'
-    document.getElementById(`editstreet${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (streetValue === '') {
+        streetError.textContent = 'Street is required';
+        streetError.style.color = 'red'
+        document.getElementById(`editstreet${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  streetError.textContent = '';
-  document.getElementById(`editstreet${index}`).style.border = "solid 2px green";
-  return true;
-}
+      streetError.textContent = '';
+      document.getElementById(`editstreet${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
-function editcityValidation(index) {
-  const cityValue = document.getElementById(`editcity${index}`).value.trim();
-  const cityError = document.getElementById(`editcityError${index}`);
-  const cityRegex = /^[a-zA-Z\s]+$/;
+    function editcityValidation(index) {
+      const cityValue = document.getElementById(`editcity${index}`).value.trim();
+      const cityError = document.getElementById(`editcityError${index}`);
+      const cityRegex = /^[a-zA-Z\s]+$/;
 
-  if (cityValue === '') {
-    cityError.textContent = 'City is required';
-    cityError.style.color = 'red'
-    document.getElementById(`editcity${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (cityValue === '') {
+        cityError.textContent = 'City is required';
+        cityError.style.color = 'red'
+        document.getElementById(`editcity${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  if (!cityRegex.test(cityValue)) {
-    cityError.textContent = 'City should contain only letters and spaces';
-    cityError.style.color = 'red'
-    document.getElementById(`editcity${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (!cityRegex.test(cityValue)) {
+        cityError.textContent = 'City should contain only letters and spaces';
+        cityError.style.color = 'red'
+        document.getElementById(`editcity${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  cityError.textContent = '';
-  document.getElementById(`editcity${index}`).style.border = "solid 2px green";
-  return true;
-}
+      cityError.textContent = '';
+      document.getElementById(`editcity${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
-function editstateValidation(index) {
-  const stateValue = document.getElementById(`editstate${index}`).value.trim();
-  const stateError = document.getElementById(`editstateError${index}`);
-  const stateRegex = /^[a-zA-Z\s]+$/;
+    function editstateValidation(index) {
+      const stateValue = document.getElementById(`editstate${index}`).value.trim();
+      const stateError = document.getElementById(`editstateError${index}`);
+      const stateRegex = /^[a-zA-Z\s]+$/;
 
-  if (stateValue === '') {
-    stateError.textContent = 'State is required';
-    stateError.style.color = 'red'
-    document.getElementById(`editstate${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (stateValue === '') {
+        stateError.textContent = 'State is required';
+        stateError.style.color = 'red'
+        document.getElementById(`editstate${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  if (!stateRegex.test(stateValue)) {
-    stateError.textContent = 'State should contain only letters and spaces';
-    stateError.style.color = 'red'
-    document.getElementById(`editstate${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (!stateRegex.test(stateValue)) {
+        stateError.textContent = 'State should contain only letters and spaces';
+        stateError.style.color = 'red'
+        document.getElementById(`editstate${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  stateError.textContent = '';
-  document.getElementById(`editstate${index}`).style.border = "solid 2px green";
-  return true;
-}
+      stateError.textContent = '';
+      document.getElementById(`editstate${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
-function editcountryValidation(index) {
-  const countryValue = document.getElementById(`editcountry${index}`).value.trim();
-  const countryError = document.getElementById(`editcountryError${index}`);
-  const countryRegex = /^[a-zA-Z\s]+$/;
+    function editcountryValidation(index) {
+      const countryValue = document.getElementById(`editcountry${index}`).value.trim();
+      const countryError = document.getElementById(`editcountryError${index}`);
+      const countryRegex = /^[a-zA-Z\s]+$/;
 
-  if (countryValue === '') {
-    countryError.textContent = 'Country is required';
-    countryError.style.color = 'red'
-    document.getElementById(`editcountry${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (countryValue === '') {
+        countryError.textContent = 'Country is required';
+        countryError.style.color = 'red'
+        document.getElementById(`editcountry${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  if (!countryRegex.test(countryValue)) {
-    countryError.textContent = 'Country should contain only letters and spaces';
-    countryError.style.color = 'red'
-    document.getElementById(`editcountry${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (!countryRegex.test(countryValue)) {
+        countryError.textContent = 'Country should contain only letters and spaces';
+        countryError.style.color = 'red'
+        document.getElementById(`editcountry${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  countryError.textContent = '';
-  document.getElementById(`editcountry${index}`).style.border = "solid 2px green";
-  return true;
-}
+      countryError.textContent = '';
+      document.getElementById(`editcountry${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
-function editpostalCodeValidation(index) {
-  const postalCodeValue = document.getElementById(`editpostalCode${index}`).value.trim();
-  const postalCodeError = document.getElementById(`editpostalCodeError${index}`);
-  const postalCodeRegex = /^[0-9]{6}$/;
+    function editpostalCodeValidation(index) {
+      const postalCodeValue = document.getElementById(`editpostalCode${index}`).value.trim();
+      const postalCodeError = document.getElementById(`editpostalCodeError${index}`);
+      const postalCodeRegex = /^[0-9]{6}$/;
 
-  if (postalCodeValue === '') {
-    postalCodeError.textContent = 'Postal Code is required';
-    postalCodeError.style.color = 'red'
-    document.getElementById(`editpostalCode${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (postalCodeValue === '') {
+        postalCodeError.textContent = 'Postal Code is required';
+        postalCodeError.style.color = 'red'
+        document.getElementById(`editpostalCode${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  if (!postalCodeRegex.test(postalCodeValue)) {
-    postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
-    postalCodeError.style.color = 'red'
-    document.getElementById(`editpostalCode${index}`).style.border = "solid 2px red";
-    return false;
-  }
+      if (!postalCodeRegex.test(postalCodeValue)) {
+        postalCodeError.textContent = 'Postal Code should contain exactly 6 digits';
+        postalCodeError.style.color = 'red'
+        document.getElementById(`editpostalCode${index}`).style.border = "solid 2px red";
+        return false;
+      }
 
-  postalCodeError.textContent = '';
-  document.getElementById(`editpostalCode${index}`).style.border = "solid 2px green";
-  return true;
-}
+      postalCodeError.textContent = '';
+      document.getElementById(`editpostalCode${index}`).style.border = "solid 2px green";
+      return true;
+    }
 
 
     $(document).ready(function () {
@@ -1804,9 +1894,9 @@ function editpostalCodeValidation(index) {
                 updateOrderStatus(orderId, 'Cancelled');
               });
 
-                      setTimeout(() => {
+              setTimeout(() => {
                 window.location.reload();
-              },5000);
+              }, 5000);
               // $('#cancelOrderModal').modal('hide');
               // showToast('Order cancelled successfully', 'success');
 
@@ -1872,9 +1962,9 @@ function editpostalCodeValidation(index) {
               title: 'Address Deleted',
               text: 'Address successfully deleted'
             }).then(() => {
-            window.location.reload()
-              });
-           
+              window.location.reload()
+            });
+
           } else {
             Swal.fire({
               icon: 'error',
@@ -1896,77 +1986,77 @@ function editpostalCodeValidation(index) {
 
 
     $(document).ready(function () {
-  let selectedOrderId;
-  let selectedItemIndex;
+      let selectedOrderId;
+      let selectedItemIndex;
 
-  // Listen for the 'show.bs.modal' event on the cancelItemModal
-  $('#cancelItemModal').on('show.bs.modal', function (event) {
-    // Get the button that triggered the modal
-    const button = $(event.relatedTarget);
+      // Listen for the 'show.bs.modal' event on the cancelItemModal
+      $('#cancelItemModal').on('show.bs.modal', function (event) {
+        // Get the button that triggered the modal
+        const button = $(event.relatedTarget);
 
-    // Get the order ID and item index from the button's data attributes
-    selectedOrderId = button.data('order-id');
-    selectedItemIndex = button.data('item-index');
-    console.log('Modal is being shown for orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
-  });
-
-  // Handle click on the confirmCancelItem button
-  $('#confirmCancelItem').click(function () {
-    const cancellationReason = $('#cancellationReason').val();
-    console.log('Canceling item with orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
-    cancelItem(selectedOrderId, selectedItemIndex, cancellationReason);
-  });
-
-  function cancelItem(orderId, itemIndex, cancellationReason) {
-    console.log('Canceling item with orderId:', orderId, 'itemIndex:', itemIndex);
-    fetch(`/orders/${orderId}/items/${itemIndex}/cancel`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        cancellationReason
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log("data test", data);
-        if (data.success) {
-          $('#cancelItemModal').modal('hide');
-          Swal.fire({
-            title: 'Success',
-            text: data.message,
-            icon: 'success',
-          }).then(() => {
-            updateOrderStatus(orderId, data.updatedOrder.orderStatus);
-          });
-
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to cancel item'
-          });
-        }
-      })
-      .catch(error => {
-        console.error('Error canceling item:', error);
-        showToast('An error occurred while canceling the item', 'error');
+        // Get the order ID and item index from the button's data attributes
+        selectedOrderId = button.data('order-id');
+        selectedItemIndex = button.data('item-index');
+        console.log('Modal is being shown for orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
       });
-  }
-});
+
+      // Handle click on the confirmCancelItem button
+      $('#confirmCancelItem').click(function () {
+        const cancellationReason = $('#cancellationReason').val();
+        console.log('Canceling item with orderId:', selectedOrderId, 'itemIndex:', selectedItemIndex);
+        cancelItem(selectedOrderId, selectedItemIndex, cancellationReason);
+      });
+
+      function cancelItem(orderId, itemIndex, cancellationReason) {
+        console.log('Canceling item with orderId:', orderId, 'itemIndex:', itemIndex);
+        fetch(`/orders/${orderId}/items/${itemIndex}/cancel`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            cancellationReason
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log("data test", data);
+            if (data.success) {
+              $('#cancelItemModal').modal('hide');
+              Swal.fire({
+                title: 'Success',
+                text: data.message,
+                icon: 'success',
+              }).then(() => {
+                updateOrderStatus(orderId, data.updatedOrder.orderStatus);
+              });
+
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to cancel item'
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error canceling item:', error);
+            showToast('An error occurred while canceling the item', 'error');
+          });
+      }
+    });
 
 
 
     function showOrderDetails(orderId) {
-            fetch(`/orders/${orderId}`)
-                .then(response => response.json())
-                .then(order => {
-                    const orderDetailsBody = document.getElementById('orderDetailsBody');
-                    orderDetailsBody.innerHTML = `
+      fetch(`/orders/${orderId}`)
+        .then(response => response.json())
+        .then(order => {
+          const orderDetailsBody = document.getElementById('orderDetailsBody');
+          orderDetailsBody.innerHTML = `
                         <p><strong>Order ID:</strong> ${order.oId}</p>
                         <p><strong>Customer:</strong> ${order.user.name}</p>
                         <p><strong>Order Date:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
@@ -1986,75 +2076,75 @@ function editpostalCodeValidation(index) {
                         </ul>
                         <p><strong>Bill Total:</strong> ${order.billTotal}</p>
                     `;
-                })
-                .catch(error => {
-                    console.error('Error fetching order details:', error);
-                });
-        }
+        })
+        .catch(error => {
+          console.error('Error fetching order details:', error);
+        });
+    }
 
 
- 
-      
-  document.querySelectorAll('.invoice-button').forEach(function (button) {
-    button.addEventListener('click', function () {
-      const orderData = JSON.parse(this.dataset.order);
-      const doc = new jsPDF();
 
-      // Add company logo (replace 'company-logo.png' with your actual logo file path)
- 
 
-      // Add some styles
-      doc.setTextColor(50);
-      doc.setFontSize(20);
-      doc.setFontStyle('bold');
-      doc.text('Invoice', doc.internal.pageSize.getWidth() / 2, 30, null, null, 'center');
+    document.querySelectorAll('.invoice-button').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const orderData = JSON.parse(this.dataset.order);
+        const doc = new jsPDF();
 
-      // Add order information
-      doc.setFontSize(14);
-      doc.setFontStyle('normal');
-      doc.text(`Order ID: ${orderData.oId}`, 14, 50);
-      doc.text(`Customer: ${orderData.user.name}`, 14, 58);
-      doc.text(`Order Date: ${new Date(orderData.orderDate).toLocaleString()}`, 14, 66);
-      doc.text(`Shipping Address: ${orderData.shippingAddress.street}, ${orderData.shippingAddress.city}, ${orderData.shippingAddress.state}, ${orderData.shippingAddress.country}, ${orderData.shippingAddress.postalCode}`, 14, 74);
+        // Add company logo (replace 'company-logo.png' with your actual logo file path)
 
-      // Add table header
-      doc.setFontSize(14);
-      doc.setFontStyle('bold');
-      doc.setTextColor(255);
-      doc.setFillColor(180, 180, 180);
-      doc.rect(14, 82, doc.internal.pageSize.getWidth() - 28, 10, 'FD');
-      doc.text('Product', 14, 90);
-      doc.text('Price', 94, 90);
-      doc.text('Quantity', 124, 90);
-      doc.text('Total', 154, 90);
 
-      // Add table body
-      doc.setFontSize(14);
-      doc.setFontStyle('normal');
-      doc.setTextColor(50);
-      let startY = 98;
-      orderData.items.forEach(item => {
-  
+        // Add some styles
+        doc.setTextColor(50);
+        doc.setFontSize(20);
+        doc.setFontStyle('bold');
+        doc.text('Invoice', doc.internal.pageSize.getWidth() / 2, 30, null, null, 'center');
 
-        doc.text(`${item.title} `,20, startY);
-        doc.text(`  ${item.productPrice ? item.productPrice.toString() : ''}`, 94, startY);
-        doc.text(`  ${item.quantity}`, 124, startY);
-        doc.text(`  ${item.price ? item.price.toString() : ''}`, 154, startY);
-        startY += 8;
+        // Add order information
+        doc.setFontSize(14);
+        doc.setFontStyle('normal');
+        doc.text(`Order ID: ${orderData.oId}`, 14, 50);
+        doc.text(`Customer: ${orderData.user.name}`, 14, 58);
+        doc.text(`Order Date: ${new Date(orderData.orderDate).toLocaleString()}`, 14, 66);
+        doc.text(`Shipping Address: ${orderData.shippingAddress.street}, ${orderData.shippingAddress.city}, ${orderData.shippingAddress.state}, ${orderData.shippingAddress.country}, ${orderData.shippingAddress.postalCode}`, 14, 74);
+
+        // Add table header
+        doc.setFontSize(14);
+        doc.setFontStyle('bold');
+        doc.setTextColor(255);
+        doc.setFillColor(180, 180, 180);
+        doc.rect(14, 82, doc.internal.pageSize.getWidth() - 28, 10, 'FD');
+        doc.text('Product', 14, 90);
+        doc.text('Price', 94, 90);
+        doc.text('Quantity', 124, 90);
+        doc.text('Total', 154, 90);
+
+        // Add table body
+        doc.setFontSize(14);
+        doc.setFontStyle('normal');
+        doc.setTextColor(50);
+        let startY = 98;
+        orderData.items.forEach(item => {
+
+
+          doc.text(`${item.title} `, 20, startY);
+          doc.text(`  ${item.productPrice ? item.productPrice.toString() : ''}`, 94, startY);
+          doc.text(`  ${item.quantity}`, 124, startY);
+          doc.text(`  ${item.price ? item.price.toString() : ''}`, 154, startY);
+          startY += 8;
+        });
+
+        // Add bill total
+        doc.setFontSize(14);
+        doc.setFontStyle('bold');
+        doc.setTextColor(255);
+        doc.setFillColor(180, 180, 180);
+        doc.rect(14, startY, doc.internal.pageSize.getWidth() - 28, 10, 'FD');
+        doc.text(`Bill Total: ${orderData.billTotal}`, 135, startY + 8);
+
+        // Save the PDF
+        doc.save(`${orderData.oId}.pdf`);
       });
-
-      // Add bill total
-      doc.setFontSize(14);
-      doc.setFontStyle('bold');
-      doc.setTextColor(255);
-      doc.setFillColor(180, 180, 180);
-      doc.rect(14, startY, doc.internal.pageSize.getWidth() - 28, 10, 'FD');
-      doc.text(`Bill Total: ${orderData.billTotal}`, 135, startY + 8);
-
-      // Save the PDF
-      doc.save(`${orderData.oId}.pdf`);
     });
-  });
 
 
 
@@ -2062,88 +2152,88 @@ function editpostalCodeValidation(index) {
 
 
 
-  async function initiateFailureRazorPayPayment(orderId, billTotal) {
-    try {
+    async function initiateFailureRazorPayPayment(orderId, billTotal) {
+      try {
         const response = await fetch('/retry/razorpayOrder', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                orderId: orderId,
-                billTotal
-            })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId: orderId,
+            billTotal
+          })
         });
 
         const data = await response.json();
         const options = {
-            key:'rzp_test_U3ASSzGpya8Oey',
-            amount: data.amount,
-            order_id: data.id,
-            name:'Wander',
-            description: 'Payment for Order',
-            handler: function (response) {
-                console.log('payment successfull', response);
-                handlePaymentResponse(response, orderId);
-            }
-            ,
-            theme:{
-                color:'#002D75'
-            }
+          key: 'rzp_test_U3ASSzGpya8Oey',
+          amount: data.amount,
+          order_id: data.id,
+          name: 'Wander',
+          description: 'Payment for Order',
+          handler: function (response) {
+            console.log('payment successfull', response);
+            handlePaymentResponse(response, orderId);
+          }
+          ,
+          theme: {
+            color: '#002D75'
+          }
         };
-       
+
 
         const rzp = new Razorpay(options);
         rzp.open();
-    } catch (error) {
+      } catch (error) {
         console.error('Error initiating Razorpay payment:', error);
+      }
     }
-}
 
 
 
-function handlePaymentResponse(response, orderId){
-    if (response.razorpay_payment_id) {
+    function handlePaymentResponse(response, orderId) {
+      if (response.razorpay_payment_id) {
         Swal.fire({
-            title: 'Payment Success',
-            text: 'Your Order is placed successfully.Thank You',
-            icon: 'success',
-            timer:1500,
-            timerProgressBar: true,
-        });      
-        updatePaymentStatus(orderId,'Success');
-        setTimeout(() => {
-            window.location.reload()
-        },1500)
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Payment Failed',
-            text: 'Order is not placed'
+          title: 'Payment Success',
+          text: 'Your Order is placed successfully.Thank You',
+          icon: 'success',
+          timer: 1500,
+          timerProgressBar: true,
         });
-        updatePaymentStatus(orderId,'Failed');
+        updatePaymentStatus(orderId, 'Success');
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Failed',
+          text: 'Order is not placed'
+        });
+        updatePaymentStatus(orderId, 'Failed');
+      }
     }
-}
 
-function updatePaymentStatus(orderId,status){
-    fetch('/update/paymentStatus', {
-        method:'PATCH',
+    function updatePaymentStatus(orderId, status) {
+      fetch('/update/paymentStatus', {
+        method: 'PATCH',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            orderId:orderId,
-            status: status
+          orderId: orderId,
+          status: status
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Payment status updated:', data);
-    })
-    .catch(error => {
-            console.error('Error updating payment status:', error);
-    });
-}
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Payment status updated:', data);
+        })
+        .catch(error => {
+          console.error('Error updating payment status:', error);
+        });
+    }
 
 
 
@@ -2154,20 +2244,20 @@ function updatePaymentStatus(orderId,status){
 
 
 
-// script.js
-// document.querySelectorAll('a[href^="/orders/"]').forEach(linkElement => {
-//   linkElement.addEventListener('click', async (event) => {
-//     event.preventDefault();
-//     const url = linkElement.href;
-//     const response = await fetch(url);
-//     const blob = await response.blob();
-//     const downloadUrl = window.URL.createObjectURL(blob);
-//     const link = document.createElement('a');
-//     link.href = downloadUrl;
-//     link.download = `invoice_${url.split('/').pop()}.pdf`;
-//     link.click();
-//   });
-// });
+    // script.js
+    // document.querySelectorAll('a[href^="/orders/"]').forEach(linkElement => {
+    //   linkElement.addEventListener('click', async (event) => {
+    //     event.preventDefault();
+    //     const url = linkElement.href;
+    //     const response = await fetch(url);
+    //     const blob = await response.blob();
+    //     const downloadUrl = window.URL.createObjectURL(blob);
+    //     const link = document.createElement('a');
+    //     link.href = downloadUrl;
+    //     link.download = `invoice_${url.split('/').pop()}.pdf`;
+    //     link.click();
+    //   });
+    // });
 
   </script>
 </body>

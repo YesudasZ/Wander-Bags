@@ -571,6 +571,7 @@ const loadprofile = async (req, res) => {
     const wallet = await Wallet.findOne({ user: user_id })
     const cart = await Cart.findOne({ owner: req.session.user_id }).populate('items.productId');
     const wishlist = await Wishlist.findOne({ user: req.session.user_id }).populate('items.productId');
+    wallet.transactions.sort((a, b) => b.transactionDate - a.transactionDate);
     res.render('profile', {
       user: userData, orders: orders, wallet: wallet, errorMessage: null, successMessage: null, cartCount: cart?.items?.length || 0,
       wishlistCount: wishlist?.items?.length || 0,

@@ -96,7 +96,7 @@
             </thead>
             <tbody>
                 <% let totalAmount = 0 %>
-                <% order.items.forEach((item) => { %>
+                <% order.items.filter(item=> item.status !== 'Cancelled').forEach((item)=> { %>
                     <tr>
                         <td><%= item.title %></td>
                         <td>x <%= item.quantity %></td>

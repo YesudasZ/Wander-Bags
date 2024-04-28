@@ -183,10 +183,48 @@ const cancelOrder = async (req, res) => {
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
+
+    console.log("item",order.items.length);
     const item = order.items[itemIndex];
     const product = item.productId;
     const updatedCountInStock = product.countInStock + item.quantity;
     await Product.findByIdAndUpdate(product._id, { countInStock: updatedCountInStock });
+
+    if(order.items.length == 1 || order.items.filter(item=> item.status !== 'Cancelled').length ==1 ){
+      if (order.paymentStatus === 'Success') {
+        const refundAmount = order.billTotal;
+        let wallet = await Wallet.findOne({ user: req.session.user_id });
+        if (!wallet) {
+          wallet = new Wallet({
+            user: req.session.user_id,
+            walletBalance: 0,
+            transactions: []
+          });
+        }
+        wallet.walletBalance += refundAmount;
+        wallet.refundAmount += refundAmount;
+        // Add transaction details
+        wallet.transactions.push({
+          amount: refundAmount,
+          description: `Refund for order #${order.oId}`,
+          type: 'Refund',
+          transactionDate: new Date()
+        });
+        await wallet.save();
+      }
+      const updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          orderStatus: 'Cancelled',
+          cancellationReason
+        },
+        { new: true }
+      );
+   return  res.json({ success: true, message: 'Order cancelled successfully', updatedOrder });
+  
+    }
+
+
     if (order.paymentStatus === 'Success') {
       const refundAmount = item.price;
       let wallet = await Wallet.findOne({ user: req.session.user_id });
@@ -201,6 +239,7 @@ const cancelOrder = async (req, res) => {
       console.log("od amt",order);
       if (order.couponAmount > 0) {
         couponAmount = order.couponAmount * (item.price / order.billTotal);
+        console.log("cou",couponAmount);
       }
       wallet.walletBalance += refundAmount - couponAmount;
       wallet.refundAmount += refundAmount - couponAmount;
@@ -213,13 +252,28 @@ const cancelOrder = async (req, res) => {
       });
       await wallet.save();
     }
-    order.items.splice(itemIndex, 1);
-    order.billTotal -= item.price-order.couponAmount;
-    order.billTotal -= order.couponAmount;
+
+
+     // Update the order item status and cancellation reason
+     order.items[itemIndex].status = 'Cancelled';
+     order.items[itemIndex].cancellationReason = cancellationReason;
+     
+     let couponAmount = 0;
+     console.log("od amt",order);
+     if (order.couponAmount > 0) {
+       couponAmount = order.couponAmount * (item.price / order.billTotal);
+       console.log("cou",couponAmount);
+       const adjustedcouponAmount = Math.abs(order.couponAmount -couponAmount)
+       console.log("adj",adjustedcouponAmount);
+       order.couponAmount =Math.floor(adjustedcouponAmount);
+       item.price = Math.floor(item.price - couponAmount);
+     }
+
+
+    order.billTotal -= item.price
     if (order.items.length === 0) {
       order.orderStatus = 'Cancelled';
     }
-
     await order.save();
     res.json({ success: true, message: 'Item cancelled successfully', updatedOrder: order });
   } catch (error) {

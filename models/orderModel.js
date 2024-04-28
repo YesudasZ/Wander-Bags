@@ -48,6 +48,17 @@ const orderSchema = Schema({
         price: {
             type: Number,
         },
+        status:{
+            type: String,
+            enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'],
+            default: 'Pending',
+        },
+        cancellationReason : {
+            type: String,
+        },
+        cancellationDate : {
+            type: Date,
+        },
     }],
     billTotal: {
         type: Number,
