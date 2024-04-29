@@ -1,8 +1,8 @@
 const express = require("express");
 const user_route = express();
 const auth = require('../middleware/userauth');
-const passport = require('passport');
-require('../passport');
+//const passport = require('passport');
+//require('../passport');
 
 // Initialize Passport
 user_route.use(passport.initialize());
@@ -30,10 +30,10 @@ user_route.post('/signup', userController.insertuser); // Insert new user
 user_route.get('/logout', auth.isLogin, userController.userLogout); // Logout user
 
 // Google authentication routes
-user_route.get('/auth/google', passport.authenticate('google', { scope: ['profile'] })); // Google authentication
-user_route.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/success', failureRedirect: '/failure' })); // Google authentication callback
-user_route.get('/success', userController.successGoogleLogin); // Successful Google login
-user_route.get('/failure', userController.failureGoogleLogin); // Failed Google login
+//user_route.get('/auth/google', passport.authenticate('google', { scope: ['profile'] })); // Google authentication
+//user_route.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/success', failureRedirect: '/failure' })); // Google authentication callback
+//user_route.get('/success', userController.successGoogleLogin); // Successful Google login
+//user_route.get('/failure', userController.failureGoogleLogin); // Failed Google login
 
 // OTP verification routes
 user_route.get('/otpverify', auth.isLogout, userController.loadotpverify); // Load OTP verification page
