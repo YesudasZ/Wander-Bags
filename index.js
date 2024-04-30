@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const PORT=8001
 // Load environment variables
 require('dotenv').config();
 
@@ -44,4 +44,4 @@ app.use('/*', async (req, res) => {
 });
 
 // Start the server
-app.listen(4000, () => console.log("Click here to go to the login page: http://localhost:4000"));
+app.listen(PORT, () => console.log(`Click here to go to the login page: http://localhost:${PORT}`));
