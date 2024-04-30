@@ -5,8 +5,8 @@ const auth = require('../middleware/userauth');
 //require('../passport');
 
 // Initialize Passport
-user_route.use(passport.initialize());
-user_route.use(passport.session());
+//user_route.use(passport.initialize());
+//user_route.use(passport.session());
 
 // Set view engine and views directory
 user_route.set('view engine', 'ejs');
