@@ -9,7 +9,7 @@ const Wallet = require("../models/walletModel")
 const Category = require('../models/categoryModel');
 const path = require('path');
 const ejs = require("ejs");
-const pdf = require('html-pdf');
+// const pdf = require('html-pdf');
 require('dotenv').config();
 
 
