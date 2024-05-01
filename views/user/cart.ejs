@@ -201,7 +201,7 @@
                         </thead>
                         <tbody>
                             <% if (cart && cart.items.length > 0) { %>
-                            <% cart.items.forEach((item, index) => { %>
+                            <% cart.items.forEach((item) => { %>
                             <tr id="item-<%= index + 1 %>">
                                
                                 <td class="image product-thumbnail"><img src="/productImages/<%= item.productId.images[0] %>" alt="#" style="max-width: 100px;"></td>
