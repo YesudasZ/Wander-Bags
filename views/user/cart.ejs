@@ -204,7 +204,7 @@
                             <% cart.items.forEach((item, index) => { %>
                             <tr id="item-<%= index + 1 %>">
                                
-                                <td class="image product-thumbnail"><img src="/productImages/<%= item.productId.images[0] %>" alt="#" style="max-width: 100px;"></td>
+                                <td class="image product-thumbnail"><img src="/productImages/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>" ></td>
                                
                                 <td class="product-des product-name">
                                     <h5><a href="#" class="text-dark"><%= item.productId.name %></a></h5>
