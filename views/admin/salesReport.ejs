@@ -260,10 +260,10 @@
                               <% order.items.forEach(item => { %>
                               <% if (item.productId) { %>
                               <% orderDiscount += ((item.productPrice * item.quantity) - order.billTotal); %>
-                              <%= ((item.productPrice * item.quantity) - order.billTotal).toFixed(2) %> <br>
+                              <%= order.couponAmount %> <br>
                               <% } %>
                               <% }) %>
-                              <% overallDiscountAmount += orderDiscount; %>
+                              <% overallDiscountAmount +=order.couponAmount  %>
                           </td>
                           <td><%= order.billTotal.toFixed(2) %></td>
                       </tr>
