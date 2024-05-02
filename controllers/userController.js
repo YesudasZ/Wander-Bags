@@ -811,6 +811,7 @@ const downloadInvoice = async (req, res) => {
       orientation: "portrait",
       border: "10mm",
     };
+    
     pdf.create(invoiceHtml, options).toStream((err, stream) => {
       if (err) {
         console.log("Error generating PDF:", err);
