@@ -3,6 +3,9 @@ const Product = require('../models/productModel');
 const Cart = require('../models/cartModel')
 const Wishlist = require('../models/wishlistModel')
 
+const newFeature = async(req,res)=>{
+
+}
 
 const loadCart = async (req, res) => {
     try {
@@ -227,5 +230,5 @@ module.exports = {
     removeCartItem,
     updateCart,
     clearCart,
-    getCartTotals
+    getCartTotals,newFeature
 }
